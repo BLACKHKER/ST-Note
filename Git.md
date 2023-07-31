@@ -60,16 +60,24 @@ git config --global user.email 'email@163.com'
 
 ```sh
 git config --global user.name 'blackhker'
-git config --global user.email '1653911611@qq.com'
+git config --global user.email 'bhkdos@qq.com'
 ```
 
 
 
 
 
-#### 初始化本地仓库
+#### 创建GIT仓库
 
-##### 会在当前目录中自动创建.git目录（隐藏），此目录用于Git跟踪管理版本库。
+##### 在需要执行仓库目录执行CMD操作来Git，或者GitBashHere
+
+![image-20230731102754118](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230731102754118.png)
+
+
+
+##### 初始化本地仓库
+
+> 会在当前目录中自动创建.git目录（隐藏），此目录用于Git跟踪管理版本库。
 
 ~~~shell
 $ git init
@@ -83,19 +91,35 @@ $ git init
 
 
 
-#### 执行CMD操作Git，或者GitBashHere
+#### 推送
 
-##### 仓库地址的获取
+##### 获取仓库地址
 
-在云仓库(git、gitee)创建仓库，会有仓库地址的链接
+> 在云仓库(git、gitee)创建仓库，会有仓库地址的链接
+>
 
 ![image-20230322093538626](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303220935178.png)
 
 
 
+##### 推送内容到仓库
+
+```shell
+git remote add origin 仓库地址
+git remote add origin https://gitee.com/blackhker/note.git
+```
+
+![image-20230731103136165](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230731103136165.png)
+
+
+
+
+
+#### 拉取
+
 ##### 克隆网络仓库到本地
 
-###### 在要克隆到的文件夹下打开cmd执行命令
+> 在要克隆到的文件夹下打开cmd执行命令
 
 ```shell
 git clone 仓库地址
