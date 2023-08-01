@@ -14,13 +14,27 @@ npm -v
 
 
 
-### 设置镜像(安装cnpm)
+### 设置镜像源(安装cnpm)
 
 ```shell
 npm install -g cnpm --registry=https://registry.npmmirror.com
 ```
 
 ![image-20230301100052417](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303012035504.png)
+
+##### 查看镜像源是否安装成功
+
+```shell
+npm config list
+```
+
+
+
+##### 切换新的镜像源
+
+```shell
+npm config set registry https://registry.npmmirror.com
+```
 
 
 
