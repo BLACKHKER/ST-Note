@@ -812,7 +812,7 @@ intsStream.forEach((e) -> {
 Exception in thread "main" java.lang.IllegalStateException: stream has already been operated upon or closed
 at java.util.stream.AbstractPipeline.sourceStageSpliterator(AbstractPipeline.java:279)
 at java.util.stream.ReferencePipeline$Head.forEach(ReferencePipeline.java:580)
-at com.woniu.study.StreamDemo.main(StreamDemo.java:30)
+at com.blackhker.study.StreamDemo.main(StreamDemo.java:30)
 ```
 
 
@@ -1116,7 +1116,7 @@ Lambda简化的接口，只能是只有一个抽象方法的接口(函数式接�
 
 #### 新建项目：
 
-![image-20230220150013461](https://s2.loli.net/2023/02/20/lpogC2uVaFEdsbR.png)
+![image-20230220150013461](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/lpogC2uVaFEdsbR.png)
 
 
 
@@ -1124,9 +1124,9 @@ Lambda简化的接口，只能是只有一个抽象方法的接口(函数式接�
 
 #### 配置项目环境(场景器)：
 
-![image-20230220150326977](https://s2.loli.net/2023/02/20/IgXUHSjwi7b6a8R.png)
-
 > 区分场景器：maven中包含starter代表SpringBoot场景器
+
+![image-20230220150326977](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/IgXUHSjwi7b6a8R.png)
 
 
 
@@ -1134,11 +1134,11 @@ Lambda简化的接口，只能是只有一个抽象方法的接口(函数式接�
 
 #### 配置环境：
 
-![image-20230220150702697](https://s2.loli.net/2023/02/20/E8p5oX6clCQLaRb.png)
-
 > ※WEB场景器引入了14个Jar包
 >
 > Maven中<parent>标签表示起步依赖，引用父类的配置
+
+![image-20230220150702697](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/E8p5oX6clCQLaRb.png)
 
 ##### Maven：
 
@@ -1197,11 +1197,7 @@ Lambda简化的接口，只能是只有一个抽象方法的接口(函数式接�
 
 
 
-
-
-
-
-### 获取SpringBoot启动时加载的组件名及对象名
+#### (附加)获取SpringBoot启动时加载的组件名及对象名
 
 ##### SpringBoot环境搭建完自动生成的启动类中主函数会执行一个run方法：
 
@@ -1215,9 +1211,13 @@ public class QqmastersApplication {
 }
 ```
 
+
+
 ##### 该方法返回一个ConfigurableApplicationContext类型的对象：
 
 ![image-20230225200408094](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202302252004388.png)
+
+
 
 ##### 接收该对象，打印长度：
 
@@ -1228,11 +1228,15 @@ ConfigurableApplicationContext config = SpringApplication.run(启动类类名.cl
 System.out.println(context.getBeanDefinitionNames().length);
 ```
 
+
+
 ##### 通过流遍历该对象内的数据(展示详细信息)：
 
 ```java
 Arrays.stream(config.getBeanDefinitionNames()).forEach(System.out::println);
 ```
+
+
 
 ##### 下图展示部分信息：
 
@@ -1246,15 +1250,12 @@ Arrays.stream(config.getBeanDefinitionNames()).forEach(System.out::println);
 
 ### @SpringBootApplication及其包含的三个注解
 
-#### 作用：
+> 注解声明的类为SpringBoot启动类，自动去加载配置文件(application.properties)，启动SpringBoot服务器
+>
 
-声明被注解的类为SpringBoot启动类，自动去加载配置文件(application.properties)，启动SpringBoot服务器
+#### @Configuration
 
-
-
-
-
-#### @Configuration（这个注解等同于SpringBootConfiguration，相当于别名）
+> 这个注解等同于SpringBootConfiguration，相当于别名
 
 Spring自动扫描到添加了@Configuration的类，会读取其中的配置信息，而@SpringBootConfiguration是来声明当前类是SpringBoot应用的主配置类。
 
@@ -1294,10 +1295,11 @@ SpringBootConfiguration注解的配置类在项目中只能有一个，只有一
 
 #### 实例
 
-##### 写一个Student类：
+##### Student类：
 
 ```java
 class Student {
+    
     private int age;
     private String name;
 
@@ -1311,7 +1313,7 @@ class Student {
 }
 
 @Log4j2 // 添加日志支持
-@MapperScan("com.woniu.mapper")
+@MapperScan("com.blackhker.mapper")
 @SpringBootApplication
 // SpringBoot启动类
 public class QqmastersApplication {
@@ -1325,6 +1327,7 @@ public class QqmastersApplication {
 
 ```java
 class Student {
+    
     private int age;
     private String name;
 
@@ -1338,14 +1341,16 @@ class Student {
 }
 
 @Log4j2 // 添加日志支持
-@MapperScan("com.woniu.mapper")
+@MapperScan("com.blackhker.mapper")
 @SpringBootApplication
 // SpringBoot启动类
 public class QqmastersApplication {
+    
     @Bean	// 手动注册
     public Student getStudent() {
         return new Student();
     }
+    
     // main方法
     public static void main(String[] args) {
         ConfigurableApplicationContext config = 	
@@ -1416,11 +1421,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 }
 ```
 
-
-
-
-
-#### 原配置欢迎页在web.xml下
+##### 原配置欢迎页在web.xml下
 
 ```xml
 <welcome-file-list>
@@ -1491,7 +1492,7 @@ public class 类名 implements WebMvcConfigurer {
 ##### 拦截器类：
 
 ```java
-package com.woniu.interceptor;
+package com.blackhker.interceptor;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -1567,9 +1568,9 @@ public class ApplicationLisener implements CommandLineRunner {
 #### 实例：
 
 ```java
-package com.woniu.listener;
+package com.blackhker.listener;
 
-import com.woniu.service.IQQUserService;
+import com.blackhker.service.IQQUserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -1603,7 +1604,7 @@ public class ApplicationLisener implements CommandLineRunner {
 > 创建过滤器类，实现Filter接口(javax.servlet)，实现doFilter方法
 
 ```java
-package com.woniuxy.mall96.filter;
+package com.blackhker.mall96.filter;
 
 import org.springframework.stereotype.Component;
 
@@ -1705,18 +1706,259 @@ public class CrossOriginFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse res = (HttpServletResponse) response;
+        // 添加响应头，允许跨域请求携带凭证（如Cookie）
         res.addHeader("Access-Control-Allow-Credentials", "true");
+        // 添加响应头，允许所有来源的跨域请求
         res.addHeader("Access-Control-Allow-Origin", "*");
+        // 添加响应头，允许的请求类型
         res.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+        // 添加响应头，允许的请求头参数，包括authorization等，用于Token验证
         res.addHeader("Access-Control-Allow-Headers", "Content-Type,X-CAF-Authorization-Token,sessionToken,X-TOKEN,authorization");
+
+        // 判断请求类型是否为OPTIONS，如果是则直接返回响应"ok"，用于预检请求
         if (((HttpServletRequest) request).getMethod().equals("OPTIONS")) {
             response.getWriter().println("ok");
             return;
         }
+
+        // 继续执行后续的过滤器链或Servlet处理
         chain.doFilter(request, response);
     }
 }
 ```
+
+
+
+
+
+#### 总结
+
+##### Session和Cookie
+
+> Cookie里建议不放重要信息，有可能伪造
+
+###### 前后端不分离
+
+客户端浏览器向服务器发送一个请求，服务器会生成一个Session，Session是保存在服务器的，在响应给客户端浏览器数据的时候，服务器会将SessionID作为一个名为"JSESSIONID"的Cookie发送给客户端浏览器，浏览器会将Cookie保存到本地，每次请求的时候，携带着这个Cookie(SessionID)，服务器收到一个包含SessionID的HTTP请求时，会去查找与该SessionID相对应的用户会话，并将请求路由到正确的会话。通过Cookie存储SessionID，服务器可以在不同的HTTP请求之间跟踪用户的会话状态。
+
+###### 前后端分离
+
+> 可以在前端设置一下，强行让浏览器携带Cookie，但是可能会收到伪造Cookie的攻击
+
+不同源(跨域)的情况下，浏览器不会自动携带Cookie发送下一个请求，所以服务器会认为这是第一次请求，重新生成一个Session。所以后端不能用Session做登录鉴权，因为每次请求都是一个新的Session
+
+
+
+
+
+---
+
+
+
+
+
+## JWT(JSON Web Token)
+
+> 两个工具类：JWTUtil、TokenEnum参阅工具类笔记
+
+### 介绍
+
+#### 结构
+
+> JWT由三部分组成：头部(header)、载荷(payload)、签名(signature)
+>
+
+<font color="red">eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9</font>.<font color="green">eyJ1aWQiOjEwMDEsImlzcyI6Imlzc3VlciIsImV4cCI6MTY5MjQzMjE1OSwiaWF0IjoxNjkwOTYwOTMwfQ</font>.<font color="blue">ffL72VG-OqLxvDEXkG84cNt5TQYx77hY6hauHBrY1LQ</font>
+
+##### Header
+
+header包含两部分信息：声明类型、声明加密的算法，通常直接使用HMAC、SHA256或RSA
+
+###### 完整的头部示例：
+
+> 将头部加密就构成了第一部分：eyJOeXAiOjKV1QiLcIhbGciojlU2l1Ni)9
+
+```json
+{
+  "typ": "JWT",
+  "alg": "HS256"
+}
+```
+
+
+
+##### Payload
+
+payload也称为JWT Claims，包含用户的一些非隐私数据(如用户id)
+
+###### 完整的payload示例:
+
+> 将payload进行base64加密，得到JWT的payload：eyJVc2vySWQiojEyMywiVXNIck5hbwuioijhZG1pbij9
+
+```json
+{
+  "sub": "1234567890",
+  "name": "John Doe",
+  "admin": true
+}
+```
+
+
+
+##### Signature
+
+signature是一个签证信息，这个签证信息是由三部分组成：header、payload(base64之后)、secred
+
+这个部分需要base64编码(序列化)之后的header和payload使用.连接组成的字符串，然后通过header中声明的加密方式进行secred组合加密构成JWT的第三部分，三部分用.作为连接符，构成了最终的JWT
+
+
+
+
+
+#### 用途
+
+解决前后端分离，HttpSession失效的问题，前后端分离的情况下，因为浏览器在不同源(前后端分离)发送请求时，不会自动携带保存上一次请求SessionID的Cookie，所以每次请求都会产生一个新的Session，造成了上一次请求保存到Session中的用户信息等权限验证内容在过滤器验证的时候获取不到，就有了JWT
+
+
+
+
+
+
+
+### 使用
+
+#### 登录流程
+
+##### 后端将token保存到请求头
+
+```java
+/**
+ * 登录接口
+ *
+ * @param user
+ * @param response
+ * @return
+ */
+@PostMapping("/login")
+public ResponseResult<Boolean> login(@RequestBody User user, HttpServletResponse response) {
+
+    // 根据账户查询用户信息
+    User findUser = userService.findByAccount(user.getAccount());
+
+    // 判断账户查询的对象不为空，且查询出的用户信息密码跟前端的密码对应上
+    if (findUser != null && findUser.getPassword().equals(user.getPassword())) {
+        // 登录成功，根据uid生成Token
+        String token = JWTUtil.generateToken(findUser.getId());
+
+        // 将Token放到响应头
+        response.setHeader("authorization", token);
+
+        // 暴漏响应头，暴漏给浏览器(告诉前端头没问题)
+        response.setHeader("Access-Control-Expose-Headers", "authorization");
+
+        // 响应
+        return new ResponseResult<Boolean>()
+                .setCode(200)
+                .setState(ResponseState.LOGIN_SUCCESS)
+                .setMessage("登录成功！")
+                .setData(true);
+    } else {
+        // 账户不存在|密码错误
+        return new ResponseResult<Boolean>()
+                .setCode(500)
+                .setState(ResponseState.LOGIN_FAIL)
+                .setMessage("用户名或密码错误！")
+                .setData(false);
+    }
+}
+```
+
+###### 暴漏响应头的解释
+
+在跨域请求中，浏览器会发送OPTIONS请求进行预检，以确保实际请求是安全的。在OPTIONS请求中，浏览器会检查响应头中的Access-Control-Expose-Headers字段，以确定允许暴露的响应头。
+
+如果你想在实际请求的响应头中暴露自定义的头部信息，例如authorization token，你需要在服务端的响应头中加入Access-Control-Expose-Headers字段指定允许暴露的头部信息。这样，浏览器就能够在实际请求的响应头中获取到该信息。
+
+因此，当你在服务端添加Token到请求头时，需要在响应头中添加Access-Control-Expose-Headers字段，以确保浏览器能够获取到该信息。具体来说，设置Access-Control-Expose-Headers字段的值为"authorization"，表示允许暴露authorization头部信息。这样，浏览器就可以在实际请求的响应头中获取到该信息，从而完成跨域请求的授权验证。
+
+
+
+
+
+##### 前端获取请求头中的Token
+
+```js
+// 登录方法
+login: function () {
+  this.$axios.post("/user/login", this.user).then(res => {
+    // token保存在请求头中的"authorization"头中
+    console.log(res);
+    let token = res.headers.authorization;
+    // 保存到LocalStorage||SessionStorage
+    // 保存Token到本地，方便其他页面携带Token发送请求
+    window.sessionStorage.setItem("token",token)
+  })
+}
+```
+
+
+
+##### 前端携带Token发送请求
+
+> 携带头向后端发请求，必须配置后端，让后端知道这个头是可以接的
+
+```js
+this.$axios.post("/cart/add", cart,{
+    // 保存Token到请求头，再发送请求
+	headers:{
+  		"authorization":window.sessionStorage.getItem("token")
+	}
+}).then(res => {
+	console.log(res.data);
+})
+```
+
+###### 配置authorization头后端可以正常识别
+
+```java
+import org.springframework.stereotype.Component;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+/**
+ * 跨域过滤器
+ */
+@Component
+public class CrossOriginFilter implements Filter {
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        HttpServletResponse res = (HttpServletResponse) response;
+        // 添加响应头，允许跨域请求携带凭证（如Cookie）
+        res.addHeader("Access-Control-Allow-Credentials", "true");
+        // 添加响应头，允许所有来源的跨域请求
+        res.addHeader("Access-Control-Allow-Origin", "*");
+        // 添加响应头，允许的请求类型
+        res.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+        // 添加响应头，允许的请求头参数，包括authorization等，用于Token验证
+        res.addHeader("Access-Control-Allow-Headers", "Content-Type,X-CAF-Authorization-Token,sessionToken,X-TOKEN,authorization");
+
+        // 判断请求类型是否为OPTIONS，如果是则直接返回响应"ok"，用于预检请求
+        if (((HttpServletRequest) request).getMethod().equals("OPTIONS")) {
+            response.getWriter().println("ok");
+            return;
+        }
+
+        // 继续执行后续的过滤器链或Servlet处理
+        chain.doFilter(request, response);
+    }
+}
+```
+
+
 
 
 
@@ -1828,7 +2070,7 @@ mybatis-plus.configuration.map-underscore-to-camel-case=true
 #### 编写配置类：
 
 ```java
-package com.woniu.config;
+package com.blackhker.config;
 
 import com.baomidou.mybatisplus.core.exceptions.MybatisPlusException;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
@@ -1891,7 +2133,7 @@ public class GeneratorCodeConfig {
         // 创建包配置对象
         PackageConfig pc = new PackageConfig();
         // 设置包名
-        pc.setParent("com.woniu");
+        pc.setParent("com.blackhker");
         pc.setEntity("entity");
         pc.setMapper("mapper");
         pc.setService("service");
@@ -2251,6 +2493,21 @@ created : function () {
 }
 ```
 
+#### 钩子函数表
+
+| 函数          | 解释                                                        |
+| ------------- | ----------------------------------------------------------- |
+| beforeCreate  | 组件实例刚被创建，组件属性计算之前，如data属性等            |
+| created       | 组件实例创建完成，属性已绑定，但DOM还未生成,$el属性还不存在 |
+| beforeMount   | 模板编译/挂载之前                                           |
+| mounted       | 模板编译/挂载之后(不保证组件已在document中)                 |
+| beforeUpdate  | 组件更新之前                                                |
+| updated       | 组件更新之后                                                |
+| activated     | for keep-alive ，组件被激活时调用                           |
+| deactivated   | for keep-alive，组件被移除时调用                            |
+| beforeDestory | 组件销毁前调用                                              |
+| destoryed     | 组件销毁后调用                                              |
+
 
 
 
@@ -2506,9 +2763,21 @@ this.$router.push("/detail")
 
 
 
+##### router-link
+
+```vue
+<router-link to="/path" tag="button">Link Text</router-link>
+```
 
 
-#### 动态配置属性
+
+
+
+
+
+### 动态配置
+
+#### 属性
 
 ##### 给Vue对象动态添加一个属性\方法(main.js)
 
@@ -2520,6 +2789,8 @@ Vue.prototype.eat = function () {
   // 没有$符号，可以认为他是方法
 }
 ```
+
+
 
 
 
@@ -2662,6 +2933,184 @@ mounted: function () {
     })
 }
 ```
+
+
+
+
+
+#### Axios拦截器
+
+##### 请求拦截器
+
+> main.js配置Axios
+
+```js
+// 设置Axios的请求拦截器：在每个Axios的请求发送之前，对请求做处理
+// 将本地(sessionStorage)的token放到每一个Axios请求的请求头中
+// 1.创建一个Axios对象
+let sentder = axios.create({});
+
+// 2.给对象添加请求拦截器并配置
+sentder.interceptors.request.use(config => {
+  // 从本地获取Token
+  let token = window.sessionStorage.getItem("token")
+
+  // 判断token是否存在
+  if (token) {
+    // 有则放入请求头
+    config.headers.authorization = token;
+  }
+
+  // 放行
+  return config;
+})
+
+// 将配置好的sentder设置为Vue的元属性
+Vue.prototype.$axios = sentder;
+```
+
+
+
+##### 响应拦截器
+
+> 验证登录状态
+
+```js
+// 设置响应拦截器：会在每次请求返回到浏览器，但是还没有执行到then回调函数时执行
+// 此处用于判断每一个响应中是否有token，如果有则得到token并放到本地
+sentder.interceptors.response.use(response => {
+
+  // 判断返回结果
+  if (response.data.state == "NO_LOGIN") {
+    // 没登录,跳转到登录页
+    // 不能使用this,这里的this不是Vue对象，无法跳转
+    // this.$router.push("/login");
+    window.location.href = "/login"
+    return response;
+  }
+
+  // 从响应头中获取token
+  let token = response.headers.authorization;
+
+  // 判断token是否存在
+  if (token) {
+    // 有token,放到本地
+    window.sessionStorage.setItem("token", token)
+  }
+
+  // 放行
+  return response;
+})
+
+// 将配置好的sentder设置为Vue的元属性
+Vue.prototype.$axios = sentder;
+```
+
+
+
+
+
+
+
+### Local/SessionStorage
+
+> 浏览器提供的两个给用户存储东西的地方
+
+#### SessionStorage
+
+只在会话期间有效，浏览器关闭就消失
+
+##### 使用场景
+
+1. 在多个页面之间共享临时数据，如表单数据。
+2. 记录用户操作的状态，以便在页面刷新时恢复数据。
+3. 保存用户购物车信息，在结账前保持选购的商品。
+
+
+
+##### 使用
+
+###### 新增
+
+```js
+// 存数据
+window.sessionStorage.setItem("token",token)
+```
+
+###### 查询
+
+```js
+// 取数据
+window.sessionStorage.getItem("token")
+
+// 获取sessionStorage中索引为0的键名
+var key = window.sessionStorage.key(0)
+
+// 获取sessionStorage中的数据项数量
+var count = window.sessionStorage.length
+```
+
+###### 删除
+
+```js
+// 删除数据
+window.sessionStorage.removeItem("token")
+
+// 清除所有sessionStorage数据
+window.sessionStorage.clear()
+```
+
+
+
+
+
+#### LocalStorage
+
+只要不主动删除、卸载浏览器，数据就会一直存在
+
+##### 使用场景
+
+1. 保存用户偏好设置，如主题、语言等。
+2. 持久保存用户登录凭证，以实现“记住我”功能。
+3. 缓存静态资源，以减少服务器请求
+
+##### 使用
+
+###### 新增
+
+```js
+// 存数据
+window.localStorage.setItem("token",token)
+```
+
+###### 查询
+
+```js
+// 取数据
+window.localStorage.getItem("token")
+
+// 获取localStorage中索引为0的键名
+var key = window.localStorage.key(0)
+
+// 获取localStorage中的数据项数量
+var count = window.localStorage.length
+```
+
+###### 删除
+
+```js
+// 删除数据
+window.localStorage.removeItem("token")
+
+// 清除所有localStorage数据
+window.localStorage.clear()
+```
+
+
+
+
+
+
 
 
 

@@ -2662,10 +2662,6 @@ DispatcherServlet响应用户
 
 
 
-
-
-
-
 ### SpringBoot启动过程
 
 > Spring Boot的启动过程是一个逐步递进的过程，通过读取配置文件、加载依赖项、启动IoC容器等
