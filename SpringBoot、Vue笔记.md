@@ -1623,6 +1623,95 @@ public class FilterTest implements Filter {
 }
 ```
 
+#### 配置过滤器执行顺序
+
+##### 配置类配置
+
+```java
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @Author BLACKHKER
+ * @Date 2023/8/8 15:16
+ * @ClassName: FilterConfig
+ * @Description: 配置过滤器执行顺序，解决跨域过滤器执行顺序的问题
+ * @Version 1.0
+ */
+@Configuration
+public class FilterConfig {
+
+    // 跨域过滤器
+    @Resource
+    private CrossOriginFilter crossOriginFilter;
+
+    // 权限认证过滤器
+    @Resource
+    private AuthFilter authFilter;
+
+    /**
+     * 注册过滤器的Bean，返回注册过滤器的Bean对象
+     *
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean<CrossOriginFilter> crossOriginFilterFilterRegistrationBean() {
+
+        // 创建一个FilterRegistrationBean实例，配置过滤器CrossOriginFilter
+        FilterRegistrationBean<CrossOriginFilter> bean = new FilterRegistrationBean<>();
+        bean.setFilter(crossOriginFilter);
+
+        // 过滤所有请求(默认过滤所有请求)
+        bean.setUrlPatterns(Arrays.asList("/*"));
+
+        // 设置过滤器的执行顺序，值越小，优先级越高
+        bean.setOrder(1);
+        return bean;
+    }
+
+    /**
+     * 注册过滤器的Bean，返回注册过滤器的Bean对象
+     *
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean<AuthFilter> authFilterFilterRegistrationBean() {
+
+        // 创建一个FilterRegistrationBean实例，配置过滤器AuthFilter
+        FilterRegistrationBean<AuthFilter> bean = new FilterRegistrationBean<>();
+        bean.setFilter(authFilter);
+
+        // 过滤所有请求
+        bean.setUrlPatterns(Arrays.asList("/*"));
+
+        // 设置过滤器的执行顺序，值越小，优先级越高
+        bean.setOrder(2);
+        return bean;
+    }
+}
+```
+
+
+
+##### 注解配置
+
+> 越低优先级越高
+
+```java
+@Slf4j
+@Component
+@Order(2)
+public class XxxFilter implements Filter {
+	...doFilter(){}
+}
+```
+
 
 
 
@@ -1688,6 +1777,8 @@ public class CrossOriginConfiguration implements WebMvcConfigurer {
 
 
 #### 方案三：自定义过滤器
+
+> 多个过滤器，执行按照过滤器类的首字母排序，跨域过滤器必须放在第一个执行，所以配置过滤器执行顺序
 
 ```java
 import org.springframework.stereotype.Component;
@@ -2285,6 +2376,28 @@ npm run install
 
 
 
+### 方法
+
+#### splice
+
+##### 删除
+
+```js
+Arrays.splice(从哪个下标开始,删除几条)
+```
+
+###### 实例：删除某商品(行)
+
+```js
+this.cartList.splice(scope.$index, 1)
+```
+
+
+
+
+
+
+
 ### Components：组件
 
 > 将界面的一部分抽成组件形式，就可以复用组件来减少代码量
@@ -2763,9 +2876,10 @@ this.$router.push("/detail")
 
 
 
-##### router-link
+##### routerlink
 
 ```vue
+<router-link to="/地址" tag="类型(a(默认)、button、li)">Link Text</router-link>
 <router-link to="/path" tag="button">Link Text</router-link>
 ```
 
@@ -2849,6 +2963,10 @@ mounted: function () {
 
 #### 请求示例
 
+> Axios的所有请求，可以使用Restful，但是传递对象，需要后端使用对象来接并且使用@RequestBody
+>
+> 一般建议参数的位置是GET、DELETE拼接在头上，POST、PUT放在请求体里
+
 ##### GET
 
 ```js
@@ -2861,11 +2979,24 @@ this.$axios.get("/goods/findById/" + this.gid).then(res => {
 
 ##### POST
 
-> 以下示例，后端使用对象接收时需要加@RequestBody，否则后端的对象参数为空
+> 以下示例，后端使用对象、数组接收时需要加@RequestBody，否则后端的对象参数为空
 
-###### 传递对象
+###### 传递对象(多参)
 
 ```js
+// 多参
+addCart: function () {
+  // 发送请求，添加到购物车
+  this.$axios.post("/cart/add", {
+    gid: this.goods.id,
+    num: this.num,
+    price: this.goods.price
+  }).then(res => {
+    console.log(res.data);
+  })
+}
+
+// 对象，包括数组，后端都是用@RequestBody接收
 addCart: function () {
 // 定义购物车实体
   let cart = {
@@ -2881,20 +3012,41 @@ addCart: function () {
 }
 ```
 
-###### 传递多参
+
+
+##### put
+
+###### Restful
+
+> 后端使用@PathVariable接收参数，一般多参使用对象传参
 
 ```js
-addCart: function () {
-  // 发送请求，添加到购物车
-  this.$axios.post("/cart/add", {
-    gid: this.goods.id,
-    num: this.num,
-    price: this.goods.price
-  }).then(res => {
-    console.log(res.data);
-  })
-}
+this.$axios.put("/cart/updateNumById/" + cart.id + "/" + cart.num).then(res => {
+	console.log(res.data);
+})
 ```
+
+###### 传递多参(对象传参)
+
+> 以下示例，后端使用对象接收，需要加@RequestBody，否则后端的对象参数为空
+
+```js
+this.$axios.put("地址", {
+  "参数名1": 参数值1,
+  "参数名2": 参数值2
+}).then(res => {
+  console.log(res.data);
+})
+
+this.$axios.put("/cart/updateNumById", {
+  "id": cart.id,
+  "num": cart.num
+}).then(res => {
+  console.log(res.data);
+})
+```
+
+
 
 
 
@@ -3112,12 +3264,6 @@ window.localStorage.clear()
 
 
 
-
-
-
-
-
-
 ### Element UI
 
 #### 安装
@@ -3165,10 +3311,6 @@ Vue.use(ElementUI);
 
 
 
-
-
-
-
 ##### 布局空白
 
 > 可能是文字超出长度，占了位置
@@ -3187,6 +3329,102 @@ Vue.use(ElementUI);
   text-overflow: ellipsis;
 }
 ```
+
+
+
+
+
+#### slot-scope：插槽
+
+> 插槽就是解决数据传递的工具
+
+##### 应用
+
+###### 删除
+
+```vue
+<el-table-column label="操作">
+  <template slot-scope="scope">
+    <el-button size="small" type="danger" @click="deleteById(scope)">删除</el-button>
+  </template>
+</el-table-column>
+```
+
+```js
+// 传递scope，里面携带当前数据的下标:$index
+// 根据商品id删除购物车商品
+deleteById: function (scope) {
+  this.$confirm('确认删除？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    // 后端根据id删除购物车商品
+    this.$axios.delete("/cart/deleteById/" + scope.row.id).then(res => {
+      // 判断是否删除成功
+      if (res.data.state == "DEL_SUCCESS") {
+        // 前端根据下标删除该数据
+        this.cartList.splice(scope.$index, 1)
+
+        // 弹窗
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        });
+      }
+    })
+  }).catch(() => {
+    this.$message({
+      type: 'info',
+      message: '取消删除'
+    });
+  });
+}
+```
+
+###### 计算
+
+使用两个参数做运算，用于表格展示，scope就是表格绑定的数据
+
+```vue
+<el-table-column prop="" label="小计">
+  <template slot-scope="scope">
+    <span>{{ scope.row.num * scope.row.price }}</span>
+  </template>
+</el-table-column>
+```
+
+
+
+
+
+#### 组件
+
+##### el-table
+
+```html
+<el-table-column prop="num" label="数量" show-overflow-tooltip></el-table-column>
+```
+
+###### 属性
+
+label：显示的标题
+
+![image-20230809172724247](S:\TypoaPicture\image-20230809172724247.png)
+
+prop：该表单绑定的数据，参数对应列内容的字段名，也可以使用 property 属性
+
+![image-20230809172940097](S:\TypoaPicture\image-20230809172940097.png)
+
+show-overflow-tooltip：控制当单元格内容溢出时是否显示提示框
+
+
+
+
+
+
+
+
 
 
 

@@ -954,7 +954,7 @@ public class ConsumerController {
 }
 ```
 
-#### 
+
 
 
 
@@ -967,7 +967,7 @@ public class ConsumerController {
 ##### 在Feign的Service接口(新被调用方)修改Feign注解
 
 ```java
-// Feign接口的FeignClient注解新增一个fallbackFactory，参数值为降级工厂类.class
+// Feign接口的FeignClient注解新增一个fallbackFactory参数，参数值为降级工厂类.class
 @FeignClient(name = "GOODS",fallbackFactory = xxx.class)
 public interface FeignGoodsService {
 
