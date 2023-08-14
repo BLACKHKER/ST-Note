@@ -2303,7 +2303,7 @@ public class GeneratorCodeConfig {
 
 
 
-## Swagger2：自动生成接口(API)文档
+## Swagger2：自动生成接口文档
 
 
 
@@ -2317,7 +2317,7 @@ public class GeneratorCodeConfig {
 
 
 
-## Vue Application(Vue.js)
+## Vue Application(前后端分离)
 
 ### 通过脚手架生成Vue项目
 
@@ -2887,6 +2887,43 @@ this.$router.push("/detail")
 
 
 
+#### 路由传参
+
+> name必须和路由中给组件定义的name一致，而且再次刷新页面后参数会丢失
+
+```js
+this.$router.push({
+	name : "路由名",
+	params : {
+		参数、对象名: 值
+	}
+})
+```
+
+##### 实例
+
+```js
+this.$router.push({
+  name: "cartConfirm",
+  // 传递选中的商品到下个页面
+  params: {
+    cartList: this.multipleSelection
+  }
+})
+```
+
+###### 取值
+
+```js
+mounted: function () {
+  this.cartList = this.$route.params.cartList
+}
+```
+
+
+
+
+
 
 
 ### 动态配置
@@ -3166,7 +3203,7 @@ Vue.prototype.$axios = sentder;
 
 ### Local/SessionStorage
 
-> 浏览器提供的两个给用户存储东西的地方
+> 浏览器提供的两个给用户存储东西的地方，注意这里只能存储字符串，对象、数组保存到这里的时候会自动转换成字符串，需要手动转换JSON格式字符串，再保存
 
 #### SessionStorage
 
@@ -3186,13 +3223,18 @@ Vue.prototype.$axios = sentder;
 
 ```js
 // 存数据
+window.sessionStorage.setItem("key",value)
 window.sessionStorage.setItem("token",token)
+// 对象、数组，接收的时候再转换成对象
+window.sessionStorage.setItem("key",JSON.stringify(对象、数组))
+window.sessionStorage.setItem("cartList",JSON.stringify(this.cartList))
 ```
 
 ###### 查询
 
 ```js
 // 取数据
+window.sessionStorage.getItem("key")
 window.sessionStorage.getItem("token")
 
 // 获取sessionStorage中索引为0的键名
@@ -3200,6 +3242,9 @@ var key = window.sessionStorage.key(0)
 
 // 获取sessionStorage中的数据项数量
 var count = window.sessionStorage.length
+
+// 取对象(将字符串转换成对象)
+JSON.parse(window.sessionStorage.getItem("cartList"))
 ```
 
 ###### 删除
