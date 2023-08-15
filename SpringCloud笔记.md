@@ -1466,7 +1466,7 @@ startup.cmd -m standalone
 
 ![image-20230509101619172](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202305091602321.png)
 
-###### 出现success表示运行成功
+###### 出现successfully表示运行成功
 
 ![image-20230509101640519](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202305091602110.png)
 
