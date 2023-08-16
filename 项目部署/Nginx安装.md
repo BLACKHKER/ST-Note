@@ -18,7 +18,7 @@ http://nginx.org/
 
 #### 自己指定的安装目录解压缩
 
-![image-20230427191025450](S:/woniu/TypoaPicture/image-20230427191025450.png)
+![image-20230427191025450](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230427191025450.png)
 
 
 
@@ -30,13 +30,13 @@ http://nginx.org/
 
 #### 进入nginx文件夹，在DOS中打开该文件夹，执行以下指令启动nginx
 
-![image-20230427195904059](S:/woniu/TypoaPicture/image-20230427195904059.png)
+![image-20230427195904059](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230427195904059.png)
 
 ```shell
 start nginx
 ```
 
-![image-20230427195925313](S:/woniu/TypoaPicture/image-20230427195925313.png)
+![image-20230427195925313](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230427195925313.png)
 
 ##### 可以通过以下指令查看nginx是否启动成功
 
@@ -44,7 +44,7 @@ start nginx
 tasklist /fi "imagename eq nginx.exe
 ```
 
-![image-20230427200215575](S:/woniu/TypoaPicture/image-20230427200215575.png)
+![image-20230427200215575](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230427200215575.png)
 
 
 
@@ -72,7 +72,7 @@ http://127.0.0.1:8800
 
 ###### 如果用的是8800端口注意修改地址后面的端口号
 
-![image-20230427200357890](S:/woniu/TypoaPicture/image-20230427200357890.png)
+![image-20230427200357890](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230427200357890.png)
 
 
 
