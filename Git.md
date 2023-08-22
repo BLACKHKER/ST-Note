@@ -35,6 +35,7 @@
 | git merge / rebase <分支名>                 | 合并分支                                           |
 | git pull <远程仓库origin> <远程分支 master> | 拉取远程仓库的数据到本地远程分支，并进行merge合并  |
 | git pull –-rebase <远程仓库> <远程分支>     | 拉取远程仓库的数据到本地远程分支，并进行rebase合并 |
+| git reset 文件名/*                          | 回滚指定文件/所有的git add                         |
 
 
 
