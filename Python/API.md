@@ -356,3 +356,18 @@ dict(set集合)
 sorted(容器名, [reverse=True](可选参数))
 ```
 
+
+
+
+
+
+
+#### 线程
+
+##### 线程休眠
+
+```python
+# 线程休眠指定的毫秒数
+time.sleep(ms)
+```
+

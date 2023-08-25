@@ -49,6 +49,42 @@ print(num)
 
 
 
+#### None
+
+##### 声明变量
+
+对一个不想赋初值的变量，可以用None声明
+
+```python
+num = None
+```
+
+
+
+##### 声明判断
+
+在if判断中，None等同于false
+
+```python
+result = None
+# None表示false，not None就是true
+if not result
+```
+
+
+
+##### 声明方法
+
+如果为空，或不返回，默认返回None
+
+###### 注意
+
+函数有返回值，返回值类型就是方法指定的类型，没有返回值，返回值是None，类型是NoneType
+
+等同于Java中的Null
+
+
+
 
 
 
@@ -753,7 +789,7 @@ for key in myDic
 
 
 
-### 输出打印
+### print()：输出打印
 
 ```python
 # 打印单个，直接打印
@@ -774,9 +810,7 @@ print(num,str,f)
 
 ### 注释
 
-#### 单行注释
-
-##### #号
+##### 单行注释：#号
 
 ```python
 # 注释内容
@@ -785,16 +819,24 @@ print(num,str,f)
 
 
 
-
-
-#### 多行注释
-
-##### 三个双引号"”“
+##### 多行注释：三个双引号"”“
 
 ```python
 """ 
 多行注释
 """
+```
+
+
+
+##### 方法注释
+
+在方法内部第一行打三个双引号回车
+
+```python
+def funcTest()
+	"""回车"""
+	TODO...
 ```
 
 
@@ -1129,51 +1171,229 @@ hello("Success!")
 
 
 
-
-
 #### 返回值
 
-##### 声明变量
+##### 不返回(return)
 
-对一个不想赋初值的变量，可以用None声明
+返回None，方法依然可以使用变量来接受这个None类型的返回值
+
+
+
+##### 返回单个、多个参数
 
 ```python
-num = None
+# 单个参数，直接返回
+return x
+
+# 多个参数，用逗号分隔，接收按照返回值的顺序，写对应顺序的变量接收
+return x, y
+
+x, y = funcReturn()
 ```
 
 
 
-##### 声明判断
 
-在if判断中，None等同于false
+
+#### 传参方式
+
+##### 位置参数
+
+> 调用函数时根据函数定义的参数位置传递参数，传递的参数和方法的参数个数、参数顺序必须一致
 
 ```python
-result = None
-# None表示false，not None就是true
-if not result
+def testFunction(id, name, age)
+	print(id + "-" name + "-" + age)
+testFunction(1, "刘备", 18)
 ```
 
 
 
-##### 声明方法
+##### 关键字参数
 
-如果为空，或不返回，默认返回None
+> 传递参数的时候通过”键 = 值“的方式传递参数，不需要按顺序传递了
+
+```python
+def testFunction(id, name, age)
+	print(id + "-" name + "-" + age)
+testFunction(name = "刘备", age = 18, id = 1)
+```
 
 ###### 注意
 
-函数有返回值，返回值类型就是方法指定的类型，没有返回值，返回值是None，类型是NoneType
-
-等同于Java中的Null
+函数调用时，如果有位置参数，位置参数必须在关键字参数的前面，且匹配参数顺序
 
 
 
-##### 方法注释
+##### 缺省参数(默认参数)
 
-在方法内部第一行打三个双引号回车
+> 就是给方法的参数设定一个默认值，调用方法时可以不传该参数，如果传了，则覆盖默认参数
 
-```python
-def funcTest()
-	"""回车"""
-	TODO...
+```
+def testFunction(id, name = "刘备", age)
+	print(id + "-" name + "-" + age)
+testFunction(age = 18, id = 1)
 ```
 
+###### 注意
+
+所有位置参数必须出现在默认参数前，包括函数定义和调用
+
+
+
+##### 不定长参数
+
+> 也叫可变参数，表示参数的个数不固定，适用于不确定要传多少个参数的场景
+
+###### 位置传递不定长(一个*号)
+
+> 所有的参数都会被args收集，args是一个元组(tuple)
+
+```python
+def testFunction(*args)
+	print(args)
+testFunction("刘备", 18, 1)
+```
+
+###### 关键字传递不定长(两个*号)
+
+> 参数是"键=值"的形式的情况下，所有的"键=值"都会被kwargs(keyword)收集，kwargs是一个字典
+
+```python
+def testFunction(**kwargs)
+	print(args)
+testFunction(name = "刘备", age = 18, id = 1)
+```
+
+
+
+
+
+#### 函数作为参数传递
+
+> 作用是传入计算逻辑，而非传入数据	逻辑固定参数不固定→逻辑不固定参数不固定
+
+##### 示例
+
+```python
+# 定义一个计算器函数
+def compute(x, y):
+	return x + y
+
+# 新的函数调用需要一个计算器函数作为参数，函数内部使用了这个计算器函数
+def function(compute):
+	result = compute(1, 2)
+	print(result)
+```
+
+
+
+
+
+#### 匿名函数(lambda表达式)
+
+> 函数定义中，def可以定义一个带有名称的函数，可以基于名称重复使用
+>
+> lambda关键字，可以定义匿名函数(无名称)，只可以使用一次
+
+##### 定义
+
+```python
+# lambda是关键字，表示定义的是匿名函数
+# 传入参数表示匿名函数的形式参数：x, y 表示接收两个形式参数
+# 函数体，就是执行逻辑，注意只能写一行，无法写多行代码
+lambda 传入参数: 函数体(一行代码)
+```
+
+
+
+##### 示例
+
+> 在使用函数作为参数传递的时候避免的定义函数的复杂过程
+
+```python
+# 新的函数调用需要一个计算器函数作为参数，函数内部使用了这个计算器函数
+def function(compute):
+	result = compute(1, 2)
+	print(result)
+function(lambda x, y: x + y)
+```
+
+
+
+##### 注意
+
+写多行代码的情况，不可以使用lambda，比如for、if、while这种
+
+
+
+
+
+
+
+### 文件操作(Java IO 流)
+
+#### API
+
+##### 打开/创建文件
+
+> 注意encoding的参数顺序不是第三位，不能用位置参数，用关键字参数直接指定
+
+```python
+# name:文件名(可以有路径) 
+# model:打开文件的模式(只读r、写入w、追加a...)
+# encoding:编码格式(一般使用UTF-8)
+open(name, mode, encoding)
+```
+
+###### 访问模式的区别
+
+r：以只读的方式打开文件。文件的指针会放在文件的开头。默认模式
+
+w：打开一个文件只用于写入。如果文件已存在则打开该文件从头编辑，原有内容删除，文件不存在创建新文件
+
+a：打开文件用于追加，文件存在写入到已有内容之后，文件不存在，创建新文件写入
+
+
+
+##### 读取文件
+
+###### read()
+
+```python
+# num表示要从文件中读取的数据的长度(单位字节)，如果没有传入num，就表示读取文件中的所有数据
+context = 文件对象.read([num])
+```
+
+###### readlines()
+
+```python
+# 按照行的方式把整个文件的内容一次性读取，并且返回的是一个列表，每一行的数据为一个元素
+context = 文件对象.readlines()
+```
+
+###### for循环读取文件
+
+```python
+# for循环读取文件行S，每一个line就是文件的一行数据
+for line in open("S:\logs\exportData.txt", r, encoding="UTF-8")
+	print(line)
+```
+
+###### 注意
+
+最后要关闭文件，否则一直占用该文件，或者使用with open
+
+```python
+# 关闭文件(关闭流)
+文件对象.close()
+```
+
+###### with open读取
+
+> 通过在with open的语句块中对文件进行操作，可以自动关闭文件，不需要close()
+
+```
+with open("S:\logs\exportData.txt", r, encoding="UTF-8") as f:
+	f.readlines()
+```
