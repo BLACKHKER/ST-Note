@@ -295,3 +295,64 @@ for i in range(10)
 # 打印0 - 9
 ```
 
+
+
+
+
+#### 容器相关
+
+##### len()：计算容器长度
+
+```python
+string = "123"
+list = [1, 2, 3]
+tuple = (1, 2, 3)
+set = {1, 2, 3}
+dic = {"1": 10, "2": 20, "3": 30}
+len(string)
+len(list)
+len(tuple)
+len(set)
+len(dic)
+```
+
+
+
+##### max()：获取容器中的最大元素
+
+```python
+max(容器名)
+```
+
+
+
+##### min()：获取容器中的最小元素
+
+```python
+min(容器名)
+```
+
+
+
+##### 容器转换
+
+> 字典进行容器转换的时候，只会保存key
+
+```python
+list(容器名)
+set(容器名)
+tuple(容器名)
+set(容器名)
+# 只有set可以转字典
+dict(set集合)
+```
+
+
+
+##### 容器排序
+
+```python
+# 升序，reverse为False的时候为降序
+sorted(容器名, [reverse=True](可选参数))
+```
+

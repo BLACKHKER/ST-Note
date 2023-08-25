@@ -216,6 +216,14 @@ stock_price_daily_growth_factor, gorwth_days, 5.41 ** stock_price_daily_growth_f
 
 
 
+##### 字符串比大小
+
+字符串大小是根据ASCII码按位比较：ASCII值越小越大，小写大于大写
+
+azz : baa baa大，先比较字符串的第一个字符，如果相等，比较第二个，以此类推
+
+
+
 ##### 方法
 
 ###### 通过下标索引取值
@@ -730,6 +738,14 @@ for key in keys:
 for key in myDic
 	print(myDic[key])
 ```
+
+
+
+
+
+
+
+
 
 
 
