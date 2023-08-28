@@ -1651,3 +1651,138 @@ def testB():
 	print("testB")
 ```
 
+
+
+
+
+
+
+### 包
+
+#### 概念
+
+包由模块和__ init __.py组成，有就是包，没有就是文件夹
+
+
+
+#### 导入包
+
+##### 格式
+
+```python
+import 包名.模块名
+```
+
+
+
+##### 基本使用
+
+```python
+包名.模块名.目标
+```
+
+
+
+
+
+#### 创建包
+
+##### 右键 → New → Python Package
+
+![image-20230828130853417](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230828130853417.png)
+
+
+
+##### __ init __.py
+
+> 配置模块的访问权限：main/all
+
+![image-20230828132701630](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230828132701630.png)
+
+
+
+
+
+#### 导入第三方包
+
+#### PIP
+
+> Python安装内置的程序，负责安装第三方包
+
+##### CMD使用
+
+```shell
+pip install 包名称
+```
+
+![image-20230828134035628](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230828134035628.png)
+
+
+
+##### 网络优化
+
+> pip因为是连接的国外的网站，有的时候速度会很慢，可以通过如下命令配置镜像站(清华大学提供)
+
+```shell
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple 包名
+```
+
+
+
+##### Pycharm使用
+
+###### 右下角Interpreter Settings
+
+![image-20230828134859892](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230828134859892.png)
+
+###### 显示导入的第三方包
+
+![image-20230828135258219](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230828135258219.png)
+
+###### 安装
+
+![image-20230828135648889](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230828135648889.png)
+
+###### 搜索安装
+
+![image-20230828140241042](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230828140241042.png)
+
+
+
+
+
+
+
+### JSON
+
+#### 转换
+
+```python
+import json
+
+# 数据格式化，列表嵌套字典转换JSON
+data = [{"name": "张大山", "age": 11}, {"name": "王大锤", "age": 13}, {"name": "赵小虎", "age": 16}]
+# 将数据转换为JSON字符串，配置ensure_ascii不使用ASCII码转换中文
+jsonStr = json.dumps(data, ensure_ascii=False)
+# String类型
+print(type(jsonStr))
+print(jsonStr)
+
+# 字典转换JSON
+dic = {"name": "周杰伦", "addr": "台北"}
+jsonStr = json.dumps(dic, ensure_ascii=False)
+print(type(jsonStr))
+print(jsonStr)
+
+# JSON字符串转换成Python数据类型(List)
+jsonStr = [{"name": "张大山", "age": 11}, {"name": "王大锤", "age": 13}, {"name": "赵小虎", "age": 16}]
+listA = list([{"name": "张大山", "age": 11}, {"name": "王大锤", "age": 13}, {"name": "赵小虎", "age": 16}])
+print(type(listA))
+print(listA)
+
+# JSON字符串转换成字典(dict)
+jsonStr = {"name": "周杰伦", "addr": "台北"}
+dictA = dict([{"name": "张大山", "age": 11}, {"name": "王大锤", "age": 13}, {"name": "赵小虎", "age": 16}])
+print(type(dictA))
+print(dictA)
+```
