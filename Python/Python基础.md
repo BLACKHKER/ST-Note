@@ -1527,7 +1527,7 @@ finally:
 
 ### 模块
 
-> 其实就是Java中的依赖，执行某些任务可以使用官方的外部包等，最大的层就是依赖，里面的工具就是包
+> 其实就是Java中的包，执行某些任务可以使用官方的外部包等，最大的层就是依赖，里面的工具就是包
 
 #### 导入
 
@@ -1547,5 +1547,107 @@ from 模块名 import 类、变量、方法
 from 模块名 import *
 import 模块名 as 别名
 from 模块名 import 功能名 as 别名
+```
+
+
+
+##### 基本使用
+
+```python
+# 导入time模块(包)
+import time
+time.sleep(5)
+
+# 使用*导入time模块的全部功能
+from time import *
+# 注意这里可以直接使用sleep方法
+sleep(5)
+
+# as加别名(包)
+import time as t
+t.sleep(5)
+
+# as加别名(方法\函数)
+from time import sleep as t
+t(5)
+```
+
+
+
+
+
+#### 自定义模块
+
+> 本质上跟Java一样，自己写程序逻辑打包(maven的package，本地依赖)，其他类引用需要导包
+
+##### 格式
+
+```python
+from 类名 import 方法名
+```
+
+
+
+##### 注意
+
+1.导入外部包的时候，运行会把导入的外部包中的方法也运行了，比如
+
+```python
+# MyTestPackage
+def test(a, b)
+	print(a + b)
+test(1, 2)
+
+# MyRunPackage
+# 导入外部包
+from MyTestPackage import test
+# 没有其他代码...运行MyRunPackage会输出3，但是没有调用外部包MyTestPackage的test方法它也运行了
+```
+
+2.导入不同模块的同名方法，优先以最后导入的模块方法为准
+
+```python
+from package import test
+from package2 import test
+# 调用package2的test()方法
+test()
+```
+
+
+
+##### __ main __(双下划线)
+
+> 解决导入包自动运行的问题，本质上是Java的作用域private(类似)
+
+```python
+# 打main自动提示
+if _ _name_ _ == "_ _main_ _":
+	方法名
+```
+
+###### 实例
+
+```python
+def test(a, b)
+	print(a + b)
+if _ _name_ _ == "_ _main_ _":
+	test(1, 2)
+```
+
+
+
+##### __ all __(双下划线)
+
+> 限制外部包使用`*`导入该包内所有方法后可以访问的方法，只限制`*`号，手动导入可以正常导入
+
+```python
+# 限制外部包只能使用testA方法
+_ _ all _ _ = ["testA"]
+
+def testA():
+	print("testA")
+	
+def testB():
+	print("testB")
 ```
 
