@@ -1401,3 +1401,151 @@ with open("D:\logs\exportData.txt", "r", encoding="UTF-8") as f:
     for line in f:
 	    print(line)
 ```
+
+
+
+##### 写入文件
+
+> close()方法内置了flush()操作
+
+###### open()
+
+> 文件不存在，会自动创建文件
+
+```python
+# 打开/创建文件用w模式打开
+file = open("D:\logs\writeData.txt", "w", encoding="UTF-8")
+
+# 追加文件用a模式打开，追加不换行
+file = open("D:\logs\writeData.txt", "a", encoding="UTF-8")
+```
+
+###### write()
+
+```python
+文件对象.write("写入内容")
+```
+
+###### flush()
+
+> 文件在操作的时候(write())是没有直接写入的，是保存在Python的内存中(缓冲区)，这样避免频繁的操作硬盘
+
+```python
+# 内容刷新
+文件对象.flush()
+```
+
+
+
+
+
+
+
+### 异常
+
+#### 捕获异常
+
+> 未指定正确异常，将无法捕获，异常具有传递性(同Java)，多个方法调用中间有异常会向上层传递
+
+##### 基本语法(同try-catch)
+
+###### 捕获所有异常
+
+```python
+try:
+	可能发生错误的代码
+except:
+	发生错误后执行的内容
+```
+
+###### 捕获指定的异常
+
+```python
+try:
+	可能发生错误的代码
+except 异常类型 as 自定义异常名:
+	发生错误后执行的内容
+```
+
+###### 捕获多个异常
+
+> 将要捕获的异常写在except后，使用元组的方式进行书写
+
+```python
+try:
+	可能发生错误的代码
+except (异常类型1,异常类型2) as 自定义异常名:
+	发生错误后执行的内容
+```
+
+实例
+
+```python
+try:
+	1 / 0
+except (NameError,ZeroDivisionError) as e:
+	print("出现了变量未定义或除以0的异常！")
+```
+
+
+
+##### else
+
+> 没有出现异常执行，非必须
+
+```python
+try:
+	可能发生错误的代码
+except 异常类型 as 自定义异常名:
+	发生错误后执行的内容
+else:
+	没有出现异常执行的内容
+```
+
+
+
+##### finally
+
+> 无论是否出现异常都执行，非必须
+
+```python
+try:
+	可能发生错误的代码
+except 异常类型 as 自定义异常名:
+	发生错误后执行的内容
+else:
+	没有出现异常执行的内容
+finally:
+    最终执行(关闭文件流等)
+```
+
+
+
+
+
+
+
+### 模块
+
+> 其实就是Java中的依赖，执行某些任务可以使用官方的外部包等，最大的层就是依赖，里面的工具就是包
+
+#### 导入
+
+##### 格式
+
+```python
+[from 模块名] import [模块 | 类 | 变量 | 函数 | *] [as 别名]
+```
+
+
+
+##### 常用组合形式
+
+```python
+import 模块名
+from 模块名 import 类、变量、方法
+from 模块名 import *
+import 模块名 as 别名
+from 模块名 import 功能名 as 别名
+```
+
