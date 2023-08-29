@@ -1,19 +1,38 @@
 ## 笔记概述
 
-**BHK：编程语言学习**
-BHK目前支持如下语言：
+### BHK：编程语言学习资源库
+
+#### BHK目前支持如下：
+
+##### 语言：
 
 - `Java` v1.8
 - `Python` v3.11
 
----
+
+
+##### 数据库：
+
+- `MySQL` v8.0+
+- `MongoDB` v7.0
+- `redis` v3.2.100
+
+
+
+##### 消息中间件：
+
+
+
+
 
 ## 其他相关
 
 - [PicGo](https://github.com/Molunerfinn/PicGo)：使用PicGo实现图片上传。
 - [Aliyun OSS](https://www.aliyun.com/product/oss)：Aliyun OSS对象存储实现图床支持。
 
----
+
+
+
 
 ## License
 
