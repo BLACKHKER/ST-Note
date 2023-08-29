@@ -85,7 +85,7 @@ if not result
 
 
 
-
+---
 
 
 
@@ -305,8 +305,6 @@ print(s2)
 # 统计字符串的长度
 字符串.len()
 ```
-
-
 
 
 
@@ -591,8 +589,11 @@ for i in myArray:
 
 ```python
 # 从序列中，从指定位置开始，依次取出元素，到指定位置结束，得到一个新序列
+
 # 起始下标表示从何处开始，可以留空，留空视作从头开始
+
 # 结束下标表示何处结束，可以留空，留空视作截取到结尾，不包含当前
+
 # 步长表示依次取元素的间隔：
 # 1表示一个个取元素(默认是1)，2表示每次跳过一个取，N表示每次跳过N-1个取，
 # 步长为负数，表示反向取(注意起始下标和结束也要反向)
@@ -777,15 +778,7 @@ for key in myDic
 
 
 
-
-
-
-
-
-
-
-
-
+---
 
 
 
@@ -804,7 +797,7 @@ print(num,str,f)
 
 
 
-
+---
 
 
 
@@ -841,7 +834,7 @@ def funcTest()
 
 
 
-
+---
 
 
 
@@ -889,7 +882,7 @@ print(c, type(c))
 
 
 
-
+---
 
 
 
@@ -929,7 +922,7 @@ print(f"您好:{user_name},您是尊贵的{user_type}")
 
 
 
-
+---
 
 
 
@@ -1125,7 +1118,7 @@ for i in range(1, 10):
 
 
 
-
+---
 
 
 
@@ -1290,7 +1283,7 @@ def function(compute):
 
 
 
-#### 匿名函数(lambda表达式)
+#### 匿名函数(Java lambda表达式)
 
 > 函数定义中，def可以定义一个带有名称的函数，可以基于名称重复使用
 >
@@ -1327,7 +1320,7 @@ function(lambda x, y: x + y)
 
 
 
-
+---
 
 
 
@@ -1437,7 +1430,7 @@ file = open("D:\logs\writeData.txt", "a", encoding="UTF-8")
 
 
 
-
+---
 
 
 
@@ -1521,7 +1514,7 @@ finally:
 
 
 
-
+---
 
 
 
@@ -1653,11 +1646,13 @@ def testB():
 
 
 
+---
 
 
 
+### Python包
 
-### 包
+> 类似Java的maven package，打包成Jar文件，就可以从依赖中引入Jar
 
 #### 概念
 
@@ -1703,9 +1698,7 @@ import 包名.模块名
 
 
 
-#### 导入第三方包
-
-#### PIP
+#### PIP：导入第三方包
 
 > Python安装内置的程序，负责安装第三方包
 
@@ -1749,7 +1742,7 @@ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple 包名
 
 
 
-
+---
 
 
 
@@ -1786,3 +1779,586 @@ dictA = dict([{"name": "张大山", "age": 11}, {"name": "王大锤", "age": 13}
 print(type(dictA))
 print(dictA)
 ```
+
+
+
+---
+
+
+
+### 类、对象
+
+> 同Java
+
+#### 类
+
+##### 创建类
+
+```python
+class 类名:
+    # 类属性(成员变量)
+	属性1 = None
+	属性2 = None
+	属性3 = None
+    
+    # 类方法(成员方法)
+    def 方法名(self,参数列表):
+        执行体...
+```
+
+
+
+##### self
+
+> 代表实例本身(调用该方法的对象，类似于Java中的this)
+>
+> 成员方法的参数必须携带self，但是传参时可以忽略。方法内部访问类的成员变量，必须使用self
+
+```python
+class Person:
+	id = None
+	name = None
+
+	def sayHi(self):
+		print("你好，我是{self.name}，很高兴认识你！")
+
+    def sayMessage(self, message):
+        print(f"你好，我是：{self.name}，这个问题:{message}需要解决一下")
+
+
+# xxx.py
+person = Person()
+person.id = 1
+person.name = "刘备"
+person.sayHello()
+# self可以不传参，只传message即可
+person.sayMessage("index of outBounds")
+
+# 输出：
+# 你好，我是刘备，很高兴认识你！
+# 你好，我是：刘备，这个问题index of outBounds需要解决一下
+```
+
+
+
+##### 构造方法
+
+> _ _ init _ _，创建对象时传入参数，使用构造方法可以不写属性，会自动创建并赋值，写则只赋值
+
+###### 示例
+
+```python
+class Person:
+    
+    # 属性(成员变量)
+	id = None
+	name = None
+	
+	# 构造方法
+	def __init__(self, id, name):
+		self.id = id
+		self.name = name
+		
+
+person = Person(1, "刘备")
+```
+
+
+
+##### 私有成员变量、方法
+
+> Java private 使用对象无法给私有成员变量赋值、无法访问私有方法
+
+```python
+# 不报错，但赋值失效
+对象名.__变量名 == xxx
+# 报错，提示没有这个成员方法
+对象名.__方法名
+```
+
+###### 在类内部可以访问
+
+```python
+class Person:
+    
+    # 属性(成员变量)
+	id = None
+	name = None
+	__age = 10
+	
+	# 构造方法
+	def __init__(self, id, name):
+		self.id = id
+		self.name = name
+	
+	# 私有方法
+	def __returnFalse(self):
+		return "未成年，无法查询！"
+	
+	# 公开方法
+	def getAge(self):
+		if self.__age > 18:
+			# 调用私有属性
+			return self.__age
+		else:
+			# 调用私有方法
+			return self.__returnFalse()
+		
+person = Person(1, "刘备")
+person.getAge()
+```
+
+
+
+
+
+#### 对象
+
+##### 创建对象
+
+```python
+# 括号可以理解为构造方法
+对象(实例)名 = 类名()
+```
+
+
+
+##### 对象赋值
+
+```python
+对象名.属性名 = 属性值
+```
+
+
+
+##### 获取对象属性值
+
+```python
+对象名.属性名
+```
+
+
+
+##### 类对象调用类函数(方法)
+
+```python
+对象名.函数名(方法名)
+```
+
+
+
+
+
+#### 魔术方法
+
+> Python中类内置的方法称为内置方法，有不同的特殊功能，_ _ init _ _就是其中之一，这些方法称为魔术方法
+>
+> 前面两个下划线后面两个下划线包裹起来的方法都是内置的魔术方法
+
+##### 常见魔术方法
+
+###### _ _ str _ _：字符串方法
+
+> Java中的重写toString()
+
+```
+class Person:
+    
+    # 属性(成员变量)
+	id = None
+	name = None
+	
+	# 构造方法
+	def __init__(self, id, name):
+		self.id = id
+		self.name = name
+	
+	# 重写toString方法
+	def __str__(self):
+		return f"student类对象,id={self.id}, name={self.name}"
+
+person = Person(1, "刘备")
+```
+
+###### _ _ lt _ _：小于符号比较方法(less than)
+
+```python
+class Person:
+    
+    # 属性(成员变量)
+	id = None
+	name = None
+	
+	# 构造方法
+	def __init__(self, id, name):
+		self.id = id
+		self.name = name
+	
+	# 小于符号比较方法,other是另一个对象
+	def __lt__(self, other):
+		return self.id < other.id
+
+person = Person(1, "刘备")
+person2 = Person(2, "关羽")
+
+# True
+print(person < person2)
+
+# False
+print(person < person2)
+```
+
+###### _ _ le _ _：小于等于符号比较方法(less than or equal)
+
+```python
+class Person:
+    
+    # 属性(成员变量)
+	id = None
+	name = None
+	
+	# 构造方法
+	def __init__(self, id, name):
+		self.id = id
+		self.name = name
+	
+	# 小于符号比较方法,other是另一个对象
+	def __le__(self, other):
+		return self.id <= other.id
+
+person = Person(1, "刘备")
+person2 = Person(2, "关羽")
+
+# True
+print(person < person2)
+
+# False
+print(person < person2)
+```
+
+###### _ _ eq _ _：比较方法(equals)
+
+> 不重写eq方法，对象之间可以比较，比较的是内存地址，就是不同的对象比较一定是False，即便属性值相同
+>
+> 重写eq方法，可以自定义比较的逻辑
+
+```python
+class Person:
+    
+    # 属性(成员变量)
+	id = None
+	name = None
+	
+	# 构造方法
+	def __init__(self, id, name):
+		self.id = id
+		self.name = name
+	
+	# 小于符号比较方法,other是另一个对象
+	def __eq__(self, other):
+		return self.id == other.id
+
+person = Person(1, "刘备")
+person2 = Person(2, "关羽")
+
+# False
+print(person == person2)
+```
+
+
+
+##### 其他魔术方法
+
+![魔术方法](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/%E9%AD%94%E6%9C%AF%E6%96%B9%E6%B3%95.png)
+
+
+
+
+
+#### 封装、继承、多态
+
+> 同Java
+
+##### 封装
+
+封装是一种隐藏对象内部细节的方式，只向外界暴露需要使用的方法和属性。这样做的好处是可以保护数据的完整性，并使代码更易于维护和理解。比如将类的属性私有化(Java private)只暴漏接口(构造方法)给外部调用
+
+
+
+##### 继承
+
+> 代码复用，公共代码写成父类
+
+继承是一种可以让某个类型获得另一个类型的字段和方法的功能。这使得父类的设计和实现可以被重用，并可以在子类中添加新的功能。
+
+###### 单继承
+
+```python
+class 类名(父类):
+	...
+```
+
+```python
+class Animal:
+	name = None
+	color = None
+	species = None
+	
+	eat方法...
+
+# Dog类继承Animal类
+class Dog(Animal):
+	# 品种
+	breed = None
+	
+	run方法...
+```
+
+###### 多继承
+
+> 一个类继承多个父类，父类里的参数重名，继承第一个(从左到右)
+
+```python
+class 类名(父类1, 父类2, 父类3...):
+    # pass是语法补全，类定义什么都没写会报错，用pass占位就不报错了
+	.../pass
+```
+
+```python
+
+```
+
+
+
+##### 多态
+
+> 父类对象的子类引用调用方法
+
+多态是指一个引用变量到底会调用哪个类的方法，不由引用变量的类型决定，而是由其实际的类型决定。在运行时可以改变引用变量的实际类型，也就是可以改变程序的行为，这就是多态性。
+
+###### 复写
+
+> 类似Java重写，即方法名、方法参数名、参数个数一致，子类的方法重写内部的具体实现，复写属性和方法
+
+```python
+class Phone:
+	# 序列号
+	IMEI = None
+	# 手机厂商
+	producer = "HUAWEI"
+	
+	def call():
+		print("4G通话")
+
+class MyPhone(Phone):
+	# 重写手机厂商
+	producer = "IPHONE"
+	
+	# 重写父类方法
+	def call():
+		print("5G通话")
+```
+
+
+
+
+
+#### super关键字
+
+> 同Java super
+
+在重写了父类的属性、方法后，调用会优先使用子类重写的，如果想调用父类的成员变量或者方法，使用super
+
+##### 调用父类方式
+
+###### 父类名调用
+
+```python
+父类名.成员变量
+父类名.成员方法(self)
+```
+
+###### super()调用
+
+```
+super().成员变量
+super().成员方法()
+```
+
+
+
+---
+
+
+
+### 注解
+
+> 在Python3.5+引入，类似于Java的泛型
+
+#### 类型注解
+
+> Python没有Java的参数类型限制，可以使用注解实现标记数据类型，本质上方便了Pycharm做类型推断
+
+##### 变量类型注解
+
+###### 基础数据类型
+
+```python
+变量名: 类型注解 = 参数值
+name: str = "刘备"
+```
+
+###### 类对象类型
+
+```python
+对象名: 类型 = 类名()
+class Student:
+# 声明对象stu的类型是Student    
+stu: Student = Student()
+```
+
+###### 容器类型
+
+```python
+"""========================简易注解========================"""
+# 列表
+myList: list = [1, 2, 3]
+# 元组
+myTuple: tuple = (1, 2, 3)
+# 集合
+mySet: set = {1, 2, 3}
+# 字典
+myDict: dict = {1: "刘备", 2: "关羽"}
+# 字符串
+myString: str = "刘备"
+
+"""========================详细注解(声明容器保存的元素类型)========================"""
+# 列表
+myList: list[int] = [1, 2, 3]
+# 元组
+myTuple: tuple[int, str, bool] = (1, "2", True)
+# 集合
+mySet: set[int] = {1, 2, 3}
+# 字典
+myDict: dict[int, str] = {1: "刘备", 2: "关羽"}
+```
+
+###### 注释实现类型注解
+
+```python
+class Student():
+	pass
+var1 = random.randint(1, 10)	# type: int
+var2 = json.loads(data)			# type: dict[str, int]
+var3 = func()					# type: Student
+```
+
+
+
+##### 函数(方法)形参列表和返回值的注解
+
+> 建议性注解
+
+###### 形参注解
+
+```python
+def 方法名(形参名: 类型, 形参名: 类型):
+	return x + y
+```
+
+###### 返回值注解
+
+```python
+def 方法名(data: list) -> 返回类型
+	return data
+```
+
+
+
+##### union类型注解
+
+###### 导包(必须先导包)
+
+```python
+from typing import Union
+```
+
+###### 使用
+
+```python
+"""=============================容器注解============================="""
+实例名: 注解类型[Union(联合类型1，联合类型2)] = [数据1, 数据2, "数据3", "数据4"]
+myList: list = [1, 2, "3", "4"]
+# 新增了数据字符串"3"、"4",list类型已经限制不了了，转换为：
+myList: list[Union(int, str)] = [1, 2, "3", "4"]
+
+"""=============================方法注解============================="""
+def 方法名(data: Union[参数类型1, 参数类型2...]):
+def func(data: Union[int, str]):
+```
+
+
+
+---
+
+
+
+### 接口
+
+> 同Java接口的概念是一样的，区别是Python的写法更像是Java抽象类
+
+#### 示例
+
+##### 父类保存抽象方法
+
+```python
+# 空调类
+class AC:
+	def coolWind(self):
+		"""制冷"""
+		pass
+	def hotWind(self):
+		"""制热"""
+		pass
+	def swingLeftAndRight(self):
+		"""摆动"""
+		pass
+    def makeCool(ac: AC):
+        # 运行
+        ac.coolWind()
+```
+
+
+
+##### 子类实现
+
+```python
+class MediaAC(AC):
+	def coolWind(self):
+		"""制冷"""
+		print("美的空调制冷")
+	def hotWind(self):
+		"""制热"""
+		print("美的空调制热")
+	def swingLeftAndRight(self):
+		"""摆动"""
+		print("美的空调摆动")
+        
+class GreeAC(AC):
+	def coolWind(self):
+		"""制冷"""
+		print("格力空调制冷")
+	def hotWind(self):
+		"""制热"""
+		print("格力空调制热")
+	def swingLeftAndRight(self):
+		"""摆动"""
+		print("格力空调摆动")
+```
+
+
+
+---
+
+
+
