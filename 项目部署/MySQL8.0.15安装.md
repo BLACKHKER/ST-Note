@@ -2,25 +2,25 @@
 
 ### 一、安装
 
-##### 1.双击安装程序，就会出现下面的界面，勾选“I accept the license terms”，然后点击next
+##### 双击安装程序，就会出现下面的界面，勾选“I accept the license terms”，然后点击next
 
 ![QQ图片20230318225248](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326017.jpg)
 
 
 
-##### 2.这一步和MySQL5.X版本的有很的大区别，直接选择“Custom（自定义）”，就可以将MySQL安装到非系统盘。
+##### 这一步和MySQL5.X版本的有很的大区别，直接选择“Custom（自定义）”，就可以将MySQL安装到非系统盘。
 
 ![QQ图片20230318225310](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326413.jpg)
 
 
 
-##### 3.进行安装功能的选择。当你第一次进入到这个界面时，右边的框内可能什么也没有，你需要不断点击“MySQL Servers”前的“+”，直到你看见“MySQL Server 8.0.xx-X64”，单击它，然后点击向右的箭头添加到右边的框里，然后在右边的框里点击它，就会出现右下角的蓝字。
+##### 进行安装功能的选择当你第一次进入到这个界面时，右边的框内可能什么也没有，你需要不断点击“MySQL Servers”前的“+”，直到你看见“MySQL Server 8.0.xx-X64”，单击它，然后点击向右的箭头添加到右边的框里，然后在右边的框里点击它，就会出现右下角的蓝字。
 
 ![QQ图片20230318225314](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326494.jpg)
 
 
 
-##### 4.接下来就是选择安装路径了，单击上一步出现的蓝字“Advanced Options”，出现下面的界面。第一个位置就是MySQL的安装路径，第二个位置是存放数据用的，建议两个路径分开，不要放在一起。路径下出现的感叹号不要去管它。直接点击“OK”。选好路径之后点击“next”。
+##### 接下来就是选择安装路径了，单击上一步出现的蓝字“Advanced Options”，出现下面的界面。第一个位置就是MySQL的安装路径，第二个位置是存放数据用的，建议两个路径分开，不要放在一起。路径下出现的感叹号不要去管它。直接点击“OK”。选好路径之后点击“next”。
 
 > 注意:路径不要有中文。
 
@@ -28,31 +28,43 @@
 
 
 
-##### 5.继续next
+##### 继续next
 
 ![QQ图片20230318225910](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326703.jpg)
 
 
 
-##### 6.选择是
+##### 选择是
 
 ![QQ图片20230318225958](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326611.jpg)
 
 
 
-##### 7.直接点击“Execute”进行安装
+##### 可能弹出需要安装VS++(紫色)环境组件，点击“Execute”进行安装
+
+
+
+
+
+##### 直接点击“Execute”进行安装
 
 ![QQ图片20230318230154](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326544.png)
 
 
 
-##### 8. 等待30s左右，点击“next”。
+##### 等待30s左右，点击“next”。
 
 ![QQ图片20230318230214](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326659.png)
 
 
 
-##### 9.这一步建议什么也不要动，直接点击“next”。(请见第10步的详细说明)
+##### 这里是独立安装\集群安装，默认独立，next
+
+![image-20230830142719937](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230830142719937.png)
+
+
+
+##### 这一步建议什么也不要动，直接点击“next”。(详见后面的详细说明)
 
 ![QQ图片20230318230313](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326400.jpg)
 
@@ -72,7 +84,7 @@
 
 
 
-##### 10.这一步对以后我们使用图形化管理软件(SQLyog)有直接的影响，所以在这一步我们要选择第二个。
+##### 这一步对以后我们使用图形化管理软件(SQLyog)有直接的影响，所以在这一步我们要选择第二个。
 
 ![QQ图片20230318230529](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326582.jpg)
 
@@ -92,43 +104,49 @@
 
 
 
-##### 11.然后next 给root用户设置密码，设置完点击next
+##### 然后next 给root用户设置密码，设置完点击next
 
 ![QQ图片20230318230617](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326589.jpg)
 
 
 
-##### 12.这一步是服务名称 默认不用管就行了，如果“Windows Service Name”出现感叹号，那你就随便换一个别的名字就行了，然后点击“next”配置权限，直接默认yes，grant... next下一步
+##### 这一步是服务名称 默认不用管就行了，如果“Windows Service Name”出现感叹号，那你就随便换一个别的名字就行了，然后点击“next”
+
+![image-20230830143001030](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230830143001030.png)
+
+
+
+##### 配置权限，直接默认yes，grant... next下一步
 
 ![QQ图片20230318230847](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326730.jpg)
 
 
 
-##### 13.点击“Execute”进行安装。
+##### 点击“Execute”进行安装。
 
 ![QQ图片20230318230940](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326520.jpg)
 
 
 
-##### 14.安装过程中 这个地方会卡一会2min左右
+##### 安装过程中 这个地方会卡一会
 
 ![QQ图片20230318230949](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326308.jpg)
 
 
 
-##### 15.安装完成之后的样子 单击Finish
+##### 安装完成之后的样子 单击Finish
 
 ![QQ图片20230318231001](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326067.jpg)
 
 
 
-##### 16.点击next
+##### 点击next
 
 ![QQ图片20230318231014](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326776.jpg)
 
 
 
-##### 17. 点击“finish”,安装完成
+##### 点击“finish”,安装完成
 
 ![QQ图片20230318231033](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303182326443.jpg)
 

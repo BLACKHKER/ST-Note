@@ -431,7 +431,7 @@ vi /usr/local/tomcat/bin/catalina.sh
 
 -Djava.awt.headless=true \
 
-![img](S:/woniu/TypoaPicture/clip_image016.jpg)
+![img](S:/TypoaPicture/clip_image016.jpg)
 
  
 

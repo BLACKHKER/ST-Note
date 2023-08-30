@@ -948,6 +948,17 @@ if age < 25:
 
 
 
+##### if-in
+
+> 判断元素x是否在y里，是返回True，否返回False
+
+```
+if x in y:
+	条件成立 TODO
+```
+
+
+
 ##### if-else
 
 ```python
@@ -1748,32 +1759,50 @@ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple 包名
 
 ### JSON
 
-#### 转换
+#### 转换 
+
+##### 转JSON
+
+###### 列表嵌套字典转换JSON
 
 ```python
 import json
 
-# 数据格式化，列表嵌套字典转换JSON
 data = [{"name": "张大山", "age": 11}, {"name": "王大锤", "age": 13}, {"name": "赵小虎", "age": 16}]
 # 将数据转换为JSON字符串，配置ensure_ascii不使用ASCII码转换中文
 jsonStr = json.dumps(data, ensure_ascii=False)
 # String类型
 print(type(jsonStr))
 print(jsonStr)
+```
 
-# 字典转换JSON
+###### 字典转换JSON
+
+```python
+import json
+
 dic = {"name": "周杰伦", "addr": "台北"}
 jsonStr = json.dumps(dic, ensure_ascii=False)
 print(type(jsonStr))
 print(jsonStr)
+```
 
-# JSON字符串转换成Python数据类型(List)
+###### JSON字符串转换成Python数据类型(List)
+
+```python
+import json
+
 jsonStr = [{"name": "张大山", "age": 11}, {"name": "王大锤", "age": 13}, {"name": "赵小虎", "age": 16}]
 listA = list([{"name": "张大山", "age": 11}, {"name": "王大锤", "age": 13}, {"name": "赵小虎", "age": 16}])
 print(type(listA))
 print(listA)
+```
 
-# JSON字符串转换成字典(dict)
+###### JSON字符串转换成字典(dict)
+
+```python
+import json
+
 jsonStr = {"name": "周杰伦", "addr": "台北"}
 dictA = dict([{"name": "张大山", "age": 11}, {"name": "王大锤", "age": 13}, {"name": "赵小虎", "age": 16}])
 print(type(dictA))
@@ -2132,7 +2161,7 @@ class 类名(父类1, 父类2, 父类3...):
 
 ##### 多态
 
-> 父类对象的子类引用调用方法
+> 父类对象的子类引用调用方法，使同一种行为，使用不同的对象，获得不同的运行结果
 
 多态是指一个引用变量到底会调用哪个类的方法，不由引用变量的类型决定，而是由其实际的类型决定。在运行时可以改变引用变量的实际类型，也就是可以改变程序的行为，这就是多态性。
 
@@ -2213,7 +2242,9 @@ name: str = "刘备"
 ```python
 对象名: 类型 = 类名()
 class Student:
-# 声明对象stu的类型是Student    
+# 正常定义
+stu = Student()
+# 注解声明对象stu的类型是Student
 stu: Student = Student()
 ```
 
@@ -2358,7 +2389,28 @@ class GreeAC(AC):
 
 
 
+##### 调用
+
+```python
+def makeCool(ac: AC):
+    # 运行
+    ac.coolWind()
+
+
+media: MediaAC = MediaAC()
+gree: GreeAC = GreeAC()
+
+makeCool(media)
+makeCool(gree)
+```
+
+
+
+
+
 ---
+
+
 
 
 
