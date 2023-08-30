@@ -8,6 +8,8 @@
 
 - `Java` v1.8
 - `Python` v3.11
+- `Vue` v2.0+
+- `NodeJS` v18.12.1
 
 
 
@@ -20,6 +22,58 @@
 
 
 ##### 消息中间件：
+
+- `RabbitMQ` v3.7.7
+
+
+
+##### Web服务器：
+
+- `Nginx` v1.23.2
+- `Tomcat` v8.0+
+
+
+
+##### 操作系统：
+
+- `Linux` vCentOS 7
+  - `Docker` v18.06.3
+- `Docker` v18.06.3
+- `VMWare` v9.0+
+
+
+
+##### 开源产品：
+
+- `Git` v2.28
+
+- `Logstash` v7.6.2
+
+- `Elasticsearch` v7.6.2 (附分词器插件)
+
+- `Kibana` v7.6.2
+
+- `Nacos` v2.1.0
+
+- `MinIO` vx.x.x
+
+  
+
+
+
+##### 开源工具：
+
+- `PowerDisigner` v15.1.0
+- `Jmeter` v5.3.0
+- `NodeVM` v1.1.11
+
+
+
+##### 开源项目：
+
+- `RuoYi-Vue` vx.x.x
+
+
 
 
 
