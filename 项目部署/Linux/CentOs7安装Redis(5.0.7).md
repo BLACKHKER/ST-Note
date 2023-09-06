@@ -1,4 +1,4 @@
-# Linux安装Redis
+## Linux安装Redis
 
 > 下载地址：http://redis.io/download，下载最新稳定版本
 >

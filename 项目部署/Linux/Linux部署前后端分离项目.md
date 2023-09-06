@@ -32,7 +32,7 @@ mysql -u 账户名 -p
 create database 数据库名 default character set utf8;
 ```
 
-![image-20230316162839870](S:/woniu/TypoaPicture/202303161652972.png)
+![image-20230316162839870](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303161652972.png)
 
 
 

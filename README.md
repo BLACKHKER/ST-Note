@@ -36,8 +36,9 @@
 
 ##### 操作系统：
 
-- `Linux` vCentOS 7
-  - `Docker` v18.06.3
+- `Linux`
+  -  CentOS 7
+  -  Ubuntu 22.04.3
 - `Docker` v18.06.3
 - `VMWare` v9.0+
 

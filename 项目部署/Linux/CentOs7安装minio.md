@@ -1,4 +1,4 @@
-# Linux安装MinIO
+## Linux安装MinIO
 
 ### 简介
 
