@@ -38,6 +38,7 @@
 | git init                                    | 初始化本地库                                       |
 | git add 文件名                              | 添加到暂存区                                       |
 | git commit -m "日志信息" 文件名             | 提交到本地库                                       |
+| git remote add origin <仓库地址>            | 将本地库连接到远程仓库地址                         |
 | git push <远程主机名> <本地分支名>          | 将本地仓库分支推送到远程仓库                       |
 | git pull <远程仓库origin> <远程分支 master> | 拉取远程仓库的数据到本地远程分支，并进行merge合并  |
 | git pull –-rebase <远程仓库> <远程分支>     | 拉取远程仓库的数据到本地远程分支，并进行rebase合并 |
@@ -47,13 +48,14 @@
 
 ##### 分支
 
-| 命令                        | 作用               |
-| :-------------------------- | :----------------- |
-| git branch <分支名>         | 创建分支           |
-| git reset --hard 版本号     | 版本穿梭           |
-| git merge / rebase <分支名> | 合并分支           |
-| git checkout <分支名>       | 切换分支           |
-| git checkout -b <分支名>    | 创建并切换到该分支 |
+| 命令                                | 作用               |
+| :---------------------------------- | :----------------- |
+| git branch <分支名>                 | 创建分支           |
+| git reset --hard 版本号             | 版本穿梭           |
+| git merge / rebase <分支名>         | 合并分支           |
+| git checkout <分支名>               | 切换分支           |
+| git checkout -b <分支名>            | 创建并切换到该分支 |
+| git branch -m <原分支名> <新分支名> | 分支更名           |
 
 
 
@@ -287,4 +289,3 @@ git reflog
 ![image-20230321222645631](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202303212226912.png)
 
 > HEAD代表指针，指针指向的位置代表当前版本所在位置(分支、版本)
->
