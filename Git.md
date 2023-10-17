@@ -1,4 +1,4 @@
-# Git
+## Git
 
 ### 1 工作流程
 
@@ -196,23 +196,21 @@ git clone https://gitee.com/blackhker/git-study.git
 
 ##### 拉取远程仓库代码到本地
 
-> 
+> 可以直接git pull，默认拉取远程仓库别名为`origin`的`master`分支
 
 ```shell
 git pull origin master
 ```
 
+![image-20231017224137612](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231017224137612.png)
 
-
-默认拉取远程master分支，如果需要单独拉取其他分支，执行以下命令
+###### 如果需要单独拉取其他分支，执行以下命令
 
 > 本地分支会基于远程origin/dev创建，并与之关联
 
 ```shell
 git checkout -b dev origin/dev
 ```
-
-TODO 图片
 
 
 
@@ -449,6 +447,188 @@ git revert -n fe91f6642cc1128270384160c8026343d27b2535^..HEAD
 
 
 
+---
 
 
-#### 提交签名
+
+### 提交签名(GPG加密)
+
+> 以下所有命令都需在Git bash中输入，因为git内置了gpg的工具
+
+#### 查看git已生成的gpg密钥
+
+```bash
+gpg --list-key
+```
+
+![image-20231018001036566](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018001036566.png)
+
+
+
+
+
+#### 查看gpg版本
+
+```bash
+gpg --version
+```
+
+![image-20231018000311305](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018000311305.png)
+
+
+
+
+
+#### 生成gpg密钥
+
+> 版本号为2.1.17及以上，才可以使用gpg生成密钥对
+
+```bash
+gpg --full-generate-key
+```
+
+##### 选择生成的密钥类型
+
+![image-20231018001152129](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018001152129.png)
+
+
+
+##### 选择密钥长度
+
+![image-20231018001226160](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018001226160.png)
+
+
+
+##### 密钥有效时常，确认
+
+![image-20231018001254501](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018001254501.png)
+
+
+
+##### 输入用户信息，确认
+
+> 邮箱填写远程仓库账号的主邮箱，Comment是用户名别名
+
+![image-20231018001601675](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018001601675.png)
+
+
+
+##### 输入保护密钥的密码
+
+> 这个密码是未来commit提交时，需要输入的密码，不建议过于复杂，过简单会提示密码不安全
+
+![image-20231018001801741](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018001801741.png)
+
+![image-20231018001926007](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018001926007.png)
+
+
+
+##### 再次输入
+
+![image-20231018002016125](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018002016125.png)
+
+
+
+##### 等待一段时间，会自动生成一个密钥对：GPG Key ID
+
+![image-20231018002205457](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018002205457.png)
+
+
+
+##### 根据GPG Key ID导出公钥
+
+```bash
+gpg --armor --export <GPG Key ID>
+```
+
+![image-20231018002438691](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018002438691.png)
+
+![image-20231018002449445](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018002449445.png)
+
+
+
+##### 将公钥添加到远程仓库
+
+> 以-----BEGIN XXX-----开头，以-----END XXX-----结尾的内容，包含开头结尾
+
+![image-20231018003031029](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018003031029.png)
+
+
+
+##### 配置Git提交全局签名
+
+> 设定所有的Commit都需要验证密钥签名，开启GPG密钥提交验证
+
+```bash
+git config --global commit.gpgsign true
+```
+
+![image-20231018003408481](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018003408481.png)
+
+
+
+##### 设置全局签名使用的Key
+
+```bash
+git config --global user.signingkey <GPG Key ID>
+```
+
+![image-20231018003618236](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018003618236.png)
+
+
+
+##### 此时，后续的提交显示Verifiled，完成
+
+> Gitee显示为已验证
+
+![image-20231018003744437](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018003744437.png)
+
+
+
+
+
+#### 删除GPG密钥
+
+##### 查看git已生成的gpg密钥
+
+```bash
+gpg --list-key
+```
+
+![image-20231018004104166](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018004104166.png)
+
+
+
+##### 删除私钥
+
+> 提示两次是否确认删除
+
+```bash
+gpg --delete-secret-key <GPG Key ID>
+```
+
+```bash
+gpg (GnuPG) 2.2.16-unknown; Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+sec  rsa4096/D4E0057431E0ECB1 2019-08-29 ppppp (ppppp) <ppppp@pp.com>
+
+Delete this key from the keyring? (y/N)y
+This is a secret key! - really delete? (y/N) y
+```
+
+
+
+##### 删除公钥
+
+```bash
+gpg --delete-key <GPG Key ID>
+```
+
+```
+pub  rsa4096/D4E0057431E0ECB1 2019-08-29 ppppp (ppppp) <ppppp@pp.com>
+
+Delete this key from the keyring? (y/N)y
+```
+
