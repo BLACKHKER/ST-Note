@@ -16,6 +16,7 @@
 ##### 数据库：
 
 - `MySQL` v8.0+
+- `SQLite` v3.43.2
 - `MongoDB` v7.0
 - `redis` v3.2.100
 
