@@ -294,8 +294,6 @@ TODO 图片
 
 > 如果本地的分支是直接创建出来的（git branch 分支名称）,则本地的分支与远程的分支默认是无关联的，若只使用`git pull` 或 `git push`，没有指定分支，则会提示先进行分支关联
 
-TODO 图片
-
 ##### 本地分支关联远程分支
 
 ```shell
@@ -448,3 +446,9 @@ git revert -n fe91f6642cc1128270384160c8026343d27b2535^..HEAD
 回退后的状态是待提交(删除了Test.txt)，未提交到本地库，重新add、commit并push：
 
 ![image-20231016225323989](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231016225323989.png)
+
+
+
+
+
+#### 提交签名
