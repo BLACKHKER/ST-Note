@@ -116,7 +116,7 @@ $ git init
 git add 文件名 / *(全部)
 ```
 
-![image-20231016223217742](S:\TypoaPicture\image-20231016223217742.png)
+![image-20231016223217742](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231016223217742.png)
 
 
 
@@ -385,9 +385,7 @@ git status
 
 ##### 已经添加到缓存区但未提交
 
-TODO
-
-![image-20231016224222901](S:\TypoaPicture\image-20231016224222901.png)
+![image-20231016224222901](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231016224222901.png)
 
 
 

@@ -701,9 +701,11 @@ SELECT SUM(ClassHour) as 总课时 ，AVG(ClassHour) as 平均课时 FROM SUBJEC
 
 
 
-#### 流程控制
 
-##### 选择结构 CASE END
+
+### 流程控制
+
+#### 选择结构 CASE END
 
 ```mysql
 SELECT CASE (DAYOFWEEK(NOW()) - 1)	-- 返回一个int 
@@ -719,7 +721,9 @@ END;
 
 
 
-##### IF()：SQL三元表达式
+
+
+#### IF()：SQL三元表达式
 
 if(表达式1，表达式2，表达式3)跟三元表达式一样，判断表达式1，true执行表达式2，false执行表达式3
 
