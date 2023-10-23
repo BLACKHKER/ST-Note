@@ -1,3 +1,5 @@
+## Java - API
+
 ### String：字符串
 
 ##### String转换为int:
@@ -6,11 +8,15 @@
 String str = "123";
 int num = Integer.presInt(str);
 ```
+
+
 ##### String转换为Integer：
 
 ```Java
 Integer num = Integer.valueOf(str);
 ```
+
+
 
 ##### Integer转换为String：
 

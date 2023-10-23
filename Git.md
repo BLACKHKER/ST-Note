@@ -134,6 +134,8 @@ git commit -m "本次提交的备注"
 
 ##### 推送
 
+> 推送前一定要先pull拉取最新的代码，防止代码覆盖，git一般会提示未pull直接push的警告
+
 ###### 获取仓库地址
 
 > 在云仓库(GitHub、Gitee)创建仓库，会有仓库地址的链接
@@ -169,6 +171,15 @@ git push -u origin master
 >
 > 当添加“-u”参数时,表示下次继续push的这个远端分支的时候推送命令就可以简写成“git push”。
 
+###### 强制推送
+
+> 在某些情况，需要不进行pull，直接推送，就可以使用强制推送
+
+```shell
+git push -f -u <远程仓库名> <远程分支名>
+git push -f -u origin release
+```
+
 
 
 
@@ -179,12 +190,22 @@ git push -u origin master
 
 > 在要克隆到的文件夹下打开cmd执行命令
 
+###### 克隆全部内容
+
 ```shell
-git clone 仓库地址
+git clone <仓库地址>
 git clone https://gitee.com/blackhker/git-study.git
 ```
 
 ![image-20231016221533345](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231016221533345.png)
+
+###### 克隆指定分支
+
+> git clone的参数-b表示指定分支
+
+```shell
+git clone -b <分支名> <仓库地址>
+```
 
 ###### 可能提示输入gitee的账号密码，输入后完成克隆(克隆了一个空的仓库会警告)，包含隐藏的git
 
@@ -612,7 +633,7 @@ gpg (GnuPG) 2.2.16-unknown; Copyright (C) 2019 Free Software Foundation, Inc.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 
-sec  rsa4096/D4E0057431E0ECB1 2019-08-29 ppppp (ppppp) <ppppp@pp.com>
+sec  rsa4096/D4E0057431E0ECB1 xxxx-xx-xx ppppp (ppppp) <ppppp@pp.com>
 
 Delete this key from the keyring? (y/N)y
 This is a secret key! - really delete? (y/N) y
@@ -627,7 +648,7 @@ gpg --delete-key <GPG Key ID>
 ```
 
 ```
-pub  rsa4096/D4E0057431E0ECB1 2019-08-29 ppppp (ppppp) <ppppp@pp.com>
+pub  rsa4096/D4E0057431E0ECB1 xxxx-xx-xx ppppp (ppppp) <ppppp@pp.com>
 
 Delete this key from the keyring? (y/N)y
 ```
