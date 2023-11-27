@@ -116,6 +116,56 @@ char* strncpy(char* destination, const char* source, size_t num);
 
 
 
+##### 1.2.2 strlen()
+
+> 计算给定字符串的长度，即字符串中的字符个数（不包括字符串末尾的空字符 '\0'），返回无符号整型
+>
+> - `*str`：要获取长度的字符串
+
+```c
+size_t strlen(const char *str);
+```
+
+**实例**
+
+输出strlen:6
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    size_t length = 0;
+    char str[] = "String";
+
+    length = strlen(str);
+    printf("strlen:%d",length);
+
+    return 0;
+}
+```
+
+输出strlen:3：遇到结束符即结束，d、e、f都不会读到
+
+> <font color="#f40">注意：</font>空格正常计数
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    size_t length = 0;
+    char str[] = {'a', 'b', 'c', '\0', 'd', 'e', ' '};
+
+    length = strlen(str);
+    printf("strlen:%d",length);
+
+    return 0;
+}
+```
+
+
+
 ---
 
 
@@ -230,5 +280,4 @@ fread(res, sizeof(char), n, file);
 /* 关闭流 */
 fclose(file);
 ```
-
 
