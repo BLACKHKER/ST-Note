@@ -431,11 +431,127 @@ int main()
 
 
 
+---
 
 
 
+### 四、注释
+
+#### 4.1 注释风格
+
+**原则**
+
+统一采用`/**/`方式注释，且注释内容左右各留一个空格，如`/* message */`；注释必须使用英文。
+
+**示例**
+
+```C
+/* TODO */
+```
+
+
+
+
+
+#### 4.2 函数注释
+
+**原则**
+
+对外接口按doxgen要求的格式书写，且注释和函数定义间不留空行； 
+
+对内接口在需要时添加注释，注释位于定义前。
+
+**示例**
+
+```c
+/**
+ * 函数功能
+ *
+ * @param  参数名  参数解释
+ * @param  work  the work to be initialized
+ * @param  fn    the call back function to run
+ * @param  arg   the paraments of the function
+ * @param  dly   ms to delay before run
+ * 
+ * @return  the operation status, 0 is OK, others is error
+ */
+int aos_work_init(aos_work_t *work, void (*fn)(void *), void *arg, int dly);
+```
+
+
+
+
+
+#### 4.3 变量注释
+
+**原则**
+
+注释在变量定义后，在仅有一个需要注释的变量时与分号之间只留一个空格； 
+
+若多行变量定义均需注释，则最长变量定义留一个空格，其他注释与其对齐。
+
+**示例**
+
+```c
+int func1(void)
+{
+    int ret; /* return value */
+    ...
+    return 0;
+}
+
+int func2(void)
+{
+    int ret;   /* return value */
+    int value; /* value */
+    ...
+    return 0;
+}
+```
 
 
 
 ---
+
+
+
+### 五、流程控制
+
+#### 5.1 选择语句
+
+> 同Java，流程控制语句跟Java的区别是C中没有布尔类型，True/False取决于参数是否为0
+
+##### if...else
+
+**实例**
+
+```c
+int main()
+{
+    int num = 0;
+
+    scanf("%d", &num);
+
+    if (1 == num)
+    {
+        printf("Success! %d", num);
+    }
+    else 
+    {
+        printf("Error! %d", num);
+    }
+
+    return 0;
+}
+```
+
+
+
+##### switch
+
+##### 实例
+
+```
+
+```
 
