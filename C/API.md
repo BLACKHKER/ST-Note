@@ -168,6 +168,10 @@ int main()
 
 1. 无`\0`时的数组长度问题
 
+   > 不完全初始化：数组大小大于元素个数，剩余元素赋值初始化为0
+   >
+   > <font color="#f40">'0'的ASCII码是48，'\0的ASCII码是0'</font>
+
    ```c
    #include <stdio.h>
    
@@ -211,7 +215,15 @@ size_t sizeof(type);
 > 该函数返回的值，建议占位符用%zu表示
 
 ```c
-ptintf("int占用的字节数为：%zu"sizeof(int));
+/* 4 */
+printf("int占用的字节数为：%zu"sizeof(int));
+
+/* 40，因为自动初始化为0，每个元素占四个字节 */
+int arr[10] = {};
+printf("%zu", sizeof(arr));
+
+/* 4 */
+printf("%zu", sizseof(arr[0]));
 ```
 
 
