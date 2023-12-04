@@ -637,6 +637,14 @@ Delete this key from the keyring? (y/N)y
 
 ### 七、乱码
 
+> 确认本地git配置：
+>
+> ```bash
+> git config --global -l
+> ```
+
+
+
 #### Git Add
 
 ##### 问题现象
@@ -672,19 +680,19 @@ git config --global core.quotepath false
 设置git gui的界面编码
 
 ```shell
-git config --global gui.encoding utf-8
+git config --global gui.encoding UTF-8
 ```
 
 设置 commit log 提交时使用 utf-8 编码，可避免服务器上乱码，同时与linux上的提交保持一致！
 
 ```shell
-git config --global i18n.commitencoding utf-8
+git config --global i18n.commitencoding UFT-8
 ```
 
 使得在 $ git log 时将 utf-8 编码转换成 gbk 编码，解决Msys bash中git log 乱码。
 
 ```shell
-git config --global i18n.logoutputencoding utf-8
+git config --global i18n.logoutputencoding UTF-8
 ```
 
 使得 git log 可以正常显示中文（配合i18n.logoutputencoding = gbk)，在 `/etc/profile` 中添加：
