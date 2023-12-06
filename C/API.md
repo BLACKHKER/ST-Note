@@ -18,7 +18,10 @@ printf(const char *format, ...)
 
 **实例**
 
-> 注意：sizeof()函数的打印，占位符最好用%zu
+> 注意：
+>
+> 1. sizeof()函数的打印，占位符最好用%zu
+> 1. 将int以%c字符类型输出时，输出的是ASCII码中对应该数字的字符
 
 ```c
 /* 字符数组(字符串) */
@@ -45,7 +48,7 @@ printf("int 占用的字节为：%zu",sizeof(int));
 
 
 
-##### 1.2.1 scanf()
+##### 1.1.2 scanf()
 
 > 基础输入(从键盘输入终端)，一般用于给变量赋值
 >
@@ -91,6 +94,63 @@ int main() {
     printf("您的姓名是：%s\n", name);
     printf("您的年龄是：%d\n", age);
     printf("您的身高是：%.2f 米\n", height);
+
+    return 0;
+}
+```
+
+
+
+##### 1.2.3 getchar()
+
+> 从标准输入(通常是键盘)读取一个字符，返回输入字符的ASCII码值。
+>
+> 如果读取成功，返回值是非负整数；
+>
+> 如果发生错误或到达文件末尾，返回值是 `EOF`（End-of-File）。
+
+```c
+int getchar(void);
+```
+
+**实例**
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int num = getchar();
+    printf("num = %d", num);
+    
+    return 0;
+}
+```
+
+
+
+##### 1.2.4 putchar()
+
+> 将参数 `c` 所表示的字符输出到标准输出，并返回输出的字符作为整数。
+>
+> 如果输出成功，返回值是输出的字符的ASCII码值；
+>
+> 如果发生错误，返回值是 `EOF`（End-of-File）。
+
+```c
+int putchar(int c);
+```
+
+**实例**
+
+```c
+#include <stdio.h>
+
+int main() {
+    char c = 'A';
+
+    printf("The character is: %c\n", c);
+    putchar(c);
 
     return 0;
 }
