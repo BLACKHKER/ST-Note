@@ -74,6 +74,8 @@ int scanf(const char *format, ...);
 
 **实例**
 
+基础接收
+
 ```c
 #include <stdio.h>
 
@@ -99,11 +101,35 @@ int main() {
 }
 ```
 
+按宽度接收
+
+```c
+#include <stdio.h>
+
+int main()
+{
+    int year = 0;
+    int month = 0;
+    int day = 0;
+
+    /* 表示前四位存到year，后面的两位存到month，以此类推... */
+    scanf_s("%4d%2d%2d", &year, &month, &day);
+
+    printf("year = %d\n", year);
+
+    /* 02d表示按两位输出，比如数字小于10的数，以01、02、03等表示 */
+    printf("month = %02d\n", month);
+    printf("day = %02d\n", day);
+
+    return 0;
+}
+```
+
 
 
 ##### 1.2.3 getchar()
 
-> 从标准输入(通常是键盘)读取一个字符，返回输入字符的ASCII码值。
+> 从标准输入缓冲区(通常是键盘)读取一个字符，返回输入字符的ASCII码值。
 >
 > 如果读取成功，返回值是非负整数；
 >
@@ -126,6 +152,43 @@ int main()
     return 0;
 }
 ```
+
+> <font color="#f40">注意</font>：键盘把数据放到缓冲区，getchar()从缓冲区中拿一个字符，包括空格、换行等；
+>
+> 可以使用如下代码防止输入的回车影响后面的内容：
+>
+> ```
+> #include <stdio.h>
+> 
+> int main()
+> {
+>     char password[20] = {0};
+>     printf("请输入密码：");
+>     scanf("%s", password);
+>     
+>     int ch = 0;
+>     
+>     /* 判断缓冲区的下一个字符是否是换行，是则继续读取，防止影响后面的判断 */
+>     while((ch = getchar()) != '\n')
+>     {
+>         ;
+>     }
+>     
+>     printf("请确认密码(Y/N):");
+>     int ret = getchar();
+>     if('Y' == ret)
+>     {
+>         printf("登录成功");
+>     }
+>     else
+>     {
+>         printf("登录失败");
+>     }
+>     
+>     return 0;
+>     
+> }
+> ```
 
 
 
@@ -284,6 +347,9 @@ printf("%zu", sizeof(arr));
 
 /* 4 */
 printf("%zu", sizseof(arr[0]));
+
+/* 求数组大小，用数组arr的整体占用内存(字节) / 每个数组元素占用的空间(字节) */
+int size = sizeof(arr) / sizeof(arr[0]);
 ```
 
 
