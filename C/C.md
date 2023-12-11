@@ -34,7 +34,7 @@
 
 ![image-20231123162349780](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231123162349780.png)
 
-##### .c文件的创建
+##### 1.2.1 .c文件的创建
 
 1. 源文件 → 添加 → 新建项
 
@@ -65,7 +65,7 @@
 
 
 
-##### .h文件的创建
+##### 1.2.2 .h文件的创建
 
 
 
