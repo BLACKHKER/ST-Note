@@ -1014,14 +1014,36 @@ int main()
 
 同Java一致，对于C++来说，面向对象不是强制的，它只是提供了一种编写代码的方式。
 
-**实例**
-
 ```c++
 class 类名
 {
 可见性范围:
     属性类型 属性名;
 };
+```
+
+**实例**
+
+> 日志类，注意这里的public是重复的，也就是说可以写多个，取决于自己喜好
+
+```c++
+#include <iostream>
+
+class Log
+{
+public:
+    /* 日志等级为错误(0) */
+    const int logLevelError = 0;
+    /* 日志等级为警告(1) */
+    const int logLevelWarning = 1;
+    /* 日志等级为信息 */
+    const int logLevelinfo = 2;
+private:
+    /* 日志等级，私有的类成员变量用m当作前缀 */
+    int m_LogLevel;
+public:
+    function...
+}
 ```
 
 
@@ -1040,7 +1062,83 @@ class 类名
 
 ##### 6.1.3 Log类
 
+```c++
+#include <iostream>
 
+class Log
+{
+public:
+    /* 日志等级为错误(0) */
+    const int logLevelError = 0;
+    /* 日志等级为警告(1) */
+    const int logLevelWarning = 1;
+    /* 日志等级为信息(2) */
+    const int logLevelinfo = 2;
+
+private:
+    /* 日志等级，私有的类成员变量用m当作前缀 */
+    int m_LogLevel;
+public:
+
+    /**
+     * 设置日志等级
+     * @param level 代表等级的数字
+     */
+    void setLevel(int level)
+    {
+        m_LogLevel = level;
+    }
+
+    /**
+     * 错误日志
+     * 
+     * @param message 日志信息
+     */
+    void error(const char* message)
+    {
+        /* 如果设置的日志级别大于等于当前日志的级别，才打印该日志 */
+        if (m_LogLevel >= logLevelError)
+        {
+            std::cout << "[ERROR]:" << message << std::endl;
+        }
+    }
+
+    /**
+     * 警告日志
+     *
+     * @param message 日志信息
+     */
+    void warn(const char* message)
+    {
+        if(m_LogLevel >= logLevelWarning)
+        {
+            std::cout << "[WARNING]:" << message << std::endl;
+        }
+        
+    }
+
+    /**
+     * 信息日志
+     *
+     * @param message 日志信息
+     */
+    void info(const char* message)
+    {
+        if (m_LogLevel >= logLevelinfo)
+        {
+            std::cout << "[INFO]:" << message << std::endl;
+        }
+    }
+};
+
+int main()
+{
+    Log log;
+    log.setLevel(log.logLevelWarning);
+    log.warn("Hello World!");
+    std::cin.get();
+}
+```
 
 
 

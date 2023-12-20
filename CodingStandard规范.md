@@ -283,9 +283,30 @@ CREATE TABLE `health_package` (
 
 
 
-### 三、C语言规范
+### 三、C、C++规范
 
+### 3.1 命名规范
 
+1. 【强制】私有的类成员变量用m当作前缀。
+
+```c++
+class Log
+{
+private:
+    /* 日志等级，私有的类成员变量用m当作前缀 */
+    int m_LogLevel;
+public:
+    void setLevel(int level)
+    {
+
+    }
+
+    void warn(const char* message)
+    {
+
+    }
+};
+```
 
 
 
@@ -293,7 +314,7 @@ CREATE TABLE `health_package` (
 
 
 
-### 四、Java语言规范
+### 四、Java规范
 
 
 
