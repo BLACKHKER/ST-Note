@@ -1060,7 +1060,7 @@ public:
 
 
 
-##### 6.1.3 Log类
+##### 6.1.3 Log类(v1)
 
 ```c++
 #include <iostream>
@@ -1073,7 +1073,7 @@ public:
     /* 日志等级为警告(1) */
     const int logLevelWarning = 1;
     /* 日志等级为信息(2) */
-    const int logLevelinfo = 2;
+    const int logLevelInfo = 2;
 
 private:
     /* 日志等级，私有的类成员变量用m当作前缀 */
@@ -1124,7 +1124,7 @@ public:
      */
     void info(const char* message)
     {
-        if (m_LogLevel >= logLevelinfo)
+        if (m_LogLevel >= logLevelInfo)
         {
             std::cout << "[INFO]:" << message << std::endl;
         }
@@ -1313,6 +1313,490 @@ int main()
     std::cin.get();
 }
 ```
+
+
+
+---
+
+
+
+### 七、关键字
+
+#### 7.1 extern
+
+声明变量/函数，表示该变量/函数是在外部定义的，编译器会去其他翻译单元寻找这个变量/函数的定义
+
+num.cpp
+
+```c++
+int num = 8;
+
+void function()
+{
+    ...
+}
+```
+
+main.cpp
+
+```c++
+#include <iostream>
+
+/* 声明该变量是外部(其他翻译单元)定义的 */
+extern int num;
+
+/* 声明该变量是外部(其他翻译单元)定义的 */
+extern void function();
+```
+
+
+
+#### 7.2 static
+
+被static修饰的变量，保存在静态区中，所以仅占用一次内存且仅有一份。
+
+##### 7.2.1 不同使用场景的含义
+
+###### 在类或结构体外部
+
+可以理解为**全局变量/函数**，跟C类似，被修饰变量/函数的外部链接属性就变成内部链接属性，像是被私有化了，就只能在本源文件(翻译单元)中使用，不能在其他源文件内使用。
+
+> 建议定义外部变量/函数(全局变量/函数)时，多使用static修饰，因为编译器会**跨编译单元**进行链接，项目很大的时候很容易造成命名冲突。
+
+**实例**
+
+全局变量不可以重复，编译链接会报错重复定义(已经在其他翻译单元中定义了)；
+
+如果加上static，那么这个全局变量在编译后，将只跟当前源文件(.cpp翻译单元)内部进行链接，
+
+可以理解为私有化了，只有当前源文件的函数能看到该变量，那么`s_variable`就不会冲突了
+
+static.cpp
+
+```c++
+static int s_variable = 5;
+
+void function()
+{
+    ...
+}
+```
+
+main.cpp
+
+```c++
+#include <iostream>
+
+int s_variable = 8;
+
+void function()
+{
+    ...
+}
+
+int main()
+{
+    std::cout << s_variable << std::endl;
+    std::cin.get();
+}
+```
+
+或者使用`extern`关键字声明，也会提示找不到s_variable的定义：
+
+```c++
+#include <iostream>
+
+extern int s_variable;
+
+int main()
+{
+    std::cout << s_variable << std::endl;
+    std::cin.get();
+}
+```
+
+###### 在类或结构体内部
+
+> 下方示例的变量都是静态的。
+
+类中的**局部变量/方法**被修饰，类的所有实例都共享该属性的内存
+
+**实例**
+
+1. 类中的静态方法访问静态属性
+
+```c++
+#include <iostream>
+
+extern int s_variable;
+
+struct Entity
+{
+    /* 静态成员变量声明 */
+    static int a;
+    static int b;
+
+    /*
+        void print()
+        {
+            std::cout << a << "," << b << std::endl;
+        }
+    */
+    static void print()
+    {
+        std::cout << a << "," << b << std::endl;
+    }
+};
+
+/* 
+    类的静态成员必须在类外部定义
+    成员类型 成员所在类::成员名(不赋初值)
+    成员类型 成员所在类::成员名 = 值(赋初值)
+*/
+int Entity::a;
+int Entity::b;
+
+int main()
+{
+    Entity entity;
+    entity.a = 8;
+    entity.b = 88;
+
+    /*
+        Entity entity2 = { 888, 8888 }
+    */
+
+    Entity entity2;
+    entity2.a = 888;
+    entity2.b = 8888;
+
+    /*
+        两个entity打印相同数值888，8888
+        因为它们共享一个内存地址，所以后赋值的会覆盖掉前面的；
+    */
+    /*
+        entity.print();
+        entity2.print();
+    */
+
+    /* 第二种调用，类似于Java的静态方法调用 → 类名::方法名 */
+    Entity::print();
+    Entity::print();
+
+    std::cin.get();
+}
+```
+
+2. 静态方法访问非静态属性
+
+因为静态方法**没有类实例**，所以方法中不能直接写类的属性，应使用对象.属性的方式；
+
+本质上非静态方法总是获取当前类的一个实例作为参数，所以可以直接访问该类的属性，因为调用的时候是：实例名(对象名).方法名，而静态方法更像是在类的外部定义了一个普通方法
+
+> <font color="#f40">注意</font>：类中的静态方法不能直接访问该类非静态属性，同Java，类属性需要使用对象获取；
+
+**错误示例**：
+
+```c++
+struct Entity
+{
+    /* 非静态成员变量声明 */
+    int a;
+    int b;
+
+    static void print()
+    {
+        /* 这里报错，非静态成员引用必须与特定对象相对 */
+        std::cout << a << "," << b << std::endl;
+    }
+};
+
+int main()
+{
+    Entity entity;
+    entity.a = 8;
+    entity.b = 88;
+    
+    Entity entity2;
+    entity2.a = 888;
+    entity2.b = 8888;
+    
+    /*
+        entity.print();
+        entity2.print();
+    */
+    
+    /* 第二种调用，类似于Java的静态方法调用：类名::函数名() */
+     Entity::print();
+     ENtity::print();
+}
+```
+
+类中的静态方法类似于在外面定义了一个函数：
+
+```c++
+struct Entity
+{
+    /* 非静态成员变量声明 */
+    int a;
+    int b;    
+};
+
+void print()
+{
+    std::cout << a << "," << b << std::endl;
+}
+```
+
+它找不到a、b是什么，所以静态方法没法直接访问类的非静态属性
+
+**正确示例**：
+
+```c++
+struct Entity
+{
+    /* 非静态成员变量声明 */
+    int a;
+    int b;    
+    
+    /* 这也是非静态方法在编译时的实际效果，有一个隐藏的Entity类型的实例当作参数 */
+    static void print(Entity entity)
+    {
+        std::cout << entity.a << "," << entity.b << std::endl;
+    }
+};
+```
+
+
+
+##### 7.2.2 局部静态
+
+以下是一个普通的单例模式：
+
+```c++
+#include <iostream>
+
+class Singleton
+{
+private:
+	/* 定义一个私有静态指针变量 */
+	static Singleton* s_instance;
+public:
+	/**
+	 * 获取实例指针的函数
+	 * 
+	 * @return 对象的引用
+	 */
+	static Singleton& getInstance()
+	{
+		return *s_instance;
+	}
+
+	void hello()
+	{
+		std::cout << "Hello World!" << std::endl;
+	}
+};
+
+Singleton* Singleton::s_instance = nullptr;
+
+int main()
+{
+	Singleton s = Singleton::getInstance();
+	s.hello();
+}
+```
+
+使用局部静态来简化：
+
+```c++
+#include <iostream>
+
+class Singleton
+{
+public:
+	/**
+	 * 获取实例指针的函数
+	 * 
+	 * @return 对象的引用
+	 */
+	static Singleton& getInstance()
+	{
+		/* 定义一个局部静态变量 */
+		static Singleton instance;
+		return instance;
+	}
+
+	void hello()
+	{
+		std::cout << "Hello World!" << std::endl;
+	}
+};
+
+int main()
+{
+	Singleton s = Singleton::getInstance();
+	s.hello();
+}
+```
+
+
+
+##### 7.2.3 总结
+
+```
+静态方法调用类中的非静态属性时，需要指定一个实例来调用，因为非静态属性每个实例都有各自的内存空间，它不知道你要调用的是哪个实例(对象)的属性。
+```
+
+
+
+---
+
+
+
+### 八、枚举
+
+> 最主要的作用是提供一个语义化的常量定义方式，避免了魔法数字(各种Integer数字)
+
+#### 8.1 定义
+
+##### 8.1.1 无类型枚举
+
+> 枚举不指定类型，默认32位整型，不指定值，默认第一位为0，以此类推
+
+```c++
+enum 枚举类型(名)
+{
+    枚举1,
+    枚举2,
+    枚举3
+};
+```
+
+**实例**
+
+> 这里的A不赋值默认为0，B2C3
+
+```c++
+enum Example
+{
+    A,
+    B,
+    C
+};
+```
+
+
+
+##### 8.1.2 有类型枚举
+
+> 本质存储一个Integer类型的数据，不需要32位，使用8位的char，节省空间
+
+```c++
+enum 枚举类型(名) : 数据类型
+{
+    枚举1,
+    枚举2,
+    枚举3
+};
+```
+
+**实例**
+
+```c++
+enum Example : unsigned char
+{
+    A,
+    B,
+    C
+};
+```
+
+
+
+##### 8.1.3 Log类(v2)
+
+```c++
+#include <iostream>
+
+class Log
+{
+public:
+    /* 日志枚举 */
+    enum Level
+    {
+        /* 日志等级为错误(0) */
+        LevelError = 0,
+        /* 日志等级为警告(1) */
+        LevelWarning,
+        /* 日志等级为信息(2) */
+        LevelInfo
+    };
+private:
+    /* 日志等级，私有的类成员变量用m当作前缀 */
+    int m_LogLevel;
+public:
+    /**
+     * 设置日志等级
+     * @param level 代表等级的数字
+     */
+    void setLevel(Level level)
+    {
+        m_LogLevel = level;
+    }
+
+    /**
+     * 错误日志
+     *
+     * @param message 日志信息
+     */
+    void error(const char* message)
+    {
+        /* 如果设置的日志级别大于等于当前日志的级别，才打印该日志 */
+        if (m_LogLevel >= LevelError)
+        {
+            std::cout << "[ERROR]:" << message << std::endl;
+        }
+    }
+
+    /**
+     * 警告日志
+     *
+     * @param message 日志信息
+     */
+    void warn(const char* message)
+    {
+        if (m_LogLevel >= LevelWarning)
+        {
+            std::cout << "[WARNING]:" << message << std::endl;
+        }
+
+    }
+
+    /**
+     * 信息日志
+     *
+     * @param message 日志信息
+     */
+    void info(const char* message)
+    {
+        if (m_LogLevel >= LevelInfo)
+        {
+            std::cout << "[INFO]:" << message << std::endl;
+        }
+    }
+};
+
+int main()
+{
+    Log log;
+    log.setLevel(Log::LevelError);
+    log.error("Hello World!");
+    std::cin.get();
+}
+```
+
+
 
 
 
