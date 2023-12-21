@@ -6,6 +6,8 @@
 
 ##### 语言：
 
+- `C` vx.x
+- `C++` vx.x
 - `Java` v1.8
 - `Python` v3.11
 - `Vue` v2.0+
@@ -40,6 +42,7 @@
 - `Linux`
   -  CentOS 7
   -  Ubuntu 22.04.3
+  -  Respberry Pi OS(Raspbian)
 - `Docker` v18.06.3
 - `VMWare` v9.0+
 
@@ -60,8 +63,6 @@
 - `MinIO` vx.x.x
 
   
-
-
 
 ##### 开源工具：
 
