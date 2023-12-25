@@ -1,4 +1,4 @@
-## 安装树莓派系统
+## Respberry Pi系统安装及环境配置
 
 ### 一、板载结构
 
@@ -24,7 +24,7 @@ TODO
 
 > 镜像下载配合第三方烧录工具(官方镜像、第三方烧录工具)，官方的烧录工具可以直接烧录，不需要额外下载
 
-#### 2.1 官方镜像站(Raspberry Pi OS)
+#### 2.1 官方站(Raspberry Pi OS)
 
 ```http
 https://www.raspberrypi.com/software/operating-systems/
@@ -133,3 +133,126 @@ https://www.alexpage.de/
 开始写入
 
 ![image-20231225104806550](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231225104806550.png)
+
+
+
+---
+
+
+
+### 四、蓝牙
+
+#### 4.1 更新/升级系统软件包
+
+```shell
+-- 更新软件包列表
+sudo apt update
+-- 升级已安装软件包
+sudo apt upgrade
+```
+
+
+
+
+
+#### 4.2 安装蓝牙软件包
+
+1. `bluetooth`：蓝牙相关的核心库和工具
+2. `pi-bluetooth`：用在树莓派上的支持蓝牙功能的软件包
+3. `bluez`：管理蓝牙设备和协议的库和工具
+4. `blueman`：图形界面的蓝牙管理器，可以管理蓝牙设备以及链接
+5. `mplayer`：多媒体播放器，支持音视频播放，用于测试蓝牙功能(蓝牙耳机)
+
+```shell
+sudo apt install bluetooth pi-bluetooth bluez blueman mplayer
+```
+
+
+
+
+
+#### 4.3 蓝牙命令行工具
+
+```shell
+-- 启动命令行工具 全称bluetooth contrl
+bluetoothctl
+-- 告诉蓝牙管理器开启代理功能，自动处理蓝牙设备的配对和认证
+agent on
+-- 扫描设备，扫描蓝牙设备，显示MAC地址
+scan on/off
+-- 配对设备，根据扫描到的MAC进行配置
+pair MAC地址
+-- 连接设备，可能会自动连接，就不需要这条命令，输入quit退出
+connect MAC地址
+```
+
+##### 4.3.1 扫描实例
+
+```
+[bluetooth]# scan on
+Discovery started
+[CHG] Controller E4:5F:01:26:55:90 Discovering: yes
+[NEW] Device 4A:E4:8E:E3:BC:54 4A-E4-8E-E3-BC-54
+[CHG] Device 9C:19:C2:4D:88:DC Name: Redmi Buds 3
+```
+
+
+
+##### 4.3.2 配对示例
+
+```shell
+[bluetooth]# pair 9C:19:C2:4D:88:DC
+Attempting to pair with 9C:19:C2:4D:88:DC
+[CHG] Device 9C:19:C2:4D:88:DC Connected: yes
+```
+
+
+
+##### 4.3.3 连接示例
+
+```shell
+[Redmi Buds 3]# connect 9C:19:C2:4D:88:DC
+Attempting to connect to 9C:19:C2:4D:88:DC
+[CHG] Device 9C:19:C2:4D:88:DC Connected: yes
+Connection successful
+quit
+```
+
+
+
+
+
+#### 4.4 测试
+
+```shell
+mplayer xxx.mp3
+```
+
+
+
+---
+
+
+
+### 五、输入法
+
+> 输入法有三种：谷歌拼音、云拼音、太阳拼音
+>
+> 输入法有BUG，跟内置的Chroium有冲突，打不了中文
+
+#### 5.1 apt安装
+
+```shell
+-- fcitx是个框架，同时安装其他软件包用空格分隔
+sudo apt install fcitx fcitx-googlepinyin fcitx-module-clouldpinyin fcitx-sunpinyin
+-- 重启生效
+sudo reboot
+```
+
+
+
+---
+
+
+
+### 六、SSH
