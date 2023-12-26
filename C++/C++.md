@@ -1316,6 +1316,301 @@ int main()
 
 
 
+##### 6.3.3 构造方法
+
+类对象(实例)的初始化，如果不显式的赋值，这个对象的各个属性的值，是随机的。
+
+属性值取决于给对象的该属性分配的内存块的值，所以类的内部需要一个方法，用于在创建对象的时候赋初值。相当于给保存该属性的内存块进行初始化。
+
+###### 不使用构造
+
+> 打印的值是内存空间的值，因为分配内存是随机的，所以值也是随机的
+
+```c++
+#include <iostream>
+
+class Entity
+{
+public:
+    float x;
+    float y;
+
+    void print()
+    {
+        std::cout << x << "," << y << std::endl;
+    }
+};
+
+int main()
+{
+    Entity entity;
+    entity.print();
+    std::cin.get();
+}
+```
+
+###### 模拟构造
+
+> 手动调用模拟的构造方法，在创建类对象的时候进行属性的初始化
+
+```c++
+#include <iostream>
+
+class Entity
+{
+public:
+    float x;
+    float y;
+
+    void init()
+    {
+        x = 0.0f;
+        y = 0.0f;
+    }
+
+    void print()
+    {
+        std::cout << x << "," << y << std::endl;
+    }
+};
+
+int main()
+{
+    Entity entity;
+    entity.init();
+    entity.print();
+    std::cin.get();
+}
+```
+
+###### 实例
+
+> 构造方法跟类名同名，没有返回值。分为无参构造、有参构造，默认生成一个无参构造；
+>
+> 构造方法会在创建对象时自动调用(包括new)，这也是构造方法跟普通方法的区别。
+>
+> 如果**没有创建对象**，仅通过类名**调用静态方法**，那么构造方法是**不会执行**的。
+
+```c++
+#include <iostream>
+
+class Entity
+{
+public:
+    float x;
+    float y;
+
+    /**
+     * 无参构造
+     */
+    Entity()
+    {
+        x = 0.0f;
+        y = 0.0f;
+    }
+
+    /**
+     * 有参构造
+     */
+    Entity(float x1, float y2)
+    {
+        x = x1;
+        y = y2;
+    }
+
+    void print()
+    {
+        std::cout << x << "," << y << std::endl;
+    }
+};
+
+int main()
+{
+    /* 无参构造对象 */
+    Entity entity;
+    entity.print();
+
+    /* 有参构造对象 */
+    Entity entity2(1.2f, 3.4f);
+    entity2.print();
+
+    std::cin.get();
+}
+```
+
+###### 删除默认构造
+
+> 构造方法 = delete;
+
+```c++
+#include <iostream>
+
+class Log
+{
+public:
+
+    Log() = delete;
+
+    static void write()
+    {
+        std::cout << "Success!" << std::endl;
+    }
+};
+
+int main()
+{
+    /* 无法创建实例，默认的构造方法被删除 */
+    Log log;
+
+    std::cin.get();
+}
+```
+
+###### 复制构造
+
+TODO
+
+###### 移动构造
+
+TODO
+
+
+
+##### 6.3.4 析构方法(函数)
+
+> 构造方法在创建类对象时调用，相反的，析构方法在销毁对象是调用；
+>
+> 它实现的卸载变量，并清理你使用过的内存。
+>
+> 如果不清理释放内存，在对象过多的时候，会造成内存泄漏。
+
+```c++
+~类名()
+{
+   ...
+}
+```
+
+###### 实例
+
+```c++
+#include <iostream>
+
+class Entity
+{
+public:
+    float x;
+    float y;
+
+    /**
+     * 无参构造
+     */
+    Entity()
+    {
+        x = 0.0f;
+        y = 0.0f;
+        std::cout << "Created Entity" << std::endl;
+    }
+
+    /**
+     * 有参构造
+     */
+    Entity(float x1, float y2)
+    {
+        x = x1;
+        y = y2;
+    }
+
+    /**
+     * 析构方法
+     */
+    ~Entity()
+    {
+        std::cout << "Destroyed Entity" << std::endl;
+    }
+
+    void print()
+    {
+        std::cout << x << "," << y << std::endl;
+    }
+};
+
+void function()
+{
+    /* 在栈上创建一个对象，函数执行结束则该对象自动调用析构函数 */
+    Entity e;
+    e.print();
+
+    std::cout << "==================" << std::endl;
+
+    /* 在堆上创建对象，不会自动调用析构函数，需要手动释放内存 */
+    Entity* e2 = new Entity();
+    /* 指针调用使用箭头操作符 */
+    e2->print();
+    /* 手动释放内存 */
+    delete e2;
+}
+
+int main()
+{
+    function();
+
+    std::cin.get();
+}
+```
+
+###### 手动调用
+
+> 手动调用析构函数不会删除对象，只是单纯的执行代码
+
+```c++
+#include <iostream>
+
+class Entity
+{
+public:
+    float x;
+    float y;
+
+    /**
+     * 析构方法
+     */
+    ~Entity()
+    {
+        std::cout << "Destroyed Entity" << std::endl;
+    }
+};
+
+void function()
+{
+    /* 手动调用析构函数，它会执行两次 */
+    e.~Entity();
+}
+
+int main()
+{
+    function();
+
+    std::cin.get();
+}
+```
+
+
+
+
+
+#### 6.4 继承
+
+继承跟Java一样，子类继承父类的所有非私有属性/方法，解决了代码重复度高的问题
+
+
+
+
+
+
+
+
+
 ---
 
 
@@ -1798,5 +2093,9 @@ int main()
 
 
 
+---
 
+
+
+### 九
 
