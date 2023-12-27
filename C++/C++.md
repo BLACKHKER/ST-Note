@@ -1474,6 +1474,27 @@ TODO
 
 TODO
 
+###### 初始化列表
+
+```c++
+class Player
+{
+private:
+    int m_age;
+	std::string m_name;
+public:
+
+	/**
+	 * 构造函数
+	 * 构造函数的初始化列表(: 后面的部分)用于初始化 Player 类的成员变量 m_name，
+	 * 通过将传入的 name 参数赋值给 m_name 来初始化成员变量。
+	 * 多个属性用逗号分隔
+	 */
+	Player(int age, const std::string& name)
+		: m_age(age), m_name(name), {}
+};
+```
+
 
 
 ##### 6.3.4 析构方法(函数)
@@ -1601,9 +1622,317 @@ int main()
 
 #### 6.4 继承
 
-继承跟Java一样，子类继承父类的所有非私有属性/方法，解决了代码重复度高的问题
+继承跟Java一样，子类继承父类的所有**非私有**属性/方法，解决了代码重复度高的问题
+
+可以理解为子类是父类的超集，包含一切父类的东西(前提是公开的public)并且有所**扩展**。
+
+**实例**
+
+```c++
+#include <iostream>
+
+/**
+ * 实体类，表示所有角色都具备的功能，例如移动
+ */
+class Entity 
+{
+public:
+
+    /* 角色坐标 */
+    float x = 0;
+    float y = 0;
+
+    /**
+     * 角色移动方法
+     * 
+     * @param xa x轴移动距离
+     * @param ya y轴移动距离
+     * 
+     * @return 
+     */
+    void move(float xa, float ya)
+    {
+        x += xa;
+        y += ya;
+    }
+};
+
+/**
+ * 玩家类，继承角色类以实现移动的基础功能
+ */
+class Player : public Entity
+{
+public:
+    /* 玩家名 */
+    const char* name;
 
 
+    /**
+     * 打印玩家名方法
+     * 
+     * @return 
+     */
+    void printName()
+    {
+        std::cout << name << std::endl;
+    }
+};
+
+int main()
+{
+    Player player;
+
+    /* 子类实例调用父类的移动方法 */
+    player.move(5.0f, 5.0f);
+
+    /* 子类实例访问父类属性 */
+    player.x = 6.0f;
+
+    /* 打印6，5 */
+    std::cout << player.x << "," << player.y << std::endl;
+
+    std::cin.get();
+}
+```
+
+证明子类包含父类的所有公开属性/方法的另一种方式：打印类的大小
+
+```c++
+#include <iostream>
+
+/**
+ * 实体类，表示所有角色都具备的功能，例如移动
+ */
+class Entity 
+{
+public:
+
+    /* 角色坐标 */
+    float x = 0;
+    float y = 0;
+
+    /**
+     * 角色移动方法
+     * 
+     * @param xa x轴移动距离
+     * @param ya y轴移动距离
+     * 
+     * @return 
+     */
+    void move(float xa, float ya)
+    {
+        x += xa;
+        y += ya;
+    }
+};
+
+/**
+ * 玩家类，继承角色类以实现移动的基础功能
+ */
+class Player : public Entity
+{
+public:
+    /* 玩家名 */
+    const char* name;
+
+    /**
+     * 打印玩家名方法
+     * 
+     * @return 
+     */
+    void printName()
+    {
+        std::cout << name << std::endl;
+    }
+};
+
+int main()
+{
+    /* 8，两个float各占4个字节 */
+    std::cout << sizeof(Entity) << std::endl;
+
+    /* 16，父类的8加上64位下指针char* name的8 */
+    std::cout << sizeof(Player) << std::endl;
+
+    std::cin.get();
+}
+```
+
+
+
+#### 6.5 虚函数
+
+> 虚函数引入了一种叫做动态联编的东西，通过虚函数表来实现编译
+
+##### 6.5.1 父子方法重载
+
+类似于Java，父子类方法重名(重载)的时候，子类对象调用方法遵循就近原则，调用子类方法
+
+**实例**
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity
+{
+public:
+    std::string getName()
+    {
+        return "Entity";
+    }
+};
+
+class Player : public Entity
+{
+private:
+    std::string m_name;
+public:
+
+    /**
+     * 构造函数
+     * 构造函数的参数初始化列表(: 后面的部分)用于初始化 Player 类的成员变量 m_name，
+     * 通过将传入的 name 参数赋值给 m_name 来初始化成员变量。
+     */
+    Player(const std::string& name)
+        : m_name(name) {}
+
+    std::string getName()
+    {
+        return m_name;
+    }
+};
+
+int main()
+{
+    Entity* e = new Entity();
+    /* 父类实例调用父类方法，输出Entity */
+    std::cout << e->getName() << std::endl;
+
+    Player* p = new Player("Blackhker");
+    /* 输出Blackhker */
+    std::cout << p->getName() << std::endl;
+
+    std::cin.get();
+}
+```
+
+
+
+##### 6.5.2 向上转型
+
+如果想要**调用父类方法**，可以模仿类似于Java的**向上转型**
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity
+{
+public:
+    std::string getName()
+    {
+        return "Entity";
+    }
+};
+
+class Player : public Entity
+{
+private:
+    std::string m_name;
+public:
+
+    /**
+     * 构造函数
+     * 构造函数的初始化列表(: 后面的部分)用于初始化 Player 类的成员变量 m_name，
+     * 通过将传入的 name 参数赋值给 m_name 来初始化成员变量。
+     */
+    Player(const std::string& name)
+        : m_name(name) {}
+
+    std::string getName()
+    {
+        return m_name;
+    }
+};
+
+int main()
+{
+    Entity* e = new Entity();
+    /* 输出Entity */
+    std::cout << e->getName() << std::endl;
+
+    Player* p = new Player("Blackhker");
+    /* 输出Blackhker */
+    std::cout << p->getName() << std::endl;
+
+    /* 类似于Java向上转型，调用父类方法 */
+    Entity* entity = p;
+    /* 输出Entity */
+    std::cout << entity->getName() << std::endl;
+
+    std::cin.get();
+}
+```
+
+
+
+##### 6.5.3 虚函数
+
+这种情况，某个函数需要根据父子类的不同实例，决定调用不同的函数时，就需要虚函数
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity
+{
+public:
+    std::string getName()
+    {
+        return "Entity";
+    }
+};
+
+class Player : public Entity
+{
+private:
+    std::string m_name;
+public:
+
+    /**
+     * 构造函数
+     * 构造函数的初始化列表(: 后面的部分)用于初始化 Player 类的成员变量 m_name，
+     * 通过将传入的 name 参数赋值给 m_name 来初始化成员变量。
+     */
+    Player(const std::string& name)
+        : m_name(name) {}
+
+    std::string getName()
+    {
+        return m_name;
+    }
+};
+
+/* 父类实例作为调用该方法的参数，子类作为参数时，调用的却是父类的方法 */
+void printName(Entity* entity)
+{
+    std::cout << entity->getName() << std::endl;
+}
+
+int main()
+{
+    Entity* e = new Entity();
+    /* 输出Entity */
+    printName(e);
+
+    Player* p = new Player("Blackhker");
+    /* 输出Entity */
+    printName(p);
+
+    std::cin.get();
+}
+```
 
 
 
