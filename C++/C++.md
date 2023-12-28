@@ -1383,7 +1383,7 @@ int main()
 }
 ```
 
-###### 实例
+###### 构造实例
 
 > 构造方法跟类名同名，没有返回值。分为无参构造、有参构造，默认生成一个无参构造；
 >
@@ -1512,7 +1512,7 @@ public:
 }
 ```
 
-###### 实例
+**实例**
 
 ```c++
 #include <iostream>
@@ -1762,7 +1762,13 @@ int main()
 
 #### 6.5 虚函数
 
-> 虚函数引入了一种叫做动态联编的东西，通过虚函数表来实现编译
+> 虚函数引入了一种叫做动态联编的东西，通过虚函数表来实现编译；
+>
+> 所以虚函数有额外的内存开销，因为单独维护一个虚函数表，用来根据不同的实例对象分配正确的函数。基类中要有一个成员指针，指向这个虚函数表；
+>
+> 每次调用虚函数时，需要遍历整个虚函数表，来确定需要映射到那个函数；
+>
+> 性能有要求的情况下，尽量避免使用虚函数。
 
 ##### 6.5.1 父子方法重载
 
@@ -1788,7 +1794,6 @@ class Player : public Entity
 private:
     std::string m_name;
 public:
-
     /**
      * 构造函数
      * 构造函数的参数初始化列表(: 后面的部分)用于初始化 Player 类的成员变量 m_name，
@@ -1810,7 +1815,7 @@ int main()
     std::cout << e->getName() << std::endl;
 
     Player* p = new Player("Blackhker");
-    /* 输出Blackhker */
+    /* 子类实例调用子类方法，输出Blackhker */
     std::cout << p->getName() << std::endl;
 
     std::cin.get();
@@ -1841,7 +1846,6 @@ class Player : public Entity
 private:
     std::string m_name;
 public:
-
     /**
      * 构造函数
      * 构造函数的初始化列表(: 后面的部分)用于初始化 Player 类的成员变量 m_name，
@@ -1859,14 +1863,14 @@ public:
 int main()
 {
     Entity* e = new Entity();
-    /* 输出Entity */
+    /* 父类引用调用父类方法，输出Entity */
     std::cout << e->getName() << std::endl;
 
     Player* p = new Player("Blackhker");
-    /* 输出Blackhker */
+    /* 子类引用调用子类方法，输出Blackhker */
     std::cout << p->getName() << std::endl;
 
-    /* 类似于Java向上转型，调用父类方法 */
+    /* 类似于Java向上转型，将子类引用赋值给父类引用，还是会调用父类方法 */
     Entity* entity = p;
     /* 输出Entity */
     std::cout << entity->getName() << std::endl;
@@ -1879,7 +1883,9 @@ int main()
 
 ##### 6.5.3 虚函数
 
-这种情况，某个函数需要根据父子类的不同实例，决定调用不同的函数时，就需要虚函数
+某个函数需要根据父子类的不同实例，决定调用不同的函数时，这种情况，就需要虚函数
+
+使用virtual关键字，声明该函数为虚函数：
 
 ```c++
 #include <iostream>
@@ -1888,7 +1894,7 @@ int main()
 class Entity
 {
 public:
-    std::string getName()
+    virtual std::string getName()
     {
         return "Entity";
     }
@@ -1899,7 +1905,6 @@ class Player : public Entity
 private:
     std::string m_name;
 public:
-
     /**
      * 构造函数
      * 构造函数的初始化列表(: 后面的部分)用于初始化 Player 类的成员变量 m_name，
@@ -1923,12 +1928,105 @@ void printName(Entity* entity)
 int main()
 {
     Entity* e = new Entity();
-    /* 输出Entity */
+    /* 通过父类指针调用printName()，输出Entity */
     printName(e);
 
     Player* p = new Player("Blackhker");
-    /* 输出Entity */
+    /* 通过子类指针调用printName()，也输出Entity */
     printName(p);
+
+    /* 虚函数调用，在父类函数上加关键字virtual，Player子类指针调用,输出Blackhker */
+    std::cin.get();
+}
+```
+
+在C++11中新增了`override`关键字，表示子类重写了父类的同名方法，这样子类实例/指针调用方法的时候，会优先调用子类自己的方法，<font color="#f40">它不具备功能，只检验函数名是否跟父类相同，增加可读性</font>。
+
+```c++
+class Player : public Entity
+{
+private:
+    std::string m_name;
+public:
+    Player(const std::string& name)
+        : m_name(name) {}
+
+    std::string getName()
+        override
+    {
+        return m_name;
+    }
+};
+```
+
+
+
+
+
+#### 6.6 纯虚函数(接口)
+
+> 纯虚函数用于在基类中定义一个没有实现的方法，然后强制子类去实现该方法；
+>
+> 类似于Java的接口，增加可读性，用于规范子类方法的定义，方法实现由子类解决；
+>
+> 跟接口的区别是创建实例，有纯虚函数的类不能直接创建实例，而要有一个实现该类(接口)所有纯虚函数的子类，创建该子类的实例。C++中没有接口的概念，只有类。
+>
+> **接口必须被实现，才能创建实例。**
+
+##### 6.6.1 定义
+
+```c++
+virtual 返回值 方法名(方法参数) = 0;
+```
+
+**实例**
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity
+{
+public:
+    virtual std::string getName() = 0;
+};
+
+class Player : public Entity
+{
+private:
+    std::string m_name;
+public:
+    /**
+     * 构造函数
+     * 构造函数的初始化列表(: 后面的部分)用于初始化 Player 类的成员变量 m_name，
+     * 通过将传入的 name 参数赋值给 m_name 来初始化成员变量。
+     */
+    Player(const std::string& name)
+        : m_name(name) {}
+
+    std::string getName()
+        override
+    {
+        return m_name;
+    }
+};
+
+void printName(Entity* entity)
+{
+    std::cout << entity->getName() << std::endl;
+}
+
+int main()
+{
+    /* 有纯虚函数的类，就是接口了，不能创建实例 */
+    /*
+        Entity* e = new Entity();
+        printName(e);
+    */
+
+    /* 实现该类(接口)所有纯虚函数的子类，创建该子类的实例 */
+    Entity* e2 = new Player("Blackhker");
+    printName(e2);
 
     std::cin.get();
 }
@@ -1936,7 +2034,116 @@ int main()
 
 
 
+##### 6.6.2 多接口实现
 
+```c++
+class A
+{
+public:
+    virtual std::string getClassName() = 0;
+};
+
+class B
+{
+public:
+    /* 虚函数，表示类B的子类可以重写该函数，调用的时候根据对象所属的类，调用对应方法 */
+    virtual std::string getName()
+    {
+        return "Entity";
+    }
+};
+
+/**
+ * 多接口实现，类C实现类A、B的纯虚拟函数
+ */
+class C : public A, B
+{
+private:
+    /* 字符串类型的变量 */
+    std::string m_param;
+public:
+    ...实现类A(接口)中定义的纯虚函数
+}
+```
+
+
+
+##### 6.6.3 多重继承
+
+A、B、C三个类依次继承，类外部有一个方法，调用该方法需要一个最上层的类A的对象的情况
+
+```c++
+#include <iostream>
+#include <string>
+
+/**
+ * Printable 最上级父类
+ */
+class Printable
+{
+public:
+    /* 纯虚函数，获取类名 */
+    virtual std::string getClassName() = 0;
+};
+
+/**
+ * Entity 继承Printable
+ */
+class Entity : public Printable
+{
+public:
+    /**
+     * 实现父类(接口)Printable的纯虚函数
+     * 
+     * @return Entity
+     */
+    std::string getClassName()
+        override
+    {
+        return "Entity";
+    }
+};
+
+/**
+ * Player 继承Entity
+ */
+class Player : public Entity
+{
+private:
+    std::string m_name;
+public:
+    Player(const std::string& name)
+        : m_name(name) {}
+    
+    /**
+     * 重写父类实现的方法getClassName()
+     *
+     * @return Player
+     */
+    std::string getClassName()
+        override
+    {
+        return "Player";
+    }
+};
+
+void print(Printable* obj)
+{
+    std::cout << obj->getClassName() << std::endl;
+}
+
+int main()
+{
+    /* 两个都输出Entity，因为getClassName只有Entity实现了，子类Player没有 */
+    Entity* e = new Entity();
+    print(e);
+
+    Player* p = new Player("Blackhker");
+    print(p);
+
+    std::cin.get();
+}
+```
 
 
 
@@ -2426,5 +2633,7 @@ int main()
 
 
 
-### 九
+### 九、可见性(作用域)
+
+
 
