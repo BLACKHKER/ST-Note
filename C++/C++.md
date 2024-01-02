@@ -318,11 +318,11 @@ int main()
 
 
 
-#### 2.3 字符型
+#### 2.3 字符/字符串
 
 ##### 2.3.1 char
 
-字符，在不同编码中占不同字节：ASCII占1字节，UTF-8占1-4字节(中文等非ASCII占3-4字节)
+字符，8bit，在不同编码中占不同字节：ASCII占1字节，UTF-8占1-4字节(中文等非ASCII占3-4字节)
 
 C++对待字符通过ASCII字符进行文本编码，一个字符就是一个字节
 
@@ -391,20 +391,217 @@ C++标准库中有一个String类，底层是一个模板类BasicString，String
 还有很多数据结构，也建议使用自己编写的String实现
 
 ```c++
+std::string 字符串名 = "字符串";
+```
+
+**实例**
+
+```c++
 #include <iostream>
 #include <string>
 
 int main()
 {
-    std::string str = "123";
+    std::string name = "Blackhker";
 
-    std::cout << str << std::endl;
+    std::cout << name << std::endl;
 
     std::cin.get();
 
     return 0;
 }
 ```
+
+**注意**
+
+1. 跟Java不同，字符串**不能直接拼接**
+
+```c++
+#include <iostream>
+#include <string>
+
+int main()
+{
+    /* C++中的字符串是const char[],不可变，所以不可以直接拼接，大小在创建时就固定了 */
+    // std::string name = "Blackhker" + "bhkdos";
+
+    /* 可以追加 */
+    std::string name = "Blackhker";
+    name += "bhkdos";
+    
+    /* 可以这么改写 */
+    std::string name2 = std::string("Blackhker") + "bhkdos";
+    
+    /* 
+        可以使用api拼接: #include <stdlib.h>
+        Blackhker后面的s是调用了来自stdlib.h中的方法，是一个操作符函数，返回标准字符串
+    */
+    using namespace std::string_literals;
+    std::string name3 = "Blackhker"s + "bhkdos";
+    std::wstring name4 = L"Blackhker"s + L"bhkdos";
+    std::u32string name5 = U"Blackhker"s + U"bhkdos";
+    
+    /* 打印多行字符串 */
+    const char* example = R"(Line1
+    Line2\n
+    Line3\n
+    Line4)";
+    // 也可以省略R
+    const char* example = "Line1"
+    "Line2\n"
+    "Line3\n";
+    
+    std::cout << name << std::endl;
+
+    std::cin.get();
+}
+```
+
+2. 字符串作为参数传递给其他函数
+
+传递的是副本，它不会影响到原始的字符串；
+
+副本意味着动态的在堆上分配一个全新的char数组来存储字符串，非常影响性能。
+
+跟对象的传递一样，只有传递指针才是将本体传递过去，否则函数执行都是对副本进行操作。
+
+```c++
+#include <iostream>
+#include <string>
+
+void printString(std::string str)
+{
+    str += "h";
+    /* 打印Blackhkerh */
+    std::cout << str << std::endl;
+}
+
+int main()
+{
+    std::string name = "Blackhker";
+    printString(name);
+
+    /* 打印Blackhker，字符串name并没有被修改 */
+    std::cout << name << std::endl;
+
+    std::cin.get();
+}
+```
+
+某些情况我们需要调用方法去修改原始字符串、或者想要传递副本(只读)，但是不想影响性能；
+
+那么就可以使用常量引用的方式传递字符串：
+
+```c++
+#include <iostream>
+#include <string>
+
+/**
+ * const表示承诺不会修改传递进来的字符串str
+ * &表示这是一个引用，它不会被复制成副本传递到该函数
+ * 也可以使用指针代替引用，但是C++建议使用引用
+ */
+void printString(const std::string& str)
+{
+    std::cout << str << std::endl;
+}
+
+int main()
+{
+    std::string name = "Blackhker";
+    printString(name);
+    std::cout << name << std::endl;
+
+    std::cin.get();
+}
+```
+
+
+
+##### 2.3.4 字符串字面量
+
+> 字面量大小是字符数+1(空终止字符\0)，字面量永远保存在内存的只读区域(类似于Java的常量池)
+
+```c++
+"字面量值"
+```
+
+**实例**
+
+```c++
+#include <iostream>
+#include <string>
+
+int main()
+{
+    "Blackhker";
+
+    std::cin.get();
+}
+```
+
+###### 字面量的操作问题
+
+> 可以理解为用指针操作字面量，是直接操作字面量常量区，而常量区内存是只读的，会出问题；
+>
+> 用数组操作字面量，是开辟了一个新的栈空间，将字面量复制进去，后续操作都是操作的数组，没有问题。
+
+```c++
+#include <iostream>
+#include <string>
+
+int main()
+{
+    /*
+        理论可行，实际上这样是不可以的，底层实现是：
+        字面量赋值给一个指针，通过操作指针更改字面量的值
+        而字面量保存在常量区，修改指针就是修改常量区的内容，这是禁止的。
+    */
+    char* name = "Blackhker";
+    name[2] = 'x';
+
+    /*
+        在栈上创建一个字符串name2，把"Blackhker"从常量区复制到name2
+        这时修改name2的值就跟修改数组元素一样，这是可以的。
+    */
+    char name2[] = "Blackhker";
+    name2[2] = 'x';
+
+    std::cout << name << std::endl;
+    std::cout << name2 << std::endl;
+
+    std::cin.get();
+}
+```
+
+
+
+##### 2.3.5 wchar_t
+
+宽字符，两字节16bit，大小实际取决于操作系统位数和环境，所以建议使用char16_t/char32_t
+
+```c++
+const wchar_t* 宽字符名 = L"宽字符值";
+```
+
+**实例**
+
+```c++
+const wchar_t* name = L"Blackhker";
+```
+
+
+
+##### 2.3.6 char16/32_t
+
+正常的char是一个字节8bit，char16则是两字节16bit，char32则是四字节32bit的<font color="#f40">字符</font>
+
+```c++
+const char16_t* 字符名 = u"字符值";
+const char32_t* 字符名 = U"字符值";
+```
+
+
 
 
 
