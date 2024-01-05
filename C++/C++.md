@@ -1975,22 +1975,71 @@ TODO
 创建一个类，向该类(创建对象实例)添加一个成员时，通常需要对该对象的成员(属性)进行初始化，本质上就是除了构造方法的创建对象的另一个流程
 
 ```c++
-class Player
+class 类名
 {
 private:
-    int m_age;
-	std::string m_name;
+    std::string 属性名A;
+    int age 属性名B;
 public:
-
-	/**
-	 * 构造函数
-	 * 构造函数的初始化列表(: 后面的部分)用于初始化 Player 类的成员变量 m_name，
-	 * 通过将传入的 name 参数赋值给 m_name 来初始化成员变量。
-	 * 多个属性用逗号分隔
-	 */
-	Player(int age, const std::string& name)
-		: m_age(age), m_name(name), {}
+    /* 
+        无参初始化列表(构造方法)，列表顺序不可以是反的，比如先初始化成员B，后初始化成员A
+        无论初始化列表的顺序怎么写，它都会按照类成员的顺序，进行初始化，也就是先A后B
+    */
+    类名()
+        : 要初始化的成员A(成员初始化值), 要初始化的成员B(成员初始化值)
+    {
+        
+    }
+    
+    /* 
+        有参初始化列表，多个属性用逗号分隔
+    */
+    类名(const std::string 形参a)
+        : 成员属性A(形参a), ...
+    {
+        
+    }
 };
+```
+
+**实例**
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity
+{
+private:
+    std::string m_Name;
+public:
+    Entity()
+        : m_Name("Unknown")
+    {
+
+    }
+
+    Entity(const std::string name)
+        : m_Name(name)
+    {
+    }
+
+    const std::string& getName() const
+    {
+        return m_Name;
+    }
+};
+
+int main()
+{
+    Entity e;
+    std::cout << e.getName() << std::endl;
+
+    Entity e2("Blackhker");
+    std::cout << e2.getName() << std::endl;
+
+    std::cin.get();
+}
 ```
 
 
