@@ -662,6 +662,14 @@ std::array<数据类型, 数组大小> 数组名;
 #include <iostream>
 #include <array>
 
+class Entity
+{
+public:
+    
+private:
+    
+};
+
 int main()
 {
     /* 在栈上创建数组 */
@@ -671,7 +679,10 @@ int main()
 
     /* 在堆上创建数组 */
     int* example4 = new int[5];
-    delete[] example4
+    delete[] example4;
+    /* 对象数组 */
+    Entity* e = new Entity[5];
+    delete[] e;
         
     /* C++11创建数组，注意引入array包 */
     std::array<int, 5> example5;
@@ -2046,6 +2057,83 @@ int main()
     std::cin.get();
 }
 ```
+
+###### 隐式构造
+
+C++允许编译器对类型做一次隐式转换，两种数据类型之间做转换，不需要使用cast做强制转换
+
+**实例**
+
+正常的创建对象：
+
+```c++
+#include <iostream>
+#include <string>
+
+using String = std::string;
+
+class Entity 
+{
+private:
+    String m_Name;
+    int m_Age;
+public:
+    Entity(const String& name)
+        :m_Name(name), m_Age(-1)
+    {
+
+    }
+
+    Entity(int age) 
+        :m_Name("Blackhker"), m_Age(age)
+    {
+
+    }
+};
+
+void printEntity(const Entity& entity)
+{
+    /* 打印逻辑... */
+}
+
+int main()
+{
+    /* 正常的创建栈对象 */
+    Entity e("Blackhker");
+    Entity e2(24);
+
+    printEntity(e);
+    printEntity(e2);
+    
+    std::cin.get();
+}
+```
+
+可以改成这样——隐式转换
+
+```c++
+int main()
+{
+    /* 隐式转换 */
+    Entity e = "Blackhker";
+    Entity e2 = 24;
+    
+    /* 函数的隐式转换 */
+    /* 
+        字符串调用失败，因为Blackhker是char[]数组，不是std::string
+        要想成功需要做两次隐式类型转换，由char[]转换成std::string，再转换成Entity
+        但是C++中只有/仅允许做一次隐式类型转换
+    */
+    printEntity("Blackhker");
+    printENtity(24);
+    
+    std::cin.get();
+}
+```
+
+它隐式的将`Blackhker`、`24`转换成Entity对象，构造出一个Entity。
+
+因为有一个Entity的构造函数，接收一个int；另一个构造函数，接收一个String。
 
 ###### 复制构造
 
@@ -3507,6 +3595,131 @@ int main()
 
 
 
+
+
+#### 7.5 new
+
+> 使用new关键字一定要配合使用`delete`/`delete[]`关键字释放内存，防止内存泄漏。
+
+##### 7.5.1 原理
+
+###### 分配内存
+
+> 找到一个足够大的内存块，返回给我们
+
+new主要用于在堆上分配内存，使用new创建任意数据类型(int、array、class)都会根据不同情况分配不同大小的内存(以字节为单位)：`new int`分配四个字节的内存，向操作系统申请一块**逻辑连续**(物理上可能不连续)的四字节内存空间，然后返回一个指向该内存的指针，这样就可以通过指针操作这个分配的内存块了。
+
+###### 调用构造函数
+
+new的定义：
+
+右键new → 转到定义
+
+![image-20240109143042546](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240109143042546.png)
+
+它是一个操作符，我们可以重载，让它执行其他内容：**操作符重载[^4]**
+
+![image-20240109143325199](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240109143325199.png)
+
+它的解析：
+
+![image-20240109143948224](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240109143948224.png)
+
+所以本质上它是依赖于C++类库的，如果自己编写编译器以及类库，可以让new执行任何操作。但是调用new，通常会同时调用隐藏在里面的C函数：**malloc()[^5]**来分配内存：
+
+```c++
+Entity* e = new Entity();
+/* 等同于申请一块内存大小为Entity的空间，转换成Entity类型的指针 */
+Entity* e = (Entity*)malloc(sizeof(Entity));
+```
+
+
+
+##### 7.5.2 操作系统寻址
+
+收到请求后，操作系统根据需要的内存大小去内存上找符合条件的内存块。
+
+寻找不是一行一行的寻找，而是有很多方法，主要是有一个**空闲链表[^3]**(维护那些有空闲字节的地址)，在链表中寻找这个内存分配给我们。
+
+**实例**
+
+```c++
+#include <iostream>
+
+int main()
+{
+    int* a = new int;
+    
+    
+    *a = 8;
+    std::cout << *a << std::endl;
+    
+    std::cin.get();
+}
+```
+
+
+
+
+
+#### 7.6 explicit
+
+##### 7.6.1 概念
+
+修饰构造函数，它用于禁用隐式转换，表示这个构造函数不能用于隐式转换，只能显式调用，提高代码的安全性
+
+**实例**
+
+```c++
+#include <iostream>
+#include <string>
+
+using String = std::string;
+
+class Entity 
+{
+private:
+    String m_Name;
+    int m_Age;
+public:
+    explicit Entity(const String name)
+        :m_Name(name), m_Age(-1)
+    {
+
+    }
+
+    explicit Entity(int age) 
+        :m_Name("Blackhker"), m_Age(age)
+    {
+
+    }
+};
+
+void printEntity(const Entity& entity)
+{
+    /* 打印逻辑... */
+}
+
+int main()
+{
+    /* 正常的创建栈对象 */
+    Entity e("Blackhker");
+    Entity e2(24);
+
+    /* 隐式转换，报错 */
+    Entity e3 = "Blackhker";
+    Entity e4 = 24;
+    printEntity("Blackhker");
+    printEntity(24);
+
+    std::cin.get();
+}
+```
+
+
+
+
+
 ---
 
 
@@ -3740,4 +3953,7 @@ int main()
 ### 解释文档
 
 [^1]: 数据结构与算法.md
-[^2]:五、5.3 智能指针
+[^2]:五、5.3 智能指针 TODO
+[^3]:操作系统.md TODO
+[^4]:x.x.x 操作符重载 TODO
+[^5]: C.md
