@@ -3886,7 +3886,7 @@ int main()
 
 私有，**只有/仅有**当前类可以访问这个变量/方法，其他类无法访问。
 
-除了使用关键字`friend`来解决这个问题，它可以让类或者函数成为类的朋友(友元)，可以从类中访问私有成员
+除了使用关键字`friend`来解决这个问题，它可以让类或者函数成为类的朋友(友元函数)，可以访问私有成员
 
 
 
@@ -3939,6 +3939,299 @@ int main()
 ##### 9.2.2 结构体
 
 结构体的属性，默认public。
+
+
+
+---
+
+
+
+### 十、运算符
+
+#### 10.1 运算符重载
+
+C++中允许对操作符进行重载，来让它们实现不同的效果。
+
+重载后的运算符就是函数，不需要函数名就可以直接调用。
+
+重载运算符要尽量避免使用，影响可读性。只在完全有意义的情况下使用。
+
+##### 10.1.1 未使用重载
+
+一个移动的函数，角色调用Add函数x轴移动0.5，y轴移动1
+
+```c++
+#include <iostream>
+#include <string>
+
+struct Vector2
+{
+    /* 坐标x, y */
+    float x, y;
+
+    Vector2(float x, float y)
+        :x(x), y(y)
+    {
+
+    }
+
+    /**
+     * 角色移动
+     * 
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Add(const Vector2& other) const
+    {
+        return Vector2(x + other.x, y + other.y);
+    }
+};
+
+int main()
+{
+    /* 当前坐标 */
+    Vector2 position(8.0f, 8.0f);
+    /* 每次移动的速度 */
+    Vector2 speed(0.5f, 1.0f);
+
+    /* 移动后的坐标结果 */
+    Vector2 result = position.Add(speed);
+    std::cout << result.x << "|" << result.y << std::endl;
+
+    std::cin.get();
+
+}
+```
+
+如果再新增一个方法，用于提高每次移动的速度(升级)，当前每次移动的速度为基数，乘以一个倍数：
+
+过于麻烦，方法嵌套方法
+
+```c++
+#include <iostream>
+#include <string>
+
+struct Vector2
+{
+    /* 坐标x, y */
+    float x, y;
+
+    Vector2(float x, float y)
+        :x(x), y(y)
+    {
+
+    }
+
+    /**
+     * 角色移动
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Add(const Vector2& other) const
+    {
+        return Vector2(x + other.x, y + other.y);
+    }
+
+    /**
+     * 增强移动的速度(每次移动的速度 * 增强的倍数)
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Mulitply(const Vector2& other) const
+    {
+        return Vector2(x * other.x, y * other.y);
+    }
+};
+
+int main()
+{
+    /* 当前坐标 */
+    Vector2 position(8.0f, 8.0f);
+    /* 每次移动的速度 */
+    Vector2 speed(0.5f, 1.0f);
+    /* 每次增强移动速度的倍数 */
+    Vector2 powerup(2.0f, 2.0f);
+
+    /* 
+        移动后的坐标结果
+        通过当前坐标对象调用移动函数，移动函数的参数中，速度对象调用增强倍数函数
+    */
+    Vector2 result = position.Add(speed.Mulitply(powerup));
+
+    std::cout << result.x << "|" << result.y << std::endl;
+
+    std::cin.get();
+}
+```
+
+c++可以使用操作符重载解决，类似于：
+
+```c++
+Vector2 result = position + speed * powerup;
+```
+
+
+
+##### 10.1.2 使用操作符重载
+
+```c++
+返回值 operator[操作符](参数类型 形参...)
+{
+    该操作符重载的内容
+}
+```
+
+**实例**
+
+通过"+"调用Add方法
+
+```c++
+#include <iostream>
+#include <string>
+
+struct Vector2
+{
+    /* 坐标x, y */
+    float x, y;
+
+    Vector2(float x, float y)
+        :x(x), y(y)
+    {
+
+    }
+
+    /**
+     * 角色移动
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Add(const Vector2& other) const
+    {
+        return Vector2(x + other.x, y + other.y);
+    }
+
+    /**
+     * 操作符"+"重载
+     * 
+     * @return 调用方法
+     */
+    Vector2 operator+(const Vector2& other) const
+    {
+        /* 调用Add方法 */
+        return Add(other);
+    }
+
+    /**
+     * 增强移动的速度(每次移动的速度 * 增强的倍数)
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Mulitply(const Vector2& other) const
+    {
+        return Vector2(x * other.x, y * other.y);
+    }
+};
+
+int main()
+{
+    /* 当前坐标 */
+    Vector2 position(8.0f, 8.0f);
+    /* 每次移动的速度 */
+    Vector2 speed(0.5f, 1.0f);
+    /* 每次增强移动速度的倍数 */
+    Vector2 powerup(2.0f, 2.0f);
+
+    /* 移动后的坐标结果 */
+    Vector2 result1 = position.Add(speed.Mulitply(powerup));
+    
+    /* 操作符重载 */
+    Vector2 result2 = position + speed;
+
+    std::cout << result2.x << "|" << result2.y << std::endl;
+
+    std::cin.get();
+
+}
+```
+
+通过"Add"方法调用"+"，两种写法：
+
+```c++
+#include <iostream>
+#include <string>
+
+struct Vector2
+{
+    /* 坐标x, y */
+    float x, y;
+
+    Vector2(float x, float y)
+        :x(x), y(y)
+    {
+
+    }
+
+    /**
+     * 角色移动
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Add(const Vector2& other) const
+    {
+        /* 两种写法 */
+        /* return *this + other; */
+        return operator+(other);
+    }
+
+    /**
+     * 操作符"+"重载
+     * 
+     * @return 调用方法
+     */
+    Vector2 operator+(const Vector2& other) const
+    {
+        /* 调用Add方法 */
+        return Vector2(x + other.x, y + other.y);
+    }
+
+    /**
+     * 增强移动的速度(每次移动的速度 * 增强的倍数)
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Mulitply(const Vector2& other) const
+    {
+        return Vector2(x * other.x, y * other.y);
+    }
+};
+
+int main()
+{
+    /* 当前坐标 */
+    Vector2 position(8.0f, 8.0f);
+    /* 每次移动的速度 */
+    Vector2 speed(0.5f, 1.0f);
+    /* 每次增强移动速度的倍数 */
+    Vector2 powerup(2.0f, 2.0f);
+
+    /* 移动后的坐标结果 */
+    Vector2 result1 = position.Add(speed.Mulitply(powerup));
+    
+    /* 操作符重载 */
+    Vector2 result2 = position + speed;
+
+    std::cout << result2.x << "|" << result2.y << std::endl;
+
+    std::cin.get();
+}
+```
+
+
+
+##### 10.1.3 左移运算符(<<)重载
+
+> 类似于Java的toString()
+
+
 
 
 
