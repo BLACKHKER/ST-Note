@@ -635,47 +635,58 @@ Delete this key from the keyring? (y/N)y
 
 
 
-### 七、乱码
+### X、乱码问题解决
 
-> 确认本地git配置：
+> 以下内容均可以通过修改Git的配置文件解决，文件名为`gitconfig`，一般在Git安装目录/etc下
+>
+> 查看本地git配置：
 >
 > ```bash
+> # 只显示主要配置(一般都是我们自己配的)
 > git config --global -l
+> # 显示所有配置(包含初始配置及我们自己后期的配置)
+> git config --list
 > ```
 
 
 
-#### Git Add
+#### X.1 Git Add/Status
 
-##### 问题现象
+##### X.1.1 问题现象
 
-使用git add添加要提交的文件的时候，如果文件名是中文，会显示形如`\274\232\350\256\256\346\200\273\347\273\223.png` 的乱码。
+1. 使用git add显示数字乱码,形如`\274\232\350\256\256\346\200\273\347\273\223.png` 的。
 
+2. 使用git add/git status显示中文古文乱码，形如![image-20240112110422838](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240112110422838.png)的。
 
-
-##### 解决方案
+##### X.1.2 解决方案
 
 > core.quotepath设为false的话，就不会对0x80以上的字符进行quote。中文显示正常。
 
-在bash提示符下输入：
+1. 在bash提示符下输入：
 
 ```bash
 git config --global core.quotepath false
 ```
 
+2. 右键bash窗口 → 选项 → 文本 → 配置本地Local、字符集 → 配置为UTF-8
+
+![image-20240112110801595](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240112110801595.png)
+
+![image-20240112110902314](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240112110902314.png)
 
 
 
 
-#### Git Log
 
-##### 问题现象
+#### X.2 Git Log
+
+##### X.2.1 问题现象
 
 使用git log显示提交的中文log乱码
 
 
 
-##### 解决方案
+##### X.2.2 解决方案
 
 设置git gui的界面编码
 
@@ -683,13 +694,13 @@ git config --global core.quotepath false
 git config --global gui.encoding UTF-8
 ```
 
-设置 commit log 提交时使用 utf-8 编码，可避免服务器上乱码，同时与linux上的提交保持一致！
+设置 commit log 提交时使用 utf-8 编码，可避免服务器上乱码，同时与linux上的提交保持一致
 
 ```shell
 git config --global i18n.commitencoding UFT-8
 ```
 
-使得在 $ git log 时将 utf-8 编码转换成 gbk 编码，解决Msys bash中git log 乱码。
+使得在 $ git log 时将编码转换成 utf-8 编码，解决Msys bash中git log 乱码。
 
 ```shell
 git config --global i18n.logoutputencoding UTF-8
@@ -708,15 +719,15 @@ setx "LESSCHARSET" "utf-8" /m
 
 
 
-#### ls
+#### X.3 ls
 
-##### 问题现象
+##### X.3.1 问题现象
 
 在自带的bash中，使用ls命令查看中文文件名乱码
 
 
 
-##### 解决方案
+##### X.3.2 解决方案
 
 > 使用ls --show-control-chars命令来强制使用控制台字符编码显示文件名，即可查看中文文件名
 

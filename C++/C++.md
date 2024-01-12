@@ -3718,6 +3718,10 @@ int main()
 
 
 
+#### 7.7 this
+
+
+
 
 
 ---
@@ -4071,7 +4075,7 @@ Vector2 result = position + speed * powerup;
 
 
 
-##### 10.1.2 使用操作符重载
+##### 10.1.2 使用运算符重载
 
 ```c++
 返回值 operator[操作符](参数类型 形参...)
@@ -4183,6 +4187,16 @@ struct Vector2
     }
 
     /**
+     * 增强移动的速度(每次移动的速度 * 增强的倍数)
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Mulitply(const Vector2& other) const
+    {
+        return Vector2(x * other.x, y * other.y);
+    }
+    
+    /**
      * 操作符"+"重载
      * 
      * @return 调用方法
@@ -4191,16 +4205,6 @@ struct Vector2
     {
         /* 调用Add方法 */
         return Vector2(x + other.x, y + other.y);
-    }
-
-    /**
-     * 增强移动的速度(每次移动的速度 * 增强的倍数)
-     *
-     * @return 创建一个新的Vecdor2返回
-     */
-    Vector2 Mulitply(const Vector2& other) const
-    {
-        return Vector2(x * other.x, y * other.y);
     }
 };
 
@@ -4225,17 +4229,193 @@ int main()
 }
 ```
 
+使用操作符完全重载实现10.1.1方法嵌套的情况：
+
+```c++
+#include <iostream>
+#include <string>
+
+struct Vector2
+{
+    /* 坐标x, y */
+    float x, y;
+
+    Vector2(float x, float y)
+        :x(x), y(y)
+    {
+
+    }
+
+    /**
+     * 角色移动
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Add(const Vector2& other) const
+    {
+        return Vector2(x + other.x, y + other.y);
+    }
+
+    /**
+     * 增强移动的速度(每次移动的速度 * 增强的倍数)
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Mulitply(const Vector2& other) const
+    {
+        return Vector2(x * other.x, y * other.y);
+    }
+
+    /**
+     * 操作符"+"重载
+     *
+     * @return 调用方法
+     */
+    Vector2 operator+(const Vector2& other) const
+    {
+        /* 调用Add方法 */
+        return Add(other);
+    }
+
+    /**
+     * 操作符"*"重载
+     *
+     * @return 调用方法Mulitply生成的Vector2类型的对象
+     */
+    Vector2 operator*(const Vector2& other) const
+    {
+        /* 调用Add方法 */
+        return Mulitply(other);
+    }
+};
+
+int main()
+{
+    /* 当前坐标 */
+    Vector2 position(8.0f, 8.0f);
+    /* 每次移动的速度 */
+    Vector2 speed(0.5f, 1.0f);
+    /* 每次增强移动速度的倍数 */
+    Vector2 powerup(2.0f, 2.0f);
+
+    /* 移动后的坐标结果 */
+    Vector2 result1 = position.Add(speed.Mulitply(powerup));
+
+    /* 操作符重载 */
+    Vector2 result2 = position + speed * powerup;
+
+    std::cout << result2.x << "|" << result2.y << std::endl;
+
+    std::cin.get();
+}
+```
+
 
 
 ##### 10.1.3 左移运算符(<<)重载
 
-> 类似于Java的toString()
+> 类似于Java的toString()，**注意**：双目运算符的重载应该定义在类外
+
+通常我们只能输出一个对象的属性，而非输出这个对象：
+
+```c++
+/* 输出对象属性 */
+std::cout << result2.x << "|" << result2.y << std::endl;
+/* 输出对象，报错：cout后面的"<<"：没有与这些操作数匹配的运算符"<<"，操作数为std::ostream << ... */
+std::cout << result2 << std::endl;
+```
+
+因为C++没有为所有的类都定义输出运算符，可以理解为其他语言的toString()，在C++中是没有的，需要重载<<这个运算符实现打印对象时输出对象的属性。
+
+**实例**
+
+```c++
+#include <iostream>
+#include <string>
+
+struct Vector2
+{
+    /* 坐标x, y */
+    float x, y;
+
+    Vector2(float x, float y)
+        :x(x), y(y)
+    {
+
+    }
+
+    /**
+     * 角色移动
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Add(const Vector2& other) const
+    {
+        return Vector2(x + other.x, y + other.y);
+    }
+
+    /**
+     * 增强移动的速度(每次移动的速度 * 增强的倍数)
+     *
+     * @return 创建一个新的Vecdor2返回
+     */
+    Vector2 Mulitply(const Vector2& other) const
+    {
+        return Vector2(x * other.x, y * other.y);
+    }
+};
+
+/**
+ * 操作符"<<"重载
+ *
+ * @return std::ostream输出流类型
+ */
+std::ostream& operator<<(std::ostream& stream, const Vector2& other)
+{
+    stream << other.x << "," << other.y;
+    return stream;
+}
+
+int main()
+{
+    std::cout << result2 << std::endl;
+
+    std::cin.get();
+}
+```
 
 
 
+##### 10.1.4 ==(equals)重载
 
+**实例**
 
+```c++
+class xxx
+{
+    ...
+        
+    /**
+     * 操作符"=="重载
+     * 
+     * @return 两个对象的值是否相等
+     */
+    bool operator==(const Vector2& other) const
+    {
+        return x == other.x && y == other.y;
+    }
 
+    /**
+     * 操作符"!="重载
+     *
+     * @return 两个对象的值是否相等
+     */
+    bool operator!=(const Vector2& other) const
+    {
+        return !(*this == other);
+    }
+};
+```
 
 
 
@@ -4248,5 +4428,5 @@ int main()
 [^1]: 数据结构与算法.md
 [^2]:五、5.3 智能指针 TODO
 [^3]:操作系统.md TODO
-[^4]:x.x.x 操作符重载 TODO
+[^4]:10.1.2 运算符重载
 [^5]: C.md
