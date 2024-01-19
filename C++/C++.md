@@ -3317,16 +3317,21 @@ int main()
 
 #### 7.3 const
 
-> 类似于Java中的final，一种声明变量的方式，声明不会去修改它的值
+> 将一个变量修改为只读状态，防止在程序运行过程中被修改
 >
+> 类似于Java中的final，一种声明变量的方式，声明不会去修改它的值
 
 ##### 7.3.1 修饰指针
 
-区分取决于`*`号，`const`在`*`前则是**常量指针**，在`*`后则是指针常量
+区分取决于`*`号，`const`在`*`前则是**常量指针**，在`*`后则是**指针常量**
 
 常量指针，该指针地址保存的值不可变；
 
-指针常量，该指针的指向的地址不可变。
+指针指向的对象是常量，即指针变量可以修改，但是不能通过指针来修改其指向的对象。
+
+指针常量，该指针的指向的地址不可变；
+
+是指针本身是个常量，不能再指向其他对象。
 
 ```c++
 #include <iostream>
@@ -3342,7 +3347,10 @@ int main()
         或者两个修饰const:
         const int* const a = new int;
     */
+    
+    /* 常量指针 */
     const int* a = new int;
+    /* 指针常量 */
     int* const b = new int;
 
     /* 都报错，a为常量指针不可修改指针值，b为指针常量不可修改指针地址 */
@@ -3355,7 +3363,7 @@ int main()
 
 
 
-##### 7.3.2修饰类
+##### 7.3.2 修饰类
 
 ###### 限制属性修改
 
@@ -3719,7 +3727,67 @@ int main()
 
 #### 7.7 this
 
+this是指向当前对象实例的指针，它指向当前对象的地址。
 
+它主要用来在类的成员函数中，访问该实例对象的属性和方法，这样就可以避免方法中成员变量和方法的局部变量重名冲突(无法赋值)，this指针还可以在类的外部访问成员函数。
+
+this指针不可修改，底层是一个const修饰的指针常量：Entity* const property
+
+this的值取决于所在的作用域(方法)，方法被const修饰
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity
+{
+public:
+    int x, y;
+
+    /**
+     * 有参构造
+     */
+    Entity(int x, int y)
+    {
+        /* 这样是形参x赋值给形参x，没有变化 */
+        /* x = x; */
+
+        /* this本质上是指针常量，所以赋值应该是 */
+        Entity* const entity = this;
+
+        /* 这个const可以省略 */
+        Entity* e = this;
+        this->x = x;
+        this->y = y;
+
+        /* 或者这样 */
+        (*this).x = x;
+        (*this).y = y;
+    }
+
+    /**
+     * const修饰方法是很常见的，声明为不会修改成员变量的方法
+     */
+    int GetX() const
+    {
+        /* 报错，this是const Entity*，因为方法声明用const修饰,this也会跟着改变 */
+        /* Entity* entity = this; */
+
+        const Entity* e = this;
+
+        return x;
+    }
+};
+
+int main()
+{
+    Entity e(5, 10);
+
+    std::cout << e.x << std::endl;
+
+    std::cin.get();
+}
+```
 
 
 
