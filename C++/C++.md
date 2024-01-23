@@ -3725,15 +3725,20 @@ int main()
 
 
 
+
+
 #### 7.7 this
 
 this是指向当前对象实例的指针，它指向当前对象的地址。
 
 它主要用来在类的成员函数中，访问该实例对象的属性和方法，这样就可以避免方法中成员变量和方法的局部变量重名冲突(无法赋值)，this指针还可以在类的外部访问成员函数。
 
-this指针不可修改，底层是一个const修饰的指针常量：Entity* const property
+this指针**不可修改**，底层是一个const修饰的指针常量：Entity* const property。
 
-this的值取决于所在的作用域(方法)，方法被const修饰
+##### 7.7.1 this的值
+
+> this的**值取决于所在的作用域(方法)**，方法被const修饰，this的值也是const
+>
 
 ```c++
 #include <iostream>
@@ -3790,6 +3795,8 @@ int main()
 ```
 
 
+
+7.7.
 
 
 
