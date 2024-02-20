@@ -1374,13 +1374,227 @@ int main()
 
 它可以称为一个类，是一个指针的包装器，在构造时用堆分配指针，然后在析构(函数)时删除指针；
 
-也就是自动化的`new`&`delete`
+也就是自动化的`new`&`delete`，手动编写的智能指针。
+
+应用有很多：
+
+1. 计时器
+
+   在函数开头设置一个计时，离开作用域自动调用析构，析构里面终止计时。
+
+2. 互斥锁
+
+   锁定一个函数，以便多个线程同时访问，设置一个自动作用域锁定在函数开头，函数结束时析构解锁。
+
+**实例**
+
+> `ScopedPtr e2 = new Entity();` 的作用是在堆上创建一个 `Entity` 对象，并使用该对象的指针初始化 `ScopedPtr` 对象 `e2`。这样，`e2` 将拥有对该对象的所有权，并负责在其生命周期结束时自动释放对象的内存。
+
+```c++
+#include <iostream>
+
+class Entity
+{
+public:
+    Entity()
+    {
+        std::cout << "Create Entity!" << std::endl;
+    }
+
+    ~Entity()
+    {
+        std::cout << "Destory Entity!" << std::endl;
+    }
+};
+
+/**
+ * 作用域指针类
+ */
+class ScopedPtr
+{
+private:
+    Entity* m_Ptr;
+public:
+    /* 初始化列表 */
+    ScopedPtr(Entity* ptr)
+        :m_Ptr(ptr)
+    {
+
+    }
+
+    ~ScopedPtr()
+    {
+        delete m_Ptr;
+    }
+};
+
+int main()
+{
+    {
+        /* 未使用作用域指针在堆上创建对象 */
+        /* Entity* e1 = new Entity(); */
+
+        /* 使用作用域指针创建对象 */
+        /* 因为ScopedPtr是在栈上创建的，所以 */
+        ScopedPtr e2 = new Entity();
+        /* 也可以这样写：ScopedPtr e(new Entity()); */
+    }
+
+    std::cin.get();
+}
+```
+
+
+
+##### 5.1.3 智能指针
+
+> 参考5.1.2作用域指针
+
+智能指针是一种封装了指针的对象，是实现new分配内存、delete删除释放内存自动化的一种方式。
+
+本质上是对原始指针的一种包装，创建一个智能指针的时候会自动调用new申请并分配内存。
+
+基于使用的智能指针，自动的调用delete在某一时刻释放。
+
+###### unique_ptr
+
+```c++
+int main()
+{
+    /* 第一种写法 C++11中就可用，使用new创建一个动态分配对象给unique_ptr */
+    std::unique_ptr<对象类型> 对象名(new 对象类型());
+    
+    /* 第二种写法 C++14引入的函数模板，建议使用，不直接调用new是因为异常安全 */
+    std::unique_ptr<对象类型> 对象名 = std::make_unique<对象类型>;
+    
+    std::cin.get();
+}
+```
+
+作用域指针，是超出作用域时被销毁然后调用delete释放内存的指针。
+
+unique表示唯一的，该指针不可复制：因为如果复制指针，那么指针A会自动释放内存，指针B指向的就是空的&错误的内存块
+
+并且智能指针不可以直接创建：
+
+```c++
+int main()
+{
+    /* 报错，必须使用 std::make_unique<对象类型> 创建 */
+    std::unique_ptr<Entity> entity = new Entity();
+}
+```
+
+**实例**
+
+> 首先要引入memory头文件
+
+```c++
+#include <iostream>
+#include <string>
+#include <memory>
+
+class Entity
+{
+public:
+    Entity()
+    {
+        std::cout << "Create Entity!" << std::endl;
+    }
+
+    ~Entity()
+    {
+        std::cout << "Destory Entity!" << std::endl;
+    }
+
+    void Print() {}
+};
+
+int main()
+{
+    {
+        /*
+            在堆上创建一个Entity对象，使用智能指针std::unique_ptr来管理该对象的生命周期
+            std::make_unique<Entity>是一个函数模板，用于创建一个动态分配的Entity对象，
+            返回一个std::unique_ptr<Entity>对象，该对象拥有对动态分配对象Entity的所有权。
+            entity在声明时被初始化为指向动态分配对象的指针，并且std::unique_ptr类会自动在该对象的析构函数中调用delete释放内存。
+            这样就是通过智能指针unique_ptr实现自动释放堆对象内存。
+        */
+        std::unique_ptr<Entity> entity = std::make_unique<Entity>();
+
+        entity->Print();
+    }
+
+    std::cin.get();
+}
+```
+
+###### shared_ptr
+
+```c++
+int main()
+{
+	std::shared_ptr<对象类型> 对象名 = std::make_shared<对象类型>();
+    
+    std::cin.get();
+}
+```
+
+共享指针解决了unique_ptr的不可复制问题，当你想要复制这个指针，使得这个指针可以在其他函数中使用时，就可以使用unique_ptr来解决这个问题。
+
+共享指针实现的方式取决于编译器和使用的标准库，大多时候使用的引用计数法：
+
+有一个初始共享指针A，复制该指针A的指针B，那么引用计数就是2，有一个指针dead了，就是1，所有指针都dead了，那么清空堆内存中该指针指向的地址。
+
+共享指针需要分配另一块内存，叫做控制块，用于引用计数器数字的存储
 
 **实例**
 
 ```c++
+#include <iostream>
+#include <string>
+#include <memory>
 
+class Entity
+{
+public:
+    Entity()
+    {
+        std::cout << "Create Entity!" << std::endl;
+    }
+
+    ~Entity()
+    {
+        std::cout << "Destory Entity!" << std::endl;
+    }
+
+    void Print() {}
+};
+
+int main()
+{
+    {
+        std::shared_ptr<Entity> sharedEntity = std::make_shared<Entity>();
+        std::shared_ptr<Entity> sharedEntityCopy = sharedEntity;
+
+        sharedEntity->Print();
+        sharedEntityCopy->Print();
+    }
+
+    std::cin.get();
+}
 ```
+
+###### weak_ptr
+
+```c++
+int main()
+{
+    std::weak_ptr<对象类型> 对象名 = 
+}
+```
+
+弱指针不会增加引用计数
 
 
 
