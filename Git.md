@@ -40,7 +40,6 @@
 | git remote -v                                 | 查看配置别名的所有远程库                           |
 | git remote rm <远程仓库别名>                  | 删除别名与远程分支的关联                           |
 | git add <文件名>                              | 添加到暂存区                                       |
-| git reset <文件名> / *                        | 回滚指定文件 / 所有的git add                       |
 | git commit -m "日志信息" <文件名>             | 提交到本地库                                       |
 | git push <远程仓库别名> <本地分支名>          | 将本地仓库分支推送到远程仓库                       |
 | git pull <远程仓库别名> <远程分支名>          | 拉取远程仓库的数据到本地远程分支，并进行merge合并  |
@@ -352,6 +351,49 @@ Rebase可以使提交历史保持整洁和线性，避免了合并提交的杂�
 Rebase适用于在本地分支上进行提交整理、保持干净的提交历史和与上游分支同步
 
 ![img](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/v2-165bfe942dfbe93aa14d0ee7743f2050_720w.webp)
+
+**实例**：
+
+合并需要记住提交的Commit ID，下列是将`智能指针补充`、`BugFix`、`智能指针`合并，将这三个变成一个提交
+
+![image-20240222141049484](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240222141049484.png)
+
+输入：
+
+```c++
+git rebase -i 0f467bc887c85644798a2f2121923490a90d451c
+```
+
+> 注意这个`0f46`是对象生存周期、作用域指针的版本号
+
+可以理解为合并从该版本号之前的所有提交，`-i`表示打开vim交互式界面，如下图：
+
+![image-20240221100015236](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240221100015236.png)
+
+手动更改，将被合并的改为s/squash，要合并到的改为p/pick，所以最少有一个pick，且为第一个
+
+可能会报错，报错根据提示输入两种不同的代码解决：
+
+```shell
+git rebase --continue
+git rebase --edit-todo
+```
+
+不报错会跳转到更新合并后显示的内存：
+
+![image-20240221100028420](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240221100028420.png)
+
+这里把三个Commit提交的文字更新为一个`智能指针`，其余的都删除，保存退出；
+
+这时git log显示只有一个`智能指针`的提交：
+
+![image-20240222143501360](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240222143501360.png)
+
+最后需要通过强制推送上传修改，正常推送会提示下载最新代码，下载完就白合并了
+
+```shell
+git push -f
+```
 
 
 
