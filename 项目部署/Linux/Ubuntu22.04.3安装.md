@@ -224,9 +224,11 @@ https://launchpad.net/ubuntu/+cdmirrors
 
 #### 3.1 Root用户的创建
 
-默认已经有root用户了，但是没有密码，使用普通用户的密码是 不行的
+默认已经有root用户了，但是没有密码，使用普通用户的密码是不行的，这时候需要给root用户设置一个密码，就可以使用`su`进入管理员模式了
 
-
+```shell
+sudo passwd root -- 设置root用户密码
+```
 
 
 
