@@ -603,6 +603,88 @@ const char32_t* 字符名 = U"字符值";
 
 
 
+##### 2.3.7 C++基础特性实现字符串
+
+```c++
+#include <iostream>
+#include <string>
+
+class String
+{
+private:
+    /* 存储字符串的字符数组 */
+    char* m_Buffer;
+    /* 字符串长度 */
+    unsigned int m_Size;
+
+public:
+    String(const char* string)
+    {
+        /* 通过计算string大小计算出字符串长度*/
+        m_Size = strlen(string);
+
+        /* 创建一个字符数组(字符串缓冲区)，大小为m_Size，因为包含终止符所以+1，赋值给m_Buffer */
+        m_Buffer = new char[m_Size + 1];
+
+        /* 复制字符串内容到m_buffer，复制的字节数为m_Size(不够) */
+        memcpy(m_Buffer, string, m_Size);
+
+        /* 复制的字符串长度m_Size不包含终止符，手动添加一个 */
+        m_Buffer[m_Size] = 0;
+    }
+
+    ~String()
+    {
+        /* 因为m_Buffer是new创建出来的，所以我们需要在析构函数中手动释放内存 */
+        delete[] m_Buffer;
+    }
+
+    /**
+     * 重载操作符"[]"
+     * @params index 数组下标
+     * 
+     * @return 该下标对应的字符
+     */
+    char& operator[](unsigned int index)
+    {
+        return m_Buffer[index];
+    }
+
+    /* 友元，这样这个重载操作符的函数<<，就可以访问string.GetBuffer()了 */
+    friend std::ostream& operator<<(std::ostream& stream, const String& string);
+};
+
+std::ostream& operator<<(std::ostream& stream, const String& string)
+{
+    stream << string.m_Buffer;
+
+    return stream;
+}
+
+int main()
+{
+    /* 创建类对象name */
+    String name = "Zhao";
+
+    /*
+        复制name赋值给name2，但是有内存泄漏：
+        String类的成员变量m_Buffer是char*类型，而因为他们直接进行了复制，
+        浅拷贝直接复制的指针的值，两个对象的char*类型的值(m_Buffer)相等
+        这就导致对象name执行析构函数(delete[] m_Buffer)的时候，把对象name2的指针也释放掉了。
+    */
+    String name2 = name;
+
+    /* 这里尝试修改name2的第二个字符，重载[]操作符 */
+    name2[1] = 'a';
+
+    /* 可以在此处打个断点，鼠标拖到name和name2上，是同一个地址 */
+    std::cout << name << std::endl;
+    std::cout << name2 << std::endl;
+
+    std::cin.get();
+}
+```
+
 
 
 
@@ -2488,9 +2570,150 @@ int main()
 
 因为有一个Entity的构造函数，接收一个int；另一个构造函数，接收一个String。
 
-###### 复制构造
+###### 拷贝构造
 
-TODO
+**赋值操作符的问题**
+
+使用`=`赋值操作符时，<font color="#f40">总是</font>在复制值，除了有一个特殊的：引用(指针)，通过引用B给引用A赋值，实际上是改变引用A的指向，并没有复制内存指向的值。
+
+当普通变量B给普通变量A赋值时，是直接复制；
+
+当指针变量B给指针变量A赋值的情况下是复制指针，也就是内存地址(一串数字)，而不是指针指向的实际内存。
+
+**实例**
+
+> 复制堆上的值，就是复制指向堆中该值的指针引用，也就是说操作复制来的变量B等于操作被复制的变量A
+
+复制栈上变量
+
+```c++
+#include <iostream>
+#include <string>
+
+struct Vector2
+{
+    float x, y;
+};
+int main()
+{
+    /* 创建结构体a并赋值 */
+    Vector2 a = { 5,8 };
+
+    /* 创建结构体b，使用a赋值 */
+    Vector2 b = a;
+
+    /* 更新结构体b的值，a的值不会变 */
+    b.x = 8;
+
+    std::cin.get();
+}
+```
+
+复制堆上变量
+
+```c++
+#include <iostream>
+#include <string>
+
+struct Vector2
+{
+    float x, y;
+};
+int main()
+{
+    /* 创建结构体引用 */
+    Vector2* a = new Vector2();
+
+    /* 创建结构体b，使用a赋值 */
+    Vector2* b = a;
+
+    /* 但是操作b就是操作a */
+    b->x = 5;
+
+    std::cin.get();
+}
+```
+
+**浅拷贝**
+
+> 新增了一个指针指向同一块内存
+
+复制一个类对象A时，C++底层将该对象的所有属性(成员变量)复制到一个新的内存地址里面。
+
+假如对象A所属的类包含两个属性`char* xxx`、`int xxx`，复制时就会将这些**值**复制到一个新地址。
+
+这个新地址组成了B。但是指针类型的值是一串表示地址的数字，而非地址上保存的实际数据。
+
+这种复制被称为`浅拷贝`，因为直接进行了复制，它所做的是复制内存中对象所属类的所有成员变量。
+
+如果成员变量有指针类型的就会出现问题，因为两个对象的该指针变量指向的是同一个地址：
+
+对象A执行析构函数释放了内存，对象B执行的时候就会报错——对空地址进行内存释放操作。
+
+C++默认有一个拷贝构造函数，它所做的就是内存复制，将other对象的内存**浅层拷贝**进成员变量。
+
+```c++
+类名(const 类名& other)
+    :成员变量a(other.成员变量a), 成员变量b(other.成员变量b)...
+{
+    
+}
+```
+
+**实例**
+
+> 类结构参考[^6]
+
+```c++
+/**
+ * 默认拷贝构造函数
+ */
+String(const String& other)
+    :m_Buffer(other.m_Buffer),m_Size(other.m_Size)
+{
+
+}
+
+/**
+ * 复杂的写法
+ */
+String(const String& other)
+{
+    memcpy(this, &other, sizeof(String));
+}
+```
+
+<font color="#f40">对于指针类型的复制，我们期望的是开辟一块新的内存存储该指针指向的内存块数据，而不是简单的复制指针</font>
+
+这时使用<font color="#f40">深拷贝</font>解决该问题，包含指针时到指针指向的内容去复制(深拷贝)。
+
+参考`使用C++基础特性实现String字符串`[^6]
+
+![image-20240223141152905](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240223141152905.png)
+
+**深拷贝**
+
+> 创建一个新的内存块，用于存储指针指向内存的数据
+
+ 
+
+
+
+###### 删除拷贝构造
+
+> 拷贝构造 = delete，类结构参考[^6]
+
+```c++
+类名(const 类名& other) = delete;
+```
+
+**实例**
+
+```c++
+String(const String& other) = delete;
+```
+
+
 
 ###### 移动构造
 
@@ -4335,6 +4558,31 @@ int main()
 
 除了使用关键字`friend`来解决这个问题，它可以让类或者函数成为类的朋友(友元函数)，可以访问私有成员
 
+一个类可以赋予某个函数访问它的私有成员的权限，就是用friend.
+
+**实例**
+
+```c++
+class FriendDemo
+{
+private:
+    unsigned int age;
+    char* name;
+public:
+    /* 构造方法 */
+    
+    /* 配置某个函数是该类的友元函数 friend 函数声明 */
+    friend int GetAge(FriendDemo person);
+}
+
+/* 类外的方法 */
+int GetAge(FriendDemo person)
+{
+    /* 正常是访问不了的，因为age是私有成员，该方法在类外无法访问 */
+    return person.age;
+}
+```
+
 
 
 ##### 9.1.2 protected
@@ -4405,7 +4653,7 @@ C++中允许对操作符进行重载，来让它们实现不同的效果。
 
 ##### 10.1.1 未使用重载
 
-一个移动的函数，角色调用Add函数x轴移动0.5，y轴移动1
+一个移动的函数，角色每调用一次Add函数，x轴移动0.5，y轴移动1
 
 ```c++
 #include <iostream>
@@ -4416,6 +4664,9 @@ struct Vector2
     /* 坐标x, y */
     float x, y;
 
+    /**
+     * 构造函数(初始化列表)
+     */
     Vector2(float x, float y)
         :x(x), y(y)
     {
@@ -4425,7 +4676,7 @@ struct Vector2
     /**
      * 角色移动
      * 
-     * @return 创建一个新的Vecdor2返回
+     * @return 创建一个新的Vector2返回
      */
     Vector2 Add(const Vector2& other) const
     {
@@ -4437,10 +4688,10 @@ int main()
 {
     /* 当前坐标 */
     Vector2 position(8.0f, 8.0f);
-    /* 每次移动的速度 */
+    /* 每次移动的速度(距离) */
     Vector2 speed(0.5f, 1.0f);
 
-    /* 移动后的坐标结果 */
+    /* 移动后的坐标结果(当前位置.移动(移动速度)) */
     Vector2 result = position.Add(speed);
     std::cout << result.x << "|" << result.y << std::endl;
 
@@ -4449,7 +4700,7 @@ int main()
 }
 ```
 
-如果再新增一个方法，用于提高每次移动的速度(升级)，当前每次移动的速度为基数，乘以一个倍数：
+如果再新增一个需求，提高每次移动的速度(升级)，以当前每次移动的速度为基数，乘以一个倍数：
 
 过于麻烦，方法嵌套方法
 
@@ -4529,7 +4780,7 @@ Vector2 result = position + speed * powerup;
 
 **实例**
 
-通过"+"调用Add方法
+1. 通过"+"调用Add方法，Add不变
 
 ```c++
 #include <iostream>
@@ -4596,11 +4847,10 @@ int main()
     std::cout << result2.x << "|" << result2.y << std::endl;
 
     std::cin.get();
-
 }
 ```
 
-通过"Add"方法调用"+"，两种写法：
+2. 通过"Add"方法调用"+"，Add改变，两种写法(Add方法返回值的不同)：
 
 ```c++
 #include <iostream>
@@ -4624,7 +4874,7 @@ struct Vector2
      */
     Vector2 Add(const Vector2& other) const
     {
-        /* 两种写法 */
+        /* 两种写法，建议使用第二个return operator+(other) */
         /* return *this + other; */
         return operator+(other);
     }
@@ -4672,7 +4922,7 @@ int main()
 }
 ```
 
-使用操作符完全重载实现10.1.1方法嵌套的情况：
+完全使用操作符重载实现10.1.1方法嵌套的情况：
 
 ```c++
 #include <iostream>
@@ -4727,7 +4977,7 @@ struct Vector2
      */
     Vector2 operator*(const Vector2& other) const
     {
-        /* 调用Add方法 */
+        /* 调用Mulitply方法 */
         return Mulitply(other);
     }
 };
@@ -4869,7 +5119,8 @@ class xxx
 ### 解释文档
 
 [^1]: 数据结构与算法.md
-[^2]:五、5.3 智能指针 TODO
+[^2]:5.13 智能指针
 [^3]:操作系统.md TODO
 [^4]:10.1.2 运算符重载
 [^5]: C.md
+[^6]:2.3.7 C++基本特性实现String字符串

@@ -354,7 +354,7 @@ Rebase适用于在本地分支上进行提交整理、保持干净的提交历�
 
 **实例**：
 
-合并需要记住提交的Commit ID，下列是将`智能指针补充`、`BugFix`、`智能指针`合并，将这三个变成一个提交
+合并需要记住提交的Commit ID，下例是将`智能指针补充`、`BugFix`、`智能指针`合并，将这三个变成一个提交
 
 ![image-20240222141049484](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240222141049484.png)
 
@@ -364,13 +364,13 @@ Rebase适用于在本地分支上进行提交整理、保持干净的提交历�
 git rebase -i 0f467bc887c85644798a2f2121923490a90d451c
 ```
 
-> 注意这个`0f46`是对象生存周期、作用域指针的版本号
+> 注意这个`0f46`是`对象生存周期、作用域指针`的版本号
 
 可以理解为合并从该版本号之前的所有提交，`-i`表示打开vim交互式界面，如下图：
 
 ![image-20240221100015236](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240221100015236.png)
 
-手动更改，将被合并的改为s/squash，要合并到的改为p/pick，所以最少有一个pick，且为第一个
+手动更改，将被合并的改为s/squash，要合并到的改为p/pick，所以最少有一个pick，且一般为第一个
 
 可能会报错，报错根据提示输入两种不同的代码解决：
 
