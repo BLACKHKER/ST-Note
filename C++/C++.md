@@ -618,6 +618,9 @@ private:
     unsigned int m_Size;
 
 public:
+    /**
+     * 构造函数
+     */
     String(const char* string)
     {
         /* 通过计算string大小计算出字符串长度*/
@@ -626,13 +629,52 @@ public:
         /* 创建一个字符数组(字符串缓冲区)，大小为m_Size，因为包含终止符所以+1，赋值给m_Buffer */
         m_Buffer = new char[m_Size + 1];
 
-        /* 复制字符串内容到m_buffer，复制的字节数为m_Size(不够) */
+        /* 复制字符串内容到m_buffer，复制的字节数为m_Size */
         memcpy(m_Buffer, string, m_Size);
 
         /* 复制的字符串长度m_Size不包含终止符，手动添加一个 */
         m_Buffer[m_Size] = 0;
     }
 
+    /**
+     * 默认拷贝构造函数及复杂的写法(浅拷贝)
+     */
+     /*
+          String(const String& other)
+              :m_Buffer(other.m_Buffer),m_Size(other.m_Size)
+          {
+
+          }
+
+          String(const String& other)
+         {
+             memcpy(this, &other, sizeof(String));
+         }
+      */
+
+      /**
+       * 重写拷贝构造(深拷贝)
+       */
+    String(const String& other)
+        :m_Size(other.m_Size)
+    {
+        std::cout << "Copyed String!" << std::endl;
+
+        /* 创建一个字符数组(字符串缓冲区)，大小为m_Size，因为包含终止符所以+1，赋值给m_Buffer */
+        m_Buffer = new char[m_Size + 1];
+
+        /* 复制字符串到m_buffer，复制的字节数+1，因为被拷贝的是字符串而非数组，已经包含终止符 */
+        memcpy(m_Buffer, other.m_Buffer, m_Size + 1);
+    }
+
+    /**
+     * 删除默认拷贝构造
+     */
+     /* String(const String& other) = delete; */
+
+     /**
+      * 析构函数
+      */
     ~String()
     {
         /* 因为m_Buffer是new创建出来的，所以我们需要在析构函数中手动释放内存 */
@@ -642,7 +684,7 @@ public:
     /**
      * 重载操作符"[]"
      * @params index 数组下标
-     * 
+     *
      * @return 该下标对应的字符
      */
     char& operator[](unsigned int index)
@@ -654,11 +696,27 @@ public:
     friend std::ostream& operator<<(std::ostream& stream, const String& string);
 };
 
+/**
+ * 重载操作符<<(toString())
+ */
 std::ostream& operator<<(std::ostream& stream, const String& string)
 {
     stream << string.m_Buffer;
 
     return stream;
+}
+
+/**
+ * 字符串输出方法
+ * 不加const传进来的字符串可能被修改
+ * 不加引用&会复制一个副本传递给该方法，浪费了性能
+ * ※ 但在某些情况下复制可能更快
+ * 
+ * @params string 要输出的字符串引用
+ */
+void PrintString(const String& string)
+{
+    std::cout << string << std::endl;
 }
 
 int main()
@@ -677,9 +735,13 @@ int main()
     /* 这里尝试修改name2的第二个字符，重载[]操作符 */
     name2[1] = 'a';
 
-    /* 可以在此处打个断点，鼠标拖到name和name2上，是同一个地址 */
-    std::cout << name << std::endl;
-    std::cout << name2 << std::endl;
+    /* 
+        可以在此处打个断点，鼠标拖到name和name2上，检查是否是同一个地址 
+        std::cout << name << std::endl;
+        std::cout << name2 << std::endl;
+    */
+    PrintString(name);
+    PrintString(name2);
 
     std::cin.get();
 }
@@ -1736,6 +1798,8 @@ int main()
 
 ##### 5.2.2 使用场景
 
+###### 普通形参传递
+
 调用一个函数，使用值传递的方式，函数不会对实参做改变：
 
 ```c++
@@ -1825,7 +1889,15 @@ int main()
 }
 ```
 
+###### 对象形参传递
 
+> 总是使用const引用传递对象，参考字符串实现[^6]中PrintString()方法
+
+1. 不加引用传递方法的形参时，会复制一个副本
+2. 传递对象使用const关键字配合引用
+3. 需要复制的时候，在方法内部复制，而非每调用一次方法复制一个副本
+
+![image-20240227164853072](A:\Typora\TyporaPicture\image-20240227164853072.png)
 
 ##### 5.2.3 注意事项
 
@@ -2695,7 +2767,34 @@ String(const String& other)
 
 > 创建一个新的内存块，用于存储指针指向内存的数据
 
- 
+浅拷贝的问题需要解决使用赋值操作符时，仅复制指针而非指针指向内存内容
+
+所以重写拷贝构造函数：
+
+```c++
+类名(const 类名& other)
+    :成员变量a(other.成员变量a), 成员变量b(other.成员变量b)...
+{
+	指针成员变量 c = 重新创建(申请)内存;
+    ...
+}
+```
+
+**实例**
+
+> 参考`使用C++基础特性实现String字符串`[^6]
+
+```c++
+String(const String& other)
+    :m_Size(other.m_Size)
+{
+    /* 创建一个字符数组(字符串缓冲区)，大小为m_Size，因为包含终止符所以+1，赋值给m_Buffer */
+    m_Buffer = new char[m_Size + 1];
+
+    /* 复制字符串内容到m_buffer，复制的字节数为m_Size + 1，因为被拷贝的已经包含终止符 */
+    memcpy(m_Buffer, other.m_Buffer, m_Size + 1);
+}
+```
 
 
 
