@@ -1516,6 +1516,8 @@ int main()
 
 ##### 5.1.2 作用域指针
 
+> 目的是堆对象的自动内存释放
+
 它可以称为一个类，是一个指针的包装器，在构造时用堆分配指针，然后在析构(函数)时删除指针；
 
 也就是自动化的`new`&`delete`，手动编写的智能指针。
@@ -1568,6 +1570,7 @@ public:
 
     ~ScopedPtr()
     {
+        /* 释放该指针指向的内存，就变相释放了Entity指针 */
         delete m_Ptr;
     }
 };
@@ -1579,7 +1582,7 @@ int main()
         /* Entity* e1 = new Entity(); */
 
         /* 使用作用域指针创建对象 */
-        /* 因为ScopedPtr是在栈上创建的，所以 */
+        /* 创建一个堆对象，指针被传递给 ScopedPtr 类的构造函数 */
         ScopedPtr e2 = new Entity();
         /* 也可以这样写：ScopedPtr e(new Entity()); */
     }
@@ -1748,9 +1751,17 @@ int main()
 
 ##### 5.2.1 概念
 
+引用是通过指针解引用(逆向引用)赋值
+
 引用是指针的包装与简化，它是一个语法糖，让指针更易于理解。它类似于给一个变量起别名。
 
-**实例**
+> 解引用指的是<font color="#f40">取指针指向的地址中的内容</font>
+
+```c++
+类名/数据类型& = *类对象/变量
+```
+
+**变量引用实例**
 
 ```c++
 #include <iostream>
@@ -1777,19 +1788,31 @@ int main()
 **对象引用实例**
 
 ```c++
+#include <iostream>
+
+#define LOG(message) std::cout << message << std::endl;
+
 class Entity
 {
-    int x;
-    int y;
+public:
+    char* name;
+    int age;
 };
 
 int main()
 {
-    /* 从栈中创建一个对象 */
-    Entity e;
-    /* 赋值给引用ee,ee就表示该对象e */
-    Entity& ee = e;
-    
+    /* 创建堆对象，赋值 */
+    Entity* e = new Entity();
+    e->age = 10;
+    e->name = "Cherno";
+
+    /* 获取引用，通过引用修改age */
+    Entity& entity = *e;
+    entity.age++;
+
+    /* 打印源对象e的值，11 */
+    LOG(e->age);
+
     std::cin.get();
 }
 ```
@@ -1817,9 +1840,6 @@ int main()
 {
     int a = 5;
 
-    /* 定义一个引用，&是类型的一部分，int&是一个整体 */
-    int& ref = a;
-
     /* 值传递，拷贝变量的值，复制到函数中 */
     increment(a);
 
@@ -1839,7 +1859,7 @@ int main()
 
 void increment(int* num)
 {
-    /* 
+    /*
         这里的num是变量a的引用(地址)
         要加上*号，表示操作指针(地址)的内容，而不是地址本身
         不加的话就变成了更改num的地址，+1(对地址递增)
@@ -1852,7 +1872,7 @@ int main()
 {
     int a = 5;
 
-    /* 指针(地址)传递 */
+    /* 指针(地址)传递，&a表示变量a的地址，也就是指向变量a的指针，&为取地址运算符 */
     increment(&a);
 
     /* 打印6 */
@@ -1863,6 +1883,8 @@ int main()
 ```
 
 指针还是很麻烦，使用引用来简化：
+
+> 注意引用没有更改参数的值
 
 ```c++
 #include <iostream>
@@ -1897,7 +1919,7 @@ int main()
 2. 传递对象使用const关键字配合引用
 3. 需要复制的时候，在方法内部复制，而非每调用一次方法复制一个副本
 
-![image-20240227164853072](A:\Typora\TyporaPicture\image-20240227164853072.png)
+![image-20240227164853072](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240227164853072.png)
 
 ##### 5.2.3 注意事项
 
@@ -4079,13 +4101,19 @@ public:
 };
 ```
 
-###### 限制属性修改2
+###### 限制属性修改
 
-某些情况使用了const修饰了函数，但是又想对类的属性做修改(测试、调试)，使用关键字`mutable`，详见关键字
+某些情况使用了`const`修饰了函数，但是又想对类的属性做修改(测试、调试)，使用关键字`mutable`[^8]
 
 ###### 修饰类方法
 
 表示返回一个不能被修改的常量指针，不能被修改的指针常量，且该方法不对Entity类数据做修改
+
+当一个成员函数被声明为 `const` 时，它有以下特点：
+
+1. 它不会修改对象的非静态成员变量。
+2. 它不会调用非 `const` 成员函数，除非这些成员函数也被声明为 `const`。
+3. 它可以被常量对象调用，以及通过指向常量对象的指针或引用调用。
 
 ```c++
 class Entity
@@ -4163,7 +4191,7 @@ int main()
 {
     Entity e;
     
-    /* 调用printEntity方法，输出有const */
+    /* 调用printEntity方法，输出:有const */
     printEntity(e);
 
     std::cin.get();
@@ -4212,7 +4240,7 @@ public:
 
 ##### 7.4.2 Lambda表达式
 
-同Java，就像Lambda语法糖一样。
+同`Java`，就像`Lambda`语法糖一样。
 
 它基本上就是一个一次性的函数简写了，这个函数可以赋值给一个变量，通过变量名执行该函数
 
@@ -4740,9 +4768,95 @@ int main()
 
 
 
-### 十、运算符
+### 十、运算符(操作符)
 
-#### 10.1 运算符重载
+#### 10.1 操作符
+
+##### 10.1.1 赋值操作符
+
+```c++
+=
+```
+
+
+
+##### 10.1.2 箭头操作符
+
+```c++
+->
+```
+
+**实例**
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity 
+{
+public:
+    void Print() const
+    {
+        std::cout << "PrintEntity" << std::endl;
+    }
+};
+
+int main()
+{
+    /* 1.栈对象调用方法 */
+    Entity e;
+    e.Print();
+
+    /* 2.堆对象(指针调用方法)，不能直接打点调用 */
+    Entity* ptr = &e;
+    /* ptr.Print(); */
+    /* 加上这个，通过引用打点调用 */
+    Entity& entity = *ptr;
+    entity.Print();
+
+    /* 3.指针调用方法，箭头操作符 */
+    ptr->Print();
+    std::cin.get();
+}
+```
+
+###### 获取内存中成员变量的偏移量
+
+> 变量在结构体中的内存位置
+
+```c++
+#include <iostream>
+#include <string>
+
+struct Vector3
+{
+    float x, y, z;
+};
+
+int main()
+{
+    int offset = (int)&((Vector3*)nullptr)->z;
+    std::cout << offset << std::endl;
+
+    std::cin.get();
+}
+```
+
+
+
+
+
+##### 10.1.x 三目运算符[^7]
+
+```c++
+if ? A : B
+```
+
+
+
+
+
+#### 10.2 运算符重载
 
 C++中允许对操作符进行重载，来让它们实现不同的效果。
 
@@ -5211,6 +5325,207 @@ class xxx
 
 
 
+##### 10.1.5 ->箭头操作符重载
+
+某些情况下我们打点实现不了，例如作用域指针[^9]：
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity 
+{
+public:
+    int x;
+public:
+    void Print() const
+    {
+        std::cout << "Hello" << std::endl;
+    }
+};
+
+class ScopedPtr
+{
+private:
+    Entity* m_Obj;
+public:
+    ScopedPtr(Entity* entity) 
+        :m_Obj(entity)
+    {
+
+    }
+
+    ~ScopedPtr()
+    {
+        delete m_Obj;
+    }
+};
+
+int main()
+{
+    ScopedPtr ptr = new Entity();
+    /* 调用不了Entity类中的方法 */
+    ptr.Print();
+
+    std::cin.get();
+}
+```
+
+那么可以通过写一个方法获取Entity对象的指针的方式调用：
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity 
+{
+private:
+    int x;
+public:
+    void Print() const
+    {
+        std::cout << "Hello" << std::endl;
+    }
+};
+
+class ScopedPtr
+{
+private:
+    Entity* m_Obj;
+public:
+    ScopedPtr(Entity* entity) 
+        :m_Obj(entity)
+    {
+
+    }
+
+    ~ScopedPtr()
+    {
+        delete m_Obj;
+    }
+
+    Entity* GetObject()
+    {
+        return m_Obj;
+    }
+};
+
+int main()
+{
+    ScopedPtr ptr = new Entity();
+    /* 调用不了Entity类中的方法 */
+    ptr.GetObject()->Print();
+
+    std::cin.get();
+}
+```
+
+但是这种方式过于麻烦，那么重载箭头操作符->：
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity 
+{
+private:
+    int x;
+public:
+    void Print() const
+    {
+        std::cout << "Hello" << std::endl;
+    }
+};
+
+class ScopedPtr
+{
+private:
+    Entity* m_Obj;
+public:
+    ScopedPtr(Entity* entity) 
+        :m_Obj(entity)
+    {
+
+    }
+
+    ~ScopedPtr()
+    {
+        delete m_Obj;
+    }
+
+    Entity* operator->()
+    {
+        return m_Obj;
+    }
+};
+
+int main()
+{
+    ScopedPtr ptr = new Entity();
+
+    /* 重写了箭头操作符->，直接调用 */
+    ptr->Print();
+
+    std::cin.get();
+}
+```
+
+特殊情况，对象是const修饰的：
+
+```c++
+#include <iostream>
+#include <string>
+
+class Entity 
+{
+private:
+    int x;
+public:
+    void Print() const
+    {
+        std::cout << "Hello" << std::endl;
+    }
+};
+
+class ScopedPtr
+{
+private:
+    Entity* m_Obj;
+public:
+    ScopedPtr(Entity* entity) 
+        :m_Obj(entity)
+    {
+
+    }
+
+    ~ScopedPtr()
+    {
+        delete m_Obj;
+    }
+
+    Entity* operator->()
+    {
+        return m_Obj;
+    }
+
+    const Entity* operator->() const
+    {
+        return m_Obj;
+    }
+};
+
+int main()
+{
+    /* ScopedPtr对象是const修饰的，重载两遍箭头操作符 */
+    const ScopedPtr ptr = new Entity();
+    ptr->Print();
+
+    std::cin.get();
+}
+```
+
+
+
 ---
 
 
@@ -5223,3 +5538,6 @@ class xxx
 [^4]:10.1.2 运算符重载
 [^5]: C.md
 [^6]:2.3.7 C++基本特性实现String字符串
+[^7]: 4.3 三目运算符
+[^8]: 7.4 mutable
+[^9]: 5.1.2 作用域指针
