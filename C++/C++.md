@@ -915,9 +915,95 @@ C++11里面定义了一个标准的数组：`std::array`，它是一个内置的
 
 
 
-##### 2.5.4 其他问题
+##### 2.5.4 动态数组
 
-C++<font color="#f40">没有和数组大小相关的概念</font>，例如array.size()；是没有的，可以使用sizeof(数组名)获取数组内部的元素使用了多少空间。
+C++标准库[^10]模板(STL)中的数组，类似于Java的数据容器
+
+###### vector
+
+类似于Java中的`ArrayList`，并不是翻译中的`向量`，称为Vector是因为动态数组的无限延长。
+
+它跟链表的区别是链表不是连续存储的，而Vector是在内存中连续存储的一块内存(数组)。
+
+它本质上是一个数组，区别是它会动态扩容，机制是：
+
+超过数组大小后，在内存中创建一个比第一个大的数组，然后将数据复制到新数组，最后删除旧数组。
+
+```c++
+#include <vector>
+
+int main()
+{
+    /* 可以存储指针，取决于使用情况，数据类型包括基础类型(int...) */
+    std::vector<数据类型> 数组名;
+    
+    std::cin.get();
+}
+```
+
+**实例**
+
+```c++
+#include <iostream>
+#include <string>
+#include <vector>
+
+struct Vertex
+{
+    float x, y, z;
+};
+
+std::ostream& operator<<(std::ostream& stream, const Vertex& vertex)
+{
+    stream << vertex.x << "," << vertex.y << "," << vertex.z;
+
+    return stream;
+}
+
+/* 当作形参调用函数，使用引用(const则取决于函数是否会对数组改动) */
+void Function(const std::vector<Vertex>& vertices)
+{
+    /* ... */
+}
+
+int main()
+{
+    /* 创建vector数组 */
+    std::vector<Vertex> vertices;
+
+    /* 添加数组元素，结构体或者类，可以按成员变量声明的顺序使用列表构造 */
+    vertices.push_back({ 1,2,3 });
+    vertices.push_back({ 4,5,6 });
+
+    /* 普通遍历 */
+    for (int i = 0; i < vertices.size(); i++)
+    {
+        std::cout << vertices[i] << std::endl;
+    }
+
+    /* for-each遍历(增强for) */
+    for (Vertex vertex : vertices)
+    {
+        std::cout << vertex << std::endl;
+    }
+
+    /* 移除某个元素 */
+    vertices.erase(vertices.begin() + 1);
+
+    /* 调用方法 */
+    Function(vertices);
+
+    std::cin.get();
+}
+```
+
+
+
+
+
+##### 2.5.x 其他问题
+
+C++<font color="#f40">没有和数组大小相关的概念</font>，例如array.size()；可以使用sizeof(数组名)获取数组使用了多少空间。
 
 ```c++
 /* 栈数组 */
@@ -4835,6 +4921,12 @@ struct Vector3
 
 int main()
 {
+    /*
+        1.将空指针强转成Vector3类型
+        2.使用箭头操作符获取指向该Vector3空对象的成员变量z的地址
+          本质上是获取成员变量z在该对象中的偏移量。
+        3.将偏移量强转成int类型，输出
+    */
     int offset = (int)&((Vector3*)nullptr)->z;
     std::cout << offset << std::endl;
 
@@ -5541,3 +5633,4 @@ int main()
 [^7]: 4.3 三目运算符
 [^8]: 7.4 mutable
 [^9]: 5.1.2 作用域指针
+[^10]: C++标准库 TODO
