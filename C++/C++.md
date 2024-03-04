@@ -262,6 +262,24 @@ int main()
 
 
 
+
+
+#### 1.3 库
+
+##### 1.3.1 静态库(静态链接)
+
+GLFW
+
+```http
+https://www.glfw.org/download.html
+```
+
+下载
+
+![image-20240304164546795](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240304164546795.png)
+
+
+
 ---
 
 
@@ -909,17 +927,15 @@ int main()
 
 
 
-##### 2.5.3 标准数组
+##### 2.5.3 array
 
 C++11里面定义了一个标准的数组：`std::array`，它是一个内置的数据结构
 
 
 
-##### 2.5.4 动态数组
+##### 2.5.4 vector
 
 C++标准库[^10]模板(STL)中的数组，类似于Java的数据容器
-
-###### vector
 
 类似于Java中的`ArrayList`，并不是翻译中的`向量`，称为Vector是因为动态数组的无限延长。
 
@@ -997,9 +1013,149 @@ int main()
 }
 ```
 
+###### 性能优化[^11]
 
+本质上当新增数据超过Vector数组大小时，会执行复制操作，也就是内存中的旧位置复制到内存中的新位置，然后清空旧位置内存。这样频繁的复制会影响性能——频繁的重新分配内存
 
+```c++
+#include <iostream>
+#include <string>
+#include <vector>
 
+struct Vertex
+{
+    float x, y, z;
+
+    Vertex(float x, float y, float z)
+        :x(x), y(y), z(z)
+    {
+
+    }
+
+    Vertex(const Vertex& vertex)
+    {
+        /* 打印6(1 + 2 + 3)次 */
+        std::cout << "Copied" << std::endl;
+    }
+};
+
+int main()
+{
+    std::vector<Vertex> vertices;
+    vertices.push_back(Vertex(1, 2, 3));
+    vertices.push_back(Vertex(4, 5, 6));
+    vertices.push_back(Vertex(7, 8, 9));
+
+    std::cin.get();
+}
+```
+
+1. 指定vector数组初始容量
+
+   vector数组在扩容的时候，会将现有元素复制一遍，给到新数组，每个元素复制时都会调用拷贝构造函数。
+
+   设置大小：
+
+   ```c++
+   vector数组名.reserve(da大小);
+   ```
+
+   这与调整大小(在构造函数中传入大小)是不同的，它会构造size个vector对象
+
+   ```c++
+   std::vector<xxx> xxxies(size);
+   ```
+
+   执行添加元素时，扩容一次执行的复制操作数为：
+   $$
+   S = (n / 2) * (1 + n)
+   $$
+   S：复制操作数
+
+   n：元素个数
+
+   **实例**
+
+   > 仅执行4次
+
+   ```c++
+   #include <iostream>
+   #include <string>
+   #include <vector>
+   
+   struct Vertex
+   {
+       float x, y, z;
+   
+       Vertex(float x, float y, float z)
+           :x(x), y(y), z(z)
+       {
+   
+       }
+   
+       Vertex(const Vertex& vertex)
+       {
+           /* 打印4次 */
+           std::cout << "Copied" << std::endl;
+       }
+   };
+   
+   int main()
+   {
+       std::vector<Vertex> vertices;
+       /* 指定数组大小 */
+       vertices.reserve(4);
+       vertices.push_back(Vertex(1, 2, 3));
+       vertices.push_back(Vertex(4, 5, 6));
+       vertices.push_back(Vertex(7, 8, 9));
+       vertices.push_back(Vertex(10, 11, 12));
+   
+       std::cin.get();
+   }
+   ```
+
+2. 在适当的位置构建vector数组
+
+   yi因为当我们创建一个vector数组时，我们是在主函数的当前栈帧创建它(vertices)，然后从主函数上(将vertices)数组放到实际的vector(vector分配的内存)中，这会产生一次复制，使用`emplace_back`替代优化。
+
+   ```c++
+   #include <iostream>
+   #include <string>
+   #include <vector>
+   
+   struct Vertex
+   {
+       float x, y, z;
+   
+       Vertex(float x, float y, float z)
+           :x(x), y(y), z(z)
+       {
+   
+       }
+   
+       Vertex(const Vertex& vertex)
+       {
+           /* 无打印 */
+           std::cout << "Copied" << std::endl;
+       }
+   };
+   
+   int main()
+   {
+       std::vector<Vertex> vertices;
+       /* 指定数组大小 */
+       vertices.reserve(4);
+       vertices.emplace_back(1, 2, 3);
+       vertices.emplace_back(4, 5, 6);
+       vertices.emplace_back(7, 8, 9);
+       vertices.emplace_back(10, 11, 12);
+   
+       std::cin.get();
+   
+   }
+   ```
+
+   
 
 ##### 2.5.x 其他问题
 
@@ -1022,9 +1178,155 @@ int example[exampleSize]
 
 
 
-#### 2.6 创建变量的问题
 
-##### 2.6.1 在堆上创建的问题
+
+#### 2.6 枚举
+
+> 最主要的作用是提供一个语义化的常量定义方式，避免了魔法数字(各种Integer数字)
+
+##### 2.6.1 无类型枚举
+
+> 枚举不指定类型，默认32位整型，不指定值，默认第一位为0，以此类推
+
+```c++
+enum 枚举类型(名)
+{
+    枚举1,
+    枚举2,
+    枚举3
+};
+```
+
+**实例**
+
+> 这里的A不赋值默认为0，B2C3
+
+```c++
+enum Example
+{
+    A,
+    B,
+    C
+};
+```
+
+
+
+##### 2.6.2 有类型枚举
+
+> 本质存储一个Integer类型的数据，不需要32位，使用8位的char，节省空间
+
+```c++
+enum 枚举类型(名) : 数据类型
+{
+    枚举1,
+    枚举2,
+    枚举3
+};
+```
+
+**实例**
+
+```c++
+enum Example : unsigned char
+{
+    A,
+    B,
+    C
+};
+```
+
+
+
+##### 2.6 Log类(v2)
+
+```c++
+#include <iostream>
+
+class Log
+{
+public:
+    /* 日志枚举 */
+    enum Level
+    {
+        /* 日志等级为错误(0) */
+        LevelError = 0,
+        /* 日志等级为警告(1) */
+        LevelWarning,
+        /* 日志等级为信息(2) */
+        LevelInfo
+    };
+private:
+    /* 日志等级，私有的类成员变量用m当作前缀 */
+    int m_LogLevel;
+public:
+    /**
+     * 设置日志等级
+     * @param level 代表等级的数字
+     */
+    void setLevel(Level level)
+    {
+        m_LogLevel = level;
+    }
+
+    /**
+     * 错误日志
+     *
+     * @param message 日志信息
+     */
+    void error(const char* message)
+    {
+        /* 如果设置的日志级别大于等于当前日志的级别，才打印该日志 */
+        if (m_LogLevel >= LevelError)
+        {
+            std::cout << "[ERROR]:" << message << std::endl;
+        }
+    }
+
+    /**
+     * 警告日志
+     *
+     * @param message 日志信息
+     */
+    void warn(const char* message)
+    {
+        if (m_LogLevel >= LevelWarning)
+        {
+            std::cout << "[WARNING]:" << message << std::endl;
+        }
+
+    }
+
+    /**
+     * 信息日志
+     *
+     * @param message 日志信息
+     */
+    void info(const char* message)
+    {
+        if (m_LogLevel >= LevelInfo)
+        {
+            std::cout << "[INFO]:" << message << std::endl;
+        }
+    }
+};
+
+int main()
+{
+    Log log;
+    log.setLevel(Log::LevelError);
+    log.error("Hello World!");
+    std::cin.get();
+}
+```
+
+
+
+
+
+#### 2.x 创建变量的问题
+
+##### 2.x.1 在堆上创建的问题
 
 有两种，有无`()`的区别在于是否对该数值初始化：
 
@@ -1037,7 +1339,7 @@ int* a = new int();
 
 
 
-##### 2.6.2 同时创建多个指针变量
+##### 2.x.2 同时创建多个指针变量
 
 多个指针同时定义，每个都要加*号
 
@@ -2645,7 +2947,7 @@ int main()
 }
 ```
 
-###### 删除默认构造
+**删除默认构造**
 
 > 构造方法 = delete;
 
@@ -2752,9 +3054,15 @@ int main()
 
 ###### 拷贝构造
 
-**赋值操作符的问题**
+```c++
+类名(const 类名& other)
+    :成员变量a(other.成员变量a), 成员变量b(other.成员变量b)...
+{
+    
+}
+```
 
-使用`=`赋值操作符时，<font color="#f40">总是</font>在复制值，除了有一个特殊的：引用(指针)，通过引用B给引用A赋值，实际上是改变引用A的指向，并没有复制内存指向的值。
+赋值操作符的问题：使用`=`赋值操作符时，<font color="#f40">总是</font>在复制值，除了有一个特殊的：引用(指针)，通过引用B给引用A赋值，实际上是改变引用A的指向，并没有复制内存指向的值。
 
 当普通变量B给普通变量A赋值时，是直接复制；
 
@@ -2814,9 +3122,23 @@ int main()
 }
 ```
 
-**浅拷贝**
+**删除拷贝构造**
 
-> 新增了一个指针指向同一块内存
+> 拷贝构造 = delete，类结构参考[^6]
+
+```c++
+类名(const 类名& other) = delete;
+```
+
+**实例**
+
+```c++
+String(const String& other) = delete;
+```
+
+###### 浅拷贝
+
+> 默认的拷贝构造，新增了一个指针指向同一块内存
 
 复制一个类对象A时，C++底层将该对象的所有属性(成员变量)复制到一个新的内存地址里面。
 
@@ -2831,14 +3153,6 @@ int main()
 对象A执行析构函数释放了内存，对象B执行的时候就会报错——对空地址进行内存释放操作。
 
 C++默认有一个拷贝构造函数，它所做的就是内存复制，将other对象的内存**浅层拷贝**进成员变量。
-
-```c++
-类名(const 类名& other)
-    :成员变量a(other.成员变量a), 成员变量b(other.成员变量b)...
-{
-    
-}
-```
 
 **实例**
 
@@ -2871,7 +3185,7 @@ String(const String& other)
 
 ![image-20240223141152905](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240223141152905.png)
 
-**深拷贝**
+###### 深拷贝
 
 > 创建一个新的内存块，用于存储指针指向内存的数据
 
@@ -2903,24 +3217,6 @@ String(const String& other)
     memcpy(m_Buffer, other.m_Buffer, m_Size + 1);
 }
 ```
-
-
-
-###### 删除拷贝构造
-
-> 拷贝构造 = delete，类结构参考[^6]
-
-```c++
-类名(const 类名& other) = delete;
-```
-
-**实例**
-
-```c++
-String(const String& other) = delete;
-```
-
-
 
 ###### 移动构造
 
@@ -4599,7 +4895,9 @@ int main()
 
 
 
-7.7.
+---
+
+
 
 
 
@@ -4607,155 +4905,7 @@ int main()
 
 
 
-### 八、枚举
-
-> 最主要的作用是提供一个语义化的常量定义方式，避免了魔法数字(各种Integer数字)
-
-#### 8.1 定义
-
-##### 8.1.1 无类型枚举
-
-> 枚举不指定类型，默认32位整型，不指定值，默认第一位为0，以此类推
-
-```c++
-enum 枚举类型(名)
-{
-    枚举1,
-    枚举2,
-    枚举3
-};
-```
-
-**实例**
-
-> 这里的A不赋值默认为0，B2C3
-
-```c++
-enum Example
-{
-    A,
-    B,
-    C
-};
-```
-
-
-
-##### 8.1.2 有类型枚举
-
-> 本质存储一个Integer类型的数据，不需要32位，使用8位的char，节省空间
-
-```c++
-enum 枚举类型(名) : 数据类型
-{
-    枚举1,
-    枚举2,
-    枚举3
-};
-```
-
-**实例**
-
-```c++
-enum Example : unsigned char
-{
-    A,
-    B,
-    C
-};
-```
-
-
-
-##### 8.1.3 Log类(v2)
-
-```c++
-#include <iostream>
-
-class Log
-{
-public:
-    /* 日志枚举 */
-    enum Level
-    {
-        /* 日志等级为错误(0) */
-        LevelError = 0,
-        /* 日志等级为警告(1) */
-        LevelWarning,
-        /* 日志等级为信息(2) */
-        LevelInfo
-    };
-private:
-    /* 日志等级，私有的类成员变量用m当作前缀 */
-    int m_LogLevel;
-public:
-    /**
-     * 设置日志等级
-     * @param level 代表等级的数字
-     */
-    void setLevel(Level level)
-    {
-        m_LogLevel = level;
-    }
-
-    /**
-     * 错误日志
-     *
-     * @param message 日志信息
-     */
-    void error(const char* message)
-    {
-        /* 如果设置的日志级别大于等于当前日志的级别，才打印该日志 */
-        if (m_LogLevel >= LevelError)
-        {
-            std::cout << "[ERROR]:" << message << std::endl;
-        }
-    }
-
-    /**
-     * 警告日志
-     *
-     * @param message 日志信息
-     */
-    void warn(const char* message)
-    {
-        if (m_LogLevel >= LevelWarning)
-        {
-            std::cout << "[WARNING]:" << message << std::endl;
-        }
-
-    }
-
-    /**
-     * 信息日志
-     *
-     * @param message 日志信息
-     */
-    void info(const char* message)
-    {
-        if (m_LogLevel >= LevelInfo)
-        {
-            std::cout << "[INFO]:" << message << std::endl;
-        }
-    }
-};
-
-int main()
-{
-    Log log;
-    log.setLevel(Log::LevelError);
-    log.error("Hello World!");
-    std::cin.get();
-}
-```
-
-
-
----
-
-
-
-### 九、可见性(作用域)
+### 八、可见性(作用域)
 
 > 可见性提高了代码的可读性，主要跟性能无关，好的设计是和可见性有很大关系的；
 >
@@ -4763,9 +4913,9 @@ int main()
 >
 > 类似于单例模式，仅public一个创建单例实例对象的方法——**封装**
 
-#### 9.1 概念
+#### 8.1 概念
 
-##### 9.1.1 private
+##### 8.1.1 private
 
 私有，**只有/仅有**当前类可以访问这个变量/方法，其他类无法访问。
 
@@ -4798,13 +4948,13 @@ int GetAge(FriendDemo person)
 
 
 
-##### 9.1.2 protected
+##### 8.1.2 protected
 
 受保护，**只有/仅有**当前类的内部及其子类可以访问这个变量/方法，其他类无法访问。
 
 
 
-##### 9.1.3 public
+##### 8.1.3 public
 
 公开的，所有类可以访问这个变量/方法，其他类无法访问。
 
@@ -4812,9 +4962,9 @@ int GetAge(FriendDemo person)
 
 
 
-#### 9.2 默认可见性
+#### 8.2 默认可见性
 
-##### 9.2.1 属性/方法
+##### 8.2.1 属性/方法
 
 C++中所有类的属性/方法，不指定可见性的情况下，默认私有。
 
@@ -4844,7 +4994,7 @@ int main()
 
 
 
-##### 9.2.2 结构体
+##### 8.2.2 结构体
 
 结构体的属性，默认public。
 
@@ -4854,11 +5004,11 @@ int main()
 
 
 
-### 十、运算符(操作符)
+### 九、运算符(操作符)
 
-#### 10.1 操作符
+#### 9.1 操作符
 
-##### 10.1.1 赋值操作符
+##### 9.1.1 赋值操作符
 
 ```c++
 =
@@ -4866,7 +5016,7 @@ int main()
 
 
 
-##### 10.1.2 箭头操作符
+##### 9.1.2 箭头操作符
 
 ```c++
 ->
@@ -4938,7 +5088,7 @@ int main()
 
 
 
-##### 10.1.x 三目运算符[^7]
+##### 9.1.x 三目运算符[^7]
 
 ```c++
 if ? A : B
@@ -4948,7 +5098,7 @@ if ? A : B
 
 
 
-#### 10.2 运算符重载
+#### 9.2 运算符重载
 
 C++中允许对操作符进行重载，来让它们实现不同的效果。
 
@@ -4956,7 +5106,7 @@ C++中允许对操作符进行重载，来让它们实现不同的效果。
 
 重载运算符要尽量避免使用，影响可读性。只在完全有意义的情况下使用。
 
-##### 10.1.1 未使用重载
+##### 9.1.1 未使用重载
 
 一个移动的函数，角色每调用一次Add函数，x轴移动0.5，y轴移动1
 
@@ -5074,7 +5224,7 @@ Vector2 result = position + speed * powerup;
 
 
 
-##### 10.1.2 使用运算符重载
+##### 9.1.2 使用运算符重载
 
 ```c++
 返回值 operator[操作符](参数类型 形参...)
@@ -5227,7 +5377,7 @@ int main()
 }
 ```
 
-完全使用操作符重载实现10.1.1方法嵌套的情况：
+完全使用操作符重载实现9.1.1方法嵌套的情况：
 
 ```c++
 #include <iostream>
@@ -5310,7 +5460,7 @@ int main()
 
 
 
-##### 10.1.3 左移运算符(<<)重载
+##### 9.1.3 左移运算符(<<)重载
 
 > 类似于Java的toString()，**注意**：双目运算符的重载应该定义在类外
 
@@ -5384,7 +5534,7 @@ int main()
 
 
 
-##### 10.1.4 ==(equals)重载
+##### 9.1.4 ==(equals)重载
 
 **实例**
 
@@ -5417,7 +5567,7 @@ class xxx
 
 
 
-##### 10.1.5 ->箭头操作符重载
+##### 9.1.5 ->箭头操作符重载
 
 某些情况下我们打点实现不了，例如作用域指针[^9]：
 
@@ -5627,10 +5777,11 @@ int main()
 [^1]: 数据结构与算法.md
 [^2]:5.13 智能指针
 [^3]:操作系统.md TODO
-[^4]:10.1.2 运算符重载
+[^4]:9.1.2 运算符重载
 [^5]: C.md
 [^6]:2.3.7 C++基本特性实现String字符串
 [^7]: 4.3 三目运算符
 [^8]: 7.4 mutable
 [^9]: 5.1.2 作用域指针
 [^10]: C++标准库 TODO
+[^11]:充分了解你的环境，再做优化
