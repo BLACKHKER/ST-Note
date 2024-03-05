@@ -87,4 +87,3 @@ nvm install 16.20.2
 |  nvm install <version>  |    安装指定版本的Node    |
 |    nvm use <version>    |    切换指定版本的Node    |
 | nvm uninstall <version> |    卸载指定版本的Node    |
-
