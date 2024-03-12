@@ -1,8 +1,8 @@
 ## NodeJS、NodeVM安装
 
-### NodeJS
+### 一、NodeJS
 
-#### 官网
+#### 1.1 官网
 
 ```http
 https://nodejs.org/en
@@ -10,13 +10,13 @@ https://nodejs.org/en
 
 
 
-##### 安装包
+##### 1.1.1 安装包
 
 
 
 
 
-##### 压缩包
+##### 1.1.2 压缩包
 
 
 
@@ -28,13 +28,13 @@ https://nodejs.org/en
 
 
 
-### NodeVM
+### 二、NodeVM
 
 > NodeVM是NodeJS的版本管理器(node version manager)，便于切换NodeJS不同版本
 >
 > 在安装版本管理器之前，需要删除已安装的 Node.js 或 npm 的程序
 
-#### 下载地址
+#### 2.1 下载
 
 ```http
 https://github.com/coreybutler/nvm-windows/releases
@@ -51,13 +51,13 @@ https://github.com/coreybutler/nvm-windows/releases
 
 
 
-#### NVM for Windows的使用
+#### 2.2 NVM for Windows的使用
 
 > 安装后打开PowerShell，尝试使用 windows-nvm 来列出当前安装的 Node 版本（此时应为无）
 >
 > **注意安装后需要新开一个dos窗口执行nvm命令，否则不识别！**
 
-##### 安装Node
+##### 2.2.1 安装
 
 > 16.20.2安装后的npm-v版本是8.19.4
 
@@ -71,13 +71,15 @@ nvm install 16.20.2
 
 
 
-##### 查看node版本
+##### 2.2.2查看node版本
 
 ![image-20230815125013851](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230815125013851.png)
 
 
 
-##### 命令
+##### 2.2.3 命令
+
+> 依次执行install → use才能切换到指定版本
 
 |          含义           |           命令           |
 | :---------------------: | :----------------------: |
@@ -87,3 +89,4 @@ nvm install 16.20.2
 |  nvm install <version>  |    安装指定版本的Node    |
 |    nvm use <version>    |    切换指定版本的Node    |
 | nvm uninstall <version> |    卸载指定版本的Node    |
+

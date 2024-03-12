@@ -432,7 +432,7 @@ git status
 
 
 
-##### 5.1.2 有更改，但未添加到缓存区
+##### 5.1.2 更改但未添加到缓存区
 
 > 使用git add 文件名 来进行添加
 
@@ -440,7 +440,7 @@ git status
 
 
 
-##### 5.1.3 已经添加到缓存区但未提交
+##### 5.1.3 添加到缓存区但未提交
 
 ![image-20231016224222901](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231016224222901.png)
 
