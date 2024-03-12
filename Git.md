@@ -372,14 +372,14 @@ git rebase -i 0f467bc887c85644798a2f2121923490a90d451c
 
 手动更改，将被合并的改为s/squash，要合并到的改为p/pick，所以最少有一个pick，且一般为第一个
 
-可能会报错，报错根据提示输入两种不同的代码解决：
+修改错的话(比如squash打错了)会报错，报错根据提示顺序输入两种不同的代码解决：
 
 ```shell
-git rebase --continue
-git rebase --edit-todo
+git rebase --edit-todo --重新进入修改界面
+git rebase --continue  --继续执行rebase操作
 ```
 
-不报错会跳转到更新合并后显示的内存：
+不报错会跳转到该界面，手动更新合并后显示的内容(git log显示的commit内容)：
 
 ![image-20240221100028420](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240221100028420.png)
 
