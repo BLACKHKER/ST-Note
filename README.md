@@ -7,7 +7,7 @@
 ##### 语言：
 
 - `C` vx.x
-- `C++` vx.x
+- `C++` v11+
 - `Java` v1.8
 - `Python` v3.11
 - `Vue` v2.0+
@@ -48,6 +48,12 @@
 
 
 
+##### 嵌入式：
+
+- `Respberry Pi` 4B+
+
+
+
 ##### 开源产品：
 
 - `Git` v2.28
@@ -62,13 +68,14 @@
 
 - `MinIO` vx.x.x
 
+- `NodeVM` v1.1.11
+
   
 
 ##### 开源工具：
 
 - `PowerDisigner` v15.1.0
 - `Jmeter` v5.3.0
-- `NodeVM` v1.1.11
 
 
 
