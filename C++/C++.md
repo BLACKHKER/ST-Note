@@ -156,7 +156,7 @@ int main()
 
 习惯上只要在项目的解决方案里面(可以理解为自己的头文件)，就用`""`;
 
-如果它是完全的外部依赖(不在解决方案资源管理器的)则使用`<>`表示，表示他们实际是外部的。
+如果它是完全的外部依赖(不在解决方案资源管理器的)则使用`<>`表示，表示他们实际是外部引入的。
 
 例如当前文件A.cpp在A:/Study/std/A.cpp下，头文件如果也在std目录，直接引入：
 
@@ -386,7 +386,9 @@ $(SolutionDir)Dependencies\GLFW\include
 
    
 
-###### 动态链接
+###### 动态链接 TODO
+
+> ###### TODOp50动态库视频末尾的问题
 
 > Dynamic link library(.dll) 动态库
 
@@ -420,7 +422,9 @@ $(SolutionDir)Dependencies\GLFW\include
 
 2. 将dll动态库放到exe应用程序同一文件夹下
 
-   生成成功，但是运行会失败，因为运行期间找不到动态库，所以手动将动态库赋值过去：
+   > 可以设置库搜索位置，但是，可执行文件(生成的文件)的根目录下，也就是包含程序的目录是默认的自动搜索路径，所以把dll动态库放在和可执行文件相同的目录是最好的。
+
+   生成成功，但是运行会失败，因为运行期间找不到动态库，所以手动将动态库复制过去：
 
    ![image-20240313150608076](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240313150608076.png)
 
@@ -452,7 +456,7 @@ $(SolutionDir)Dependencies\GLFW\include
 
 > 头文件通过声明告诉我们哪些函数是可用的，库文件提供了定义(函数体)，这样就可以链接到这些函数，并在C++中调用函数时执行正确的代码。
 
-##### 1.3.1 静态库(静态链接)
+##### 1.3.1 静态库(lib)
 
 GLFW
 
@@ -485,6 +489,126 @@ https://www.glfw.org/download.html
 ![image-20240305110656115](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240305110656115.png)
 
 
+
+##### 1.3.2 库的创建/使用
+
+###### 静态库
+
+> 以下示例基于VisualStudio2022
+
+1. 新建一个项目，创建时<font color="#f40">不勾选</font>源文件和解决方案放在同一目录下：
+
+   ![image-20240318142549649](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318142549649.png)
+
+2. 再创建一个项目(库)
+
+   ![image-20240318142805545](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318142805545.png)
+
+   最终效果：
+
+   ![image-20240318143029910](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318143029910.png)
+
+   确保创建完项目后文件目录结构是这样的：Game包含Game应用程序和Engine静态库两个子模块
+   ![image-20240318161131640](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318161131640.png)
+
+3. 配置Game为可执行文件、Engine为静态库(因为要静态链接)
+
+   Game：
+
+   ![image-20240318143909434](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318143909434.png)
+
+   Engine：
+
+   ![image-20240318143838857](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318143838857.png)
+
+4. 创建源目录(src)
+
+   首先点击显示所有文件，然后新建文件夹src
+
+   ![image-20240318144246135](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318144246135.png)
+
+   ![image-20240318144233500](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318144233500.png)
+
+5. 创建应用的Application.cpp文件
+
+   ![image-20240318144539531](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318144539531.png)
+
+6. 创建库的头文件、CPP文件
+
+   ![image-20240318145000363](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318145000363.png)
+
+7. 编写测试代码
+
+   > 这里会报错——Application.cpp配置引入头文件没有做，所以没有engine这个东西
+
+   Engine.h
+
+   ```c++
+   #pragma once
+   
+   namespace engine {
+       void PrintMessage();
+   }
+   ```
+
+   Engine.cpp
+
+   ```c++
+   #include "Engine.h"
+   
+   #include <iostream>
+   
+   namespace engine {
+       void PrintMessage();
+   }
+   ```
+
+   Application.cpp
+
+   ```c++
+   # TODO
+   
+   int main()
+   {
+       engine::PrintMessage();
+   }
+   ```
+
+8. 配置附加包含目录(库引入目录)
+
+   TODO正常情况可以是`#include ../../Engine/src/Engine.h`，但是如果移动文件夹/重命名项目名就会出现问题，所以没有在同一文件夹下的头文件，可以配置绝对路径。
+
+   打开Game的属性 → C/C++ → 常规 → 附加的包含目录，通过宏配置相对路径
+
+   ![image-20240318152123803](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318152123803.png)
+
+   之后就可以配置相对于`Engine`的头文件路径了：`#include Engine.h`
+
+9. 配置自动化静态链接
+
+   这时右键Engine生成，即可生成静态库，可以找到对应路径：
+
+   ![image-20240318163724352](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318163724352.png)
+
+   ![image-20240318163624645](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318163624645.png)
+
+   这时可以配置静态链接[^14]，但是手动配置过于麻烦，VS可以自动化这一过程：
+
+   右键项目 → 添加 → 引用，将库模块加入进去
+
+   ![image-20240318164314978](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318164314978.png)
+
+   ![image-20240318164411372](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318164411372.png)
+
+10. 测试
+
+    右键解决方案 → 清理解决方案 → 右键Game重新生成
+
+    ![image-20240318164852962](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240318164852962.png)
+
+###### 动态库
+
+前两步同上，第三步配置类型为动态库(dll)，配置了之后不会输出lib文件，那么需要在dll项目中，在声明和定义的函数前均加上`_declspec(dllexport)，即可同时生成dll与lib
 
 
 
@@ -1680,6 +1804,8 @@ void Log(const char* message)
 编译器其实并不确定在其他文件中是否真的定义了，但声明了编译器便不再报错。
 
 那么编译器是如何运行到正确的代码的？解决这个问题的，就是**链接(Linking)**
+
+
 
 
 
@@ -5995,3 +6121,4 @@ int main()
 [^11]:充分了解你的环境，再做优化
 [^12]:1.3.1 静态库
 [^13]: TODO C和C++的库同时使用
+[^14]: 1.2.2 静态链接 No4

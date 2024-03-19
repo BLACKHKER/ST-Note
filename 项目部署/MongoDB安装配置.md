@@ -2,41 +2,41 @@
 
 > 示例版本：7.0.0
 
-### MongoDB
+### 一、MongoDB
 
-#### 自定义安装
+#### 1.1 自定义安装
 
-##### 选中Custom
+##### 1.1.1 选中Custom
 
 ![image-20230822110937954](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230822110937954.png)
 
 
 
-##### 选择路径
+##### 1.1.2 选择路径
 
 ![image-20230822111123574](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230822111123574.png)
 
 
 
-##### Next
+##### 1.1.3 配置服务账户，Next
 
 ![image-20230822111156729](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230822111156729.png)
 
 
 
-##### 勾选安装图形化界面
+##### 1.1.4 勾选安装图形化界面
 
 ![image-20230822111301472](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230822111301472.png)
 
 
 
-##### 安装
+##### 1.1.5 安装
 
 ![image-20230822111317145](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230822111317145.png)
 
 
 
-##### 安装成功
+##### 1.1.6 安装成功
 
 > 安装完会有两个软件：MongoDB数据库、MongoDBCompass图形化界面(类似于Navicat、Postage小海豚)
 
@@ -44,7 +44,7 @@
 
 
 
-##### 测试
+##### 1.1.7 测试
 
 使用MongoDBCompass，默认即可，直接连接
 
@@ -52,7 +52,7 @@
 
 
 
-##### 成功页
+##### 1.1.8 成功页
 
 ![image-20230822112457563](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230822112457563.png)
 
@@ -62,7 +62,7 @@
 
 
 
-### MongoSH
+### 二、MongoSH
 
 > MongoDB6开始数据库和图形界面分离，需要去官网下载MongoSH
 
@@ -80,9 +80,9 @@ https://www.mongodb.com/try/download/shell
 
 
 
-### 配置环境变量
+### 三、配置环境变量
 
-#### 配置Path
+#### 3.1 配置Path
 
 ![image-20230822115819904](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20230822115819904.png)
 
@@ -94,9 +94,9 @@ https://www.mongodb.com/try/download/shell
 
 
 
-#### 测试
+#### 3.2 测试
 
-##### CMD连接MongoDB
+##### 3.2.1 CMD连接MongoDB
 
 ```shell
 mongosh
@@ -106,7 +106,7 @@ mongosh
 
 
 
-##### 退出
+##### 3.2.2 退出
 
 ```shell
 quit
@@ -114,7 +114,7 @@ quit
 
 
 
-##### 指令集
+##### 3.2.3 指令集
 
 |       命令       |                作用                |
 | :--------------: | :--------------------------------: |
