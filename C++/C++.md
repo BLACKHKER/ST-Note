@@ -4399,6 +4399,150 @@ int main()
 
 
 
+
+
+#### 6.7 模板(Template)
+
+> 类似于Java的泛型，但是功能更加强大，也就是参数决定实际放到模板中的代码。
+
+模板允许你定义一个可以根据你的用途进行编译的模板，可以理解为让编译器帮助我们写代码。
+
+运行基于我们提供给编译器的模板(规则)，例如写一个函数时在函数中使用模板，实际上是创建了一个框架；
+
+框架的运行机制取决于给它的参数，那么当调用该使用模板的函数的时候，不同的参数，会有不同的运行结果。
+
+##### 6.7.1 非模板(方法重载)
+
+没有模板的情况下，接收不同参数类型的方法，例如输出三种数据类型，就需要定义三种方法：
+
+```c++
+#include <iostream>
+
+void Print(int value)
+{
+    std::cout << value << std::endl;
+}
+
+void Print(float value)
+{
+    std::cout << value << std::endl;
+}
+
+void Print(std::string value)
+{
+    std::cout << value << std::endl;
+}
+
+int main()
+{
+    Print(1);
+    Print(1.2f);
+    Print("10");
+
+    std::cin.get();
+}
+```
+
+
+
+##### 6.7.2 模板
+
+使用模板可以解决重载问题，避免代码复制从而简化代码：
+
+C++ 模板允许编写通用的函数或类，其中某些部分可以根据使用模板时提供的具体类型进行参数化。
+
+通过使用模板，可以实现代码的重用和类型安全，因为编译器会根据模板参数在编译时生成相应的代码。
+
+###### 方法模板
+
+```c++
+#include <iostream>
+
+/* 定义一个模板 */
+template <typename T>
+/* 
+    也可以写成class，就跟Java大差不差了 
+    template <class V>
+*/
+
+
+/**
+ * 隐式的从参数获取类型赋值给T
+ * 
+ * @param value 打印的数据
+ */
+void Print(T value)
+{
+    std::cout << value << std::endl;
+}
+
+int main()
+{
+    /* 调用方式1 */
+    Print(1);
+    Print(1.2f);
+    Print("3");
+
+    /* 调用方式2，int会取代T称为Print方法形参的类型 */
+    Print<int>(4);
+
+    std::cin.get();
+}
+```
+
+###### 类模板
+
+```c++
+#include <iostream>
+
+template<int N>
+
+class Array
+{
+private:
+    /*
+        定义一个int类型的数组，因为是在栈上，给定数组大小必须是确切的值：
+        int m_array[数组大小]
+        那么可以使用模板，“强行”通过变量指定数组大小
+    */
+    int m_array[N];
+public:
+    /**
+     * 获取数组大小
+     */
+    int GetSize()
+    {
+        return N;
+    }
+};
+
+int main()
+{
+    Array<5> array;
+    std::cout << array.GetSize() << std::endl;
+
+    std::cin.get();
+}
+```
+
+需要注意的是，模板是在编译时根据模板参数进行实例化并生成相应的代码。具体取决于编译器。
+
+**示例**
+
+```c++
+...
+
+void Print(T value)
+{
+    /* 这里少一个e，依然可以编译(VS2017以及以下版本不会报错) */
+    std::cout << valu << std::endl;
+}
+
+...
+```
+
+
+
 ---
 
 
