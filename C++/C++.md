@@ -4492,6 +4492,8 @@ int main()
 
 ###### 类模板
 
+1. 使用模板实现动态指定数组大小
+
 ```c++
 #include <iostream>
 
@@ -4519,6 +4521,44 @@ public:
 int main()
 {
     Array<5> array;
+    std::cout << array.GetSize() << std::endl;
+
+    std::cin.get();
+}
+```
+
+2. 使用模板同时实现动态数组大小&类型(C++标准库底层array的实现大差不差)
+
+```c++
+#include <iostream>
+#include <string>
+
+/* 定义两个模板，类型T和INTEGER N */
+template<typename T, int N>
+
+class Array
+{
+private:
+    /*
+        定义一个int类型的数组，因为是在栈上，给定数组大小必须是确切的值：
+        int m_array[数组大小]
+        那么可以使用模板，“强行”通过变量指定数组大小
+    */
+    T m_array[N];
+public:
+    /**
+     * 获取数组大小
+     */
+    int GetSize()
+    {
+        return N;
+    }
+};
+
+int main()
+{
+    /* 定义时传入模板参数 */
+    Array<int, 5> array;
     std::cout << array.GetSize() << std::endl;
 
     std::cin.get();
@@ -6239,6 +6279,80 @@ int main()
     /* ScopedPtr对象是const修饰的，重载两遍箭头操作符 */
     const ScopedPtr ptr = new Entity();
     ptr->Print();
+
+    std::cin.get();
+}
+```
+
+
+
+---
+
+
+
+### X、C++堆栈
+
+#### X.1 堆栈的由来
+
+当程序开始的时候，它被分为不同的内存区域，其中就包含堆、栈；
+
+应用程序(.exe)启动后，会将整个程序加载到内存，并分配一块内存空间(物理RAM)，以便我们的实际应用程序可以运行，栈和堆则是在该分配的内存中的两个区域。
+
+我们可以要求C++给我们一些内存，从栈或堆中；不同之处在于，它如何为我们分配内存。
+
+重要的是，两个区域的实际位置，都是在RAM中。
+
+
+
+
+
+#### X.2 栈
+
+##### X.2.1 基本概念
+
+栈通常是一个预定义大小的内存区域，通常约为两兆字节(2MB)左右。
+
+栈并不是存储在CPU缓存中或类似的地方。它在物理意义上的内存(RAM)中。
+
+
+
+##### X.2.2 栈内存分配的方式
+
+```c++
+#include <iostream>
+
+int main()
+{
+    int value = 8;
+    int array[5];
+
+    std::cin.get();
+}
+```
+
+
+
+
+
+#### X.3 堆
+
+##### X.3.1 基本概念
+
+堆通常是一个预定义了默认值的区域，但是它可以<font color="#f40">生长</font>，并随着应用程序的进行而改变。
+
+堆空间不足以执行下一个操作时，例如分配一个内存存储对象，操作系统就会分配更多的内存给堆。
+
+
+
+##### X.3.2 堆内存分配的方式
+
+```c++
+#include <iostream>
+
+int main()
+{
+    int* hValue = new int;
+    *hValue = 8;
 
     std::cin.get();
 }
