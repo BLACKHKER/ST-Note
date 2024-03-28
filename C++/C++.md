@@ -612,6 +612,24 @@ https://www.glfw.org/download.html
 
 
 
+
+
+#### 1.N 控制台输入/输出
+
+```c++
+#inlcude <iostream>
+
+int main()
+{
+    std::cout << "Hello World!" << std::endl;
+    
+    /* 等待键盘输入一个字符，用于窗口保活(执行完窗口自动退出) */
+    std::cin.get()
+}
+```
+
+
+
 ---
 
 
@@ -1687,133 +1705,9 @@ int* a, *b;
 
 
 
-### 三、函数
-
-#### 3.1 函数定义
-
-**实例**
-
-functions.h
-
-.h头文件定义函数的返回值、函数名、参数类型、参数个数，类似Java的接口。
-
-> ```c++
-> #ifndef _FUNCTIONS_H
-> #define _FUNCTIONS_H
-> ...
-> #endif 
-> ```
->
-> 这种结构是头文件的保护机制，作用是确保同一个头文件不会被多次包含，以防止重复定义和编译错误。
->
-> 一个头文件被多次包含时，编译器会对其中的内容进行重复处理，导致重复定义的错误。在C++中，可以使用`#pragma once`代替，但是它是非标准的预处理指令，可能不兼容。
-
-```c++
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
-
-int multiply(int a, int b);
-void printMessage();
-
-#endif
-```
-
-functions.c
-
-.c源文件定义函数的具体执行逻辑，类似于Java的接口实现类，
-
-```c++
-#include <stdio.h>
-#include functions.h
-
-int multiply(int a, int b)
-{
-    return a * b;   
-}
-
-void print_message()
-{
-    std::cout << "Message" << std::endl;
-    std::cin.get();
-}
-```
-
-main.cpp
-
-> 其他文件就可以通过引入头文件(.h文件)，来调用其他文件中定义的函数
-
-```c++
-#include functions.h
-
-int main()
-{
-    int sum = multiply(1, 2);
-    print_message();
-}
-```
 
 
-
-
-
-#### 3.2 函数声明
-
-> 函数声明可以使用#include头文件的形式替代
-
-##### 3.2.1 概念
-
-一个函数引用外部函数时，需要进行一个预声明，来表示这个函数是由外部引用的，不在本文件中
-
-**实例**
-
-Main.cpp
-
-```c++
-#include <iostream>
-
-/* 预声明Log是一个函数，定义在其他文件中 */
-void Log(const char*);
-/* 形参参数名可以省略，但建议加上，便于提高维护性 */
-void Log(const char* message);
-
-int main()
-{
-    /* 日志打印 */
-    Log("Hello World!");
-    std::cin.get();
-}
-```
-
-Log.cpp
-
-```c++
-#include <iostream>
-
-void Log(const char* message)
-{
-    std::cout << message << std::endl;
-}
-```
-
-
-
-##### 3.2.2 总结
-
-函数声明会告诉编译器，哪些东西虽然没有在当前文件定义，但是是在其他文件中定义的；
-
-编译器其实并不确定在其他文件中是否真的定义了，但声明了编译器便不再报错。
-
-那么编译器是如何运行到正确的代码的？解决这个问题的，就是**链接(Linking)**
-
-
-
-
-
----
-
-
-
-### 四、流程控制
+### 三、流程控制
 
 > 流程控制包含：顺序结构、选择(分支)结构、循环结构
 >
@@ -1821,11 +1715,11 @@ void Log(const char* message)
 >
 > 底层对应不同的内存块，跳到不同的内存块开始执行指令，所以if语句和分支语句有很大的内存开销。
 
-#### 4.1 分支
+#### 3.1 分支
 
 > C++中不同于C，它有布尔类型，if的参数也是布尔
 
-##### 4.1.1 if...else
+##### 3.1.1 if...else
 
 > if底层只是对参数进行检查，判断它是否为0，为0即为false
 
@@ -1895,7 +1789,7 @@ int main()
 
 
 
-##### 4.1.2 if...else if
+##### 3.1.2 if...else if
 
 > else if不是c+的关键字，本质上是else嵌套了if，上面的if执行了，那么elseif就不会执行
 
@@ -1965,9 +1859,9 @@ int main()
 
 
 
-#### 4.2 循环
+#### 3.2 循环
 
-##### 4.2.1 for
+##### 3.2.1 for
 
 > 循环的条件判断不建议写<=、>=，影响性能，因为做的是小于以及等于的比较，多了一步运算
 
@@ -2044,7 +1938,7 @@ int main()
 
 
 
-##### 4.2.2 while
+##### 3.2.2 while
 
 ```c
 while(条件判断condition)
@@ -2076,7 +1970,7 @@ int main()
 
 
 
-##### 4.2.3 do...while
+##### 3.2.3 do...while
 
 ```c
 do
@@ -2108,7 +2002,7 @@ int main()
 
 
 
-##### 4.2.4 continue/break
+##### 3.2.4 continue/break
 
 > 同Java
 
@@ -2124,7 +2018,7 @@ break;
 
 
 
-#### 4.3 三目运算符
+#### 3.3 三目运算符
 
 简化if...else的一些流程，条件为真执行`:`前面的表达式；为假则相反，返回表达式执行的结果；可以嵌套。
 
@@ -2179,6 +2073,130 @@ else
 /* 三目不会让otherRank创建空字符串占用空间(构造临时字符串再销毁) */
 std::string otherRank = s_Level > 5 ? "Master" : "Beginner"
 ```
+
+
+
+---
+
+
+
+### 四、函数
+
+#### 4.1 函数定义
+
+**实例**
+
+functions.h
+
+.h头文件定义函数的返回值、函数名、参数类型、参数个数，类似Java的接口。
+
+> ```c++
+> #ifndef _FUNCTIONS_H
+> #define _FUNCTIONS_H
+> ...
+> #endif 
+> ```
+>
+> 这种结构是头文件的保护机制，作用是确保同一个头文件不会被多次包含，以防止重复定义和编译错误。
+>
+> 一个头文件被多次包含时，编译器会对其中的内容进行重复处理，导致重复定义的错误。在C++中，可以使用`#pragma once`代替，但是它是非标准的预处理指令，可能不兼容。
+
+```c++
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+
+int multiply(int a, int b);
+void printMessage();
+
+#endif
+```
+
+functions.c
+
+.c源文件定义函数的具体执行逻辑，类似于Java的接口实现类，
+
+```c++
+#include <stdio.h>
+#include functions.h
+
+int multiply(int a, int b)
+{
+    return a * b;   
+}
+
+void print_message()
+{
+    std::cout << "Message" << std::endl;
+    std::cin.get();
+}
+```
+
+main.cpp
+
+> 其他文件就可以通过引入头文件(.h文件)，来调用其他文件中定义的函数
+
+```c++
+#include functions.h
+
+int main()
+{
+    int sum = multiply(1, 2);
+    print_message();
+}
+```
+
+
+
+
+
+#### 4.2 函数声明
+
+> 函数声明可以使用#include头文件的形式替代
+
+##### 4.2.1 概念
+
+一个函数引用外部函数时，需要进行一个预声明，来表示这个函数是由外部引用的，不在本文件中
+
+**实例**
+
+Main.cpp
+
+```c++
+#include <iostream>
+
+/* 预声明Log是一个函数，定义在其他文件中 */
+void Log(const char*);
+/* 形参参数名可以省略，但建议加上，便于提高维护性 */
+void Log(const char* message);
+
+int main()
+{
+    /* 日志打印 */
+    Log("Hello World!");
+    std::cin.get();
+}
+```
+
+Log.cpp
+
+```c++
+#include <iostream>
+
+void Log(const char* message)
+{
+    std::cout << message << std::endl;
+}
+```
+
+
+
+##### 4.2.2 总结
+
+函数声明会告诉编译器，哪些东西虽然没有在当前文件定义，但是是在其他文件中定义的；
+
+编译器其实并不确定在其他文件中是否真的定义了，但声明了编译器便不再报错。
+
+那么编译器是如何运行到正确的代码的？解决这个问题的，就是**链接(Linking)**
 
 
 
@@ -2926,7 +2944,7 @@ delete objectPtr;
 
 ##### 6.2.3 生命周期(作用域)
 
-> 作用域指针参考标题五中的内容
+> 作用域指针参考节5.1.2
 
 对象的生存期取决于该对象创建在堆/栈上：
 
@@ -5425,13 +5443,13 @@ int main()
 
 ### 八、可见性(作用域)
 
-> 可见性提高了代码的可读性，主要跟性能无关，好的设计是和可见性有很大关系的；
->
-> 一个类内部的、仅自己使用的属性/方法都设计成private，仅public对外供外部调用的接口，其他人就只需要看这些public的属性/方法的实现就可以。
->
-> 类似于单例模式，仅public一个创建单例实例对象的方法——**封装**
-
 #### 8.1 概念
+
+可见性提高了代码的可读性，主要跟性能无关，好的设计是和可见性有很大关系的；
+
+一个类内部的、仅自己使用的属性/方法都设计成private，仅public对外供外部调用的接口，其他人就只需要看这些public的属性/方法的实现就可以。
+
+类似于单例模式，仅public一个创建单例实例对象的方法——<font color="#f40">封装</font>
 
 ##### 8.1.1 private
 
