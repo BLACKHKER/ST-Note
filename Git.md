@@ -142,7 +142,7 @@ git commit -m "本次提交的备注"
 
 ![image-20231016215954976](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231016215954976.png)
 
-###### 2. 本地仓库连接远程仓库
+###### 2. 连接远程仓库
 
 > 远程仓库别名一般为origin，约定俗成
 
@@ -153,7 +153,7 @@ git remote add origin https://gitee.com/blackhker/git-study.git
 
 ![image-20231016221328919](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231016221328919.png)
 
-###### 3. 提交本地仓库中的代码到gitee
+###### 3. 提交代码到远程仓库
 
 > `-u` 参数设置该远程仓库为默认的上游(关联分支)，以后就可以只git push; origin为Git默认的远程仓库名称
 
@@ -169,6 +169,10 @@ git push -u origin master
 > 在git中,“push -u”的意思是将本地的分支版本上传到远程合并,并且记录push到远程分支的默认值
 >
 > 当添加“-u”参数时,表示下次继续push的这个远端分支的时候推送命令就可以简写成“git push”。
+>
+> 第一次推送会提示输入远程仓库的账户密码
+>
+> ![image-20240403153322798](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240403153322798.png)
 
 ###### 4. 强制推送
 
