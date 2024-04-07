@@ -175,7 +175,35 @@ sudo passwd root -- 设置root用户密码
 
 
 
-#### 3.2 删除系统自带软件
+#### 3.2 中文设置
+
+1. 右上角设置
+
+![image-20240407135646939](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240407135646939.png)
+
+2. 左侧菜单区找到区域与语言，配置语言
+
+![image-20240407135825331](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240407135825331.png)
+
+3. 选中语言为中文
+
+   ![image-20240407135908422](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240407135908422.png)
+
+4. 重启生效
+
+   ![image-20240407140010335](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240407140010335.png)
+
+5. 注销生效，选择
+
+   ![image-20240407140045982](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240407140045982.png)
+
+6. 会提示是否重命名目录，一定要选择保留旧的名称，否则桌面等目录将改名；例如`Desktop`改为`桌面`。
+
+
+
+
+
+#### 3.3 删除系统自带软件
 
 1. ```shell
    sudo apt-get remove libreoffice-common
@@ -193,9 +221,9 @@ sudo passwd root -- 设置root用户密码
 
 
 
-#### 3.3 安装开发环境
+#### 3.4 安装开发环境
 
-##### 3.3.1 QT
+##### 3.4.1 QT
 
 ```http
 https://kevinglaser.blog.csdn.net/article/details/117202517
@@ -203,7 +231,7 @@ https://kevinglaser.blog.csdn.net/article/details/117202517
 
 
 
-##### 3.3.2 Clion&C/C++&OpenGL
+##### 3.4.2 Clion&C/C++&OpenGL
 
 ```http
 https://kevinglaser.blog.csdn.net/article/details/117531615
@@ -211,7 +239,7 @@ https://kevinglaser.blog.csdn.net/article/details/117531615
 
 
 
-##### 3.3.3 JAVA和IDEA
+##### 3.4.3 JAVA和IDEA
 
 ```http
 https://kevinglaser.blog.csdn.net/article/details/116334487
@@ -221,9 +249,9 @@ https://kevinglaser.blog.csdn.net/article/details/116334487
 
 
 
-#### 3.4 删除多余的垃圾缓存文件
+#### 3.5 删除多余的垃圾缓存文件
 
-##### 3.4.1 清理旧版本的软件缓存
+##### 3.5.1 清理旧版本的软件缓存
 
 ```shell
 sudo apt-get autoclean
@@ -231,7 +259,7 @@ sudo apt-get autoclean
 
 
 
-##### 3.4.2 清理所有软件缓存
+##### 3.5.2 清理所有软件缓存
 
 ```shell
 
