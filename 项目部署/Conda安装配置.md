@@ -26,6 +26,14 @@ https://conda.io/projects/conda/en/latest/index.html#
 
 
 
+##### 1.1.2 AnaConda
+
+```http
+https://www.anaconda.com/download/
+```
+
+
+
 
 
 #### 1.2 三方站
