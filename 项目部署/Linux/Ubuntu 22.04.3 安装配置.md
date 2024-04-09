@@ -199,7 +199,7 @@ sudo passwd root -- 设置root用户密码
 
 6. 会提示是否重命名目录，一定要选择保留旧的名称，否则桌面等目录将改名；例如`Desktop`改为`桌面`。
 
-
+![image-20240408132352623](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240408132352623.png)
 
 
 
