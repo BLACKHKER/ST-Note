@@ -138,9 +138,29 @@ conda config --add envs_dirs D:\CondaEnvs
 
 
 
+#### 3.2 配置到Pycharm中
 
+> Conda的可执行文件(exe)在安装目录的`Scripts`里面
 
+1. 右上角设置
 
+![image-20240410100256510](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240410100256510.png)
+
+2. Settings
+
+![image-20240410100337943](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240410100337943.png)
+
+3. Project:项目名 → Python Interpreter → Add Intedpreter → Add Local Interpreter
+
+![image-20240410100700022](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240410100700022.png)
+
+4. 选中Conda Environment，点击右面的文件夹，去找Conda的可执行文件，即可添加成功
+
+![image-20240410100656969](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240410100656969.png)
+
+5. 虚拟环境选择自己创建的，带路径的是默认的环境
+
+![image-20240410101030498](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240410101030498.png)
 
 
 
