@@ -21,7 +21,7 @@ Conda是一个包管理器，类似于Maven(Java依赖管理器)，同时包含�
 > 默认的是MiniConda[^1]，跟AnaConda[^2]的区别是，MiniConda只包含基本的内容。
 
 ```http
-https://conda.io/projects/conda/en/latest/index.html#
+https://conda.io/projects/conda/en/latest/index.html
 ```
 
 
@@ -54,7 +54,7 @@ https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/?C=M&O=D
 
 ### 二、安装
 
-#### 2.1 MiniConda
+#### 2.1 Conda
 
 ##### 2.1.1 安装步骤
 
