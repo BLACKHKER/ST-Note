@@ -2,11 +2,11 @@
 
 ### 一、基本概念
 
-数据库是结构化存储数据的容器，用于大量数据的存储、查询。
+数据库是结构化存储数据的容器，用于大量数据的储存、查询。
 
 按照结构分，最大则是DataBase(数据库)，其次是Table(表)。
 
-按照数据内容分(以表为单位)，表中的数据每一行为一条数据，每一列为该数据的属性，属性也称为字段。
+按照数据内容分(以表为单位)，表中的数据，每一行为一条数据，每一列为该数据的属性，属性也称为字段。
 
 
 
@@ -34,8 +34,8 @@ CREATE DATABASE IF NOT EXISTS 数据库名; -- 如果没有就创建，有就跳
 ```mysql
 DROP DATABASE 数据库名
 
-DROP DATABASE person;-- 删除名为person的数据库
-DROP DATABASE IF EXISTS; -- 如果有就删除，没有就跳过。
+DROP DATABASE person;	-- 删除名为person的数据库
+DROP DATABASE IF EXISTS;	-- 如果有就删除，没有就跳过。
 ```
 
 
@@ -56,7 +56,7 @@ USE person;	-- 切换到person数据库。
 
 ### 三、表
 
-> 字段为表的一列的列明
+> 字段为表的列名
 
 #### 3.1 基本命令
 
@@ -80,8 +80,8 @@ CREATE TABLE person_info(	-- 创建一个person_info表
 CREATE table 新表表名 查询语句
 
 CREATE table table_2 
-SELECT SUM(ClassHour) as 总课时 ，
-AVG(ClassHour) as 平均课时 
+SELECT SUM(ClassHour) as 总课时,
+AVG(ClassHour) as 平均课时
 FROM subject;
 ```
 
@@ -92,7 +92,7 @@ FROM subject;
 ```mysql
 DROP TABLE 表名;
 
-DROP TABLE IF clazz;	-- 删除表clazz
+DROP TABLE clazz;	-- 删除表clazz
 DROP TABLE IF EXISTS clazz; -- 如果存在就删除
 ```
 
@@ -111,10 +111,10 @@ INSERT INTO 表名(字段名)
 VALUES(值1,值2,值3,值4,值5,值6);
 
 INSERT INTO person_info(id,name,age,sex,birthday,remark)
-VALUES(1,'张三',29,'男','1999-10-01','我是谁？');
+VALUES(1,'刘备',29,'男','1999-10-01','我是谁？');
 
 INSERT INTO person_info(id,name,sex,birthday,remark)
-VALUES(2,'貂蝉',18,'女','2004-05-23','我是谁');
+VALUES(2,'关羽',18,'女','2004-05-23','我是谁');
 ```
 
 ###### 多条
@@ -123,8 +123,8 @@ VALUES(2,'貂蝉',18,'女','2004-05-23','我是谁');
 INSERT INTO 表名(字段名)
 
 INSERT INTO person_info(id,name,age,sex,birthday,remark)
-VALUES (3,'叶孤城',27,'男','1995-08-15','我是谁'),
-       (4,'陆小凤',20,'女','2002-03-23','我是谁');	-- 最后一句加分号，前面加逗号。
+VALUES (3,'张飞',27,'男','1995-08-15','我是谁'),
+       (4,'马超',20,'女','2002-03-23','我是谁');	-- 最后一句加分号，前面加逗号。
 ```
 
 
@@ -196,7 +196,7 @@ SELECT MD5("12345") FROM dual
 SELECT 要查询的列名 FROM 表1，表2	-- 联表查询至少要有两个表
 WHERE 两个表去重的"="判断 AND 排除某些数据的语句;
 
--- 查询学号，学生姓名。年纪名称，年级Id，从学生表和年级表并且年级名为S2的所有数据
+-- 查询学号，学生姓名，年级名称，年级ID，从学生表和年级表并且年级名为S2的所有数据
 SELECT s.StudentNo,s.StudentName,g.GradeName,g.GradeId -- 直接使用别名
 FROM student s,grade g	-- 表1 别名，表2 别名	别名为了避免两个表都有同一个列名数据库不知道查询哪个
 WHERE s.GradeId = g.GradeId		-- 去重，避免笛卡尔积
@@ -285,7 +285,7 @@ SELECT @name;	-- java
 
 #### 4.1 AS
 
-> 表、字段、等重命名(备注)。keyi理解为别名，将长的名字简化，使SQLkanqi来更简洁
+> 表、字段、等重命名(备注)。keyi理解为别名，将长的名字简化，使SQL看起来更简洁。
 >
 > 只修改查询出来的结果集，不会实际修改表中的字段。
 
@@ -345,7 +345,7 @@ SELECT * FROM Student WHERE StudentName LIKE '刘星' -- 只查询固定值：�
 
 ```mysql
 LIKE 刘_;	-- 一个字符，匹配姓刘的二字名的人
-LIKE _ _江;	-- 两个字符，匹配**江三字名的人，便于观察，正常没有空格，两个“_”
+LIKE _ _江;	-- 两个字符，匹配**江三字名的人，为了便于观察，正常两个--之间没有空格，两个“_”
 LIKE 刘%;	-- 多个字符：%表示不限制字符数，匹配姓刘的所有字名长度的人
 -- 如 [] 内有一系列字符（01234、abcde）则可略写为“[0-4]”、“[a-e]” 
 LIKE '刘[备,秀]'	-- [1,2,3] 匹配括号中指定范围的一个字符查询(刘备或刘秀)

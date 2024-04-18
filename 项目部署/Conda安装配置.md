@@ -100,7 +100,6 @@ https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/?C=M&O=D
    conda --version
    ```
 
-   
 
 
 
@@ -112,7 +111,11 @@ https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/?C=M&O=D
 
 #### 3.1 更改Conda虚拟环境安装路径
 
-1. 展示所有pei置。
+> 建议不更改虚拟环境的位置，除非Conda安装在了C盘，如果已经在其他盘了，就别动。
+>
+> conda虚拟环境一定要在安装目录的envs下
+
+1. 展示所有配置。
 
 ```shell
 conda config --show
@@ -154,7 +157,7 @@ conda config --add envs_dirs D:\CondaEnvs
 
 ![image-20240410100700022](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240410100700022.png)
 
-4. 选中Conda Environment，点击右面的文件夹，去找Conda的可执行文件，即可添加成功
+4. 选中Conda Environment，点击右面的文件夹，去找Conda的可执行文件，点击Load即可添加成功
 
 ![image-20240410100656969](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240410100656969.png)
 
@@ -209,6 +212,42 @@ conda config --add envs_dirs D:\CondaEnvs
 | conda activate [env-name]                          | 激活环境                     |
 | conda deactivate                                   | 退出环境                     |
 | conda env list                                     | 列出所有可用的环境           |
+
+
+
+---
+
+
+
+### 五、常见问题及解决方案
+
+#### 5.1 Pycharm打开终端报错
+
+**问题现象**
+
+配置好Conda虚拟环境的项目，打开终端报错，提示`conda init powershell`
+
+![image-20240418151131260](A:\Typora\TyporaPicture\image-20240418151131260.png)
+
+**报错原因**
+
+重装过Conda，例如第一次安装不在C盘，后面卸载安装到了D盘
+
+**解决方案**
+
+打开C盘的该文件：
+
+```http
+C:\用户\用户名\文档\WindowsPowershell\profile.ps1
+```
+
+修改Conda可执行文件的目录，改为安装Conda的实际目录即可。一般是在AnaConda下的Scripts下。
+
+如果依然失效，使用以下命令以允许本地计算机运行本地脚本
+
+```shell
+set-executionpolicy remotesigned
+```
 
 
 
