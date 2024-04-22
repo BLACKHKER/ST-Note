@@ -1,4 +1,4 @@
-## Aliyun-OSS对象存储开通配置
+## Aliyun-OSS 对象存储开通&配置
 
 ### 一、开通阿里云OSS服务
 
@@ -58,7 +58,7 @@ bucket列表 → 创建bucket
 
 ![image-20230413131902739](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202304131328912.png)
 
-**<font color='red'>创建完毕之后，在用户列表下有用户信息和accesskey id和accesskey secret，请立即将access key保存</font>**
+**<font color='red'>创建完毕之后，在用户列表下有用户信息和AccessKey ID和Accesskey Secret，请立即将Access Key保存</font>**
 
 ![image-20230413132256264](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/202304131328975.png)
 

@@ -227,27 +227,26 @@ conda config --add envs_dirs D:\CondaEnvs
 
 配置好Conda虚拟环境的项目，打开终端报错，提示`conda init powershell`
 
-![image-20240418151131260](A:\Typora\TyporaPicture\image-20240418151131260.png)
+![image-20240418151131260](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240418151131260.png)
 
 **报错原因**
 
-重装过Conda，例如第一次安装不在C盘，后面卸载安装到了D盘
+1. 原先旧的Conda卸载了，重装了一个，或不在一个盘；
+1. 未配置环境变量
 
 **解决方案**
 
-打开C盘的该文件：
-
-```http
-C:\用户\用户名\文档\WindowsPowershell\profile.ps1
-```
-
-修改Conda可执行文件的目录，改为安装Conda的实际目录即可。一般是在AnaConda下的Scripts下。
-
-如果依然失效，使用以下命令以允许本地计算机运行本地脚本
+1. 在conda的Prompt窗口输入：
 
 ```shell
-set-executionpolicy remotesigned
+where conda
 ```
+
+![image-20240419101343944](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240419101343944.png)
+
+2. 将下列目录添加到环境变量中
+
+![image-20240419101628536](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240419101628536.png)
 
 
 
