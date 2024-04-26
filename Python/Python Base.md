@@ -359,6 +359,11 @@ print(f"好的，{name}")
 user_name = input("请输入用户名: \n")
 user_type = input("请输入账号身份: \n")
 print(f"您好:{user_name},您是尊贵的{user_type}")
+
+# 数据格式化处理
+birth_year = input("Birth Year:")
+age = 2024 - int(birth_year)
+print(age)
 ```
 
 
@@ -545,11 +550,29 @@ stock_price_daily_growth_factor, gorwth_days, 5.41 ** stock_price_daily_growth_f
 
 
 
+##### 2.4.5 表达式
+
+字符串可以和运算符组合成表达式：
+
+```python
+# 生成十个*号打印
+print("*" * 10)
+# 生成十个1打印
+print("1" * 10)
+```
+
 
 
 #### 2.3 布尔(bool)
 
-True、False
+注意Python中的布尔是大写，true是不被识别的
+
+
+
+```python
+True
+False
+```
 
 
 
@@ -561,6 +584,23 @@ True、False
 n = None
 print(n)
 print(type(n))
+```
+
+
+
+
+
+#### 2.5 格式化
+
+> 格式化后的数据类型(被格式化的数据)
+
+**实例**
+
+```python
+now_year = "2024"
+born_year = 1999
+age = int(now_year) - born_year
+print(age)
 ```
 
 
