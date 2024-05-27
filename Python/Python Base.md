@@ -124,10 +124,27 @@ print(c, type(c))
 
 ```python
 import 模块名
+import math
+result = math.sqrt(25)
+print(result)  # 输出：5.0
+
 from 模块名 import 类、变量、方法
+from math import pi
+print(pi)  # 输出：3.141592653589793
+
 from 模块名 import *
+result = sqrt(16)
+print(result)  # 输出：4.0
+
 import 模块名 as 别名
+import numpy as np
+array = np.array([1, 2, 3])
+print(array)  # 输出：[1 2 3]
+
 from 模块名 import 功能名 as 别名
+from datetime import datetime as dt
+current_time = dt.now()
+print(current_time)  # 输出当前日期和时间
 ```
 
 
@@ -165,7 +182,7 @@ from 类名 import 方法名
 
 **注意**
 
-1.导入外部包的时候，运行会把导入的外部模块中的方法也运行了，解决方案`__main__`[^5]
+1.导入外部包的时候，运行会把导入的外部模块中的方法也运行了，解决方案：使用`__main__`[^5]
 
 ```python
 # MyTestPackage
