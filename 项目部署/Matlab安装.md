@@ -22,6 +22,10 @@
 
 1. 断网直接进入到许可协议部分，下一步后，填写密钥
 
+```
+09806-07443-53955-64350-21751-41297
+```
+
 ![image-20240508100647742](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240508100647742.png)
 
 2. 进入Crack文件夹，选中License_standalone.lic
