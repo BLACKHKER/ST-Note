@@ -56,7 +56,24 @@ def funcTest()
 	TODO...
 ```
 
+实例(Google)
 
+```python
+def function_name(param1, param2):
+    """登录
+
+    Args:
+        account(int): 账号
+        password(str): 密码
+
+    Returns:
+        bool: 登陆是否成功
+
+    Raises: （这里提供了可能会碰到的报错，非必要可不写）
+        ValueError: If `param1` is equal to `param2`.
+    """
+# 注意通过空行增加可读性
+```
 
 
 
