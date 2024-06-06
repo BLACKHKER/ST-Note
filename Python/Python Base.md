@@ -56,7 +56,24 @@ def funcTest()
 	TODO...
 ```
 
+实例(Google)
 
+```python
+def function_name(param1, param2):
+    """登录
+
+    Args:
+        account(int): 账号
+        password(str): 密码
+
+    Returns:
+        bool: 登陆是否成功
+
+    Raises: （这里提供了可能会碰到的报错，非必要可不写）
+        ValueError: If `param1` is equal to `param2`.
+    """
+# 注意通过空行增加可读性
+```
 
 
 
@@ -124,10 +141,27 @@ print(c, type(c))
 
 ```python
 import 模块名
+import math
+result = math.sqrt(25)
+print(result)  # 输出：5.0
+
 from 模块名 import 类、变量、方法
+from math import pi
+print(pi)  # 输出：3.141592653589793
+
 from 模块名 import *
+result = sqrt(16)
+print(result)  # 输出：4.0
+
 import 模块名 as 别名
+import numpy as np
+array = np.array([1, 2, 3])
+print(array)  # 输出：[1 2 3]
+
 from 模块名 import 功能名 as 别名
+from datetime import datetime as dt
+current_time = dt.now()
+print(current_time)  # 输出当前日期和时间
 ```
 
 
@@ -165,7 +199,7 @@ from 类名 import 方法名
 
 **注意**
 
-1.导入外部包的时候，运行会把导入的外部模块中的方法也运行了，解决方案`__main__`[^5]
+1.导入外部包的时候，运行会把导入的外部模块中的方法也运行了，解决方案：使用`__main__`[^5]
 
 ```python
 # MyTestPackage

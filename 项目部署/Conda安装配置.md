@@ -167,6 +167,57 @@ conda config --add envs_dirs D:\CondaEnvs
 
 
 
+
+
+#### 3.2 换源
+
+##### 3.2.1 新增源
+
+阿里源
+
+> 可能失效
+
+```shell
+conda config --add channels https://mirrors.aliyun.com/anaconda/pkgs/free
+conda config --add channels https://mirrors.aliyun.com/anaconda/pkgs/main
+conda config --add channels https://mirrors.aliyun.com/anaconda/pkgs/msys2
+conda config --add channels https://mirrors.aliyun.com/anaconda/pkgs/r
+```
+
+清华源
+
+```shell
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/pro
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2  
+```
+
+设置运行conda命令时，是否显示远程仓库URL
+
+```shell
+conda config --set show_channel_urls yes
+```
+
+
+
+##### 3.2.2 删除源
+
+```shell
+conda config --remove-key channels
+```
+
+
+
+##### 3.2.3 查看源
+
+```shell
+conda config --show channels
+```
+
+
+
 ---
 
 

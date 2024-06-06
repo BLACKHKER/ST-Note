@@ -57,6 +57,7 @@ https://www.sdcardformatter.com/
 ##### 3.2.1 官方安装工具(Raspberry Pi Imager)
 
 ```http
+https://www.raspberrypi.com/software/
 https://downloads.raspberrypi.org/imager/imager_latest.exe
 ```
 
