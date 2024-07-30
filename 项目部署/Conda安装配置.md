@@ -272,13 +272,15 @@ conda config --show channels
 
 ### 五、常见问题及解决方案
 
-#### 5.1 Pycharm打开终端报错
+#### 5.1 Pycharm终端报错
+
+##### 5.1.1 找不到Conda
 
 **问题现象**
 
 配置好Conda虚拟环境的项目，打开终端报错，提示`conda init powershell`
 
-![image-20240418151131260](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240418151131260.png)
+![](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240418151131260.png)
 
 **报错原因**
 
@@ -298,6 +300,40 @@ where conda
 2. 将下列目录添加到环境变量中
 
 ![image-20240419101628536](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240419101628536.png)
+
+
+
+##### 5.1.2 终端禁止执行脚本
+
+**问题现象**
+
+> File C:\Users\xxx cannot be loaded because running scripts is disabled on this system
+>
+> 无法加载文件xxx，因为在此系统上禁止运行脚本
+
+**报错原因**
+
+Windows自动配置了脚本执行策略，禁止三方执行脚本/受限.
+
+该问题一般出现在Windows10上
+
+**解决方案**
+
+[可选]进入Powershell，查询执行策略，Restricted为限制了脚本执行的执行策略
+
+```shell
+get-ExecutionPolicy
+```
+
+![QQ_1722327412543](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/QQ_1722327412543.png)
+
+管理员方式进入CMD，执行以下命令，解除脚本执行策略限制，Y同意执行
+
+```shell
+set-ExecutionPolicy RemoteSigned
+```
+
+![QQ_1722327554405](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/QQ_1722327554405.png)
 
 
 
