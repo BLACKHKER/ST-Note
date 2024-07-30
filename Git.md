@@ -572,7 +572,7 @@ gpg --full-generate-key
 
 5. 输入保护密钥的密码
 
-> 这个密码是未来commit提交时，需要输入的密码，不建议过于复杂，过简单会提示密码不安全
+> 密码是未来commit提交时输入的密码，不建议过于复杂，过简单会提示密码不安全，强选take this即可
 
 ![image-20231018001801741](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018001801741.png)
 
