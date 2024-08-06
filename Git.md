@@ -32,24 +32,24 @@
 
 ### 二、基本命令
 
-| 命令                                          | 作用                                               |
-| --------------------------------------------- | -------------------------------------------------- |
-| git clone <仓库地址>                          | 克隆仓库到本地                                     |
-| git init                                      | 初始化本地库                                       |
-| git remote add <远程仓库别名><远程仓库地址>   | 关联别名到远程库                                   |
-| git remote -v                                 | 查看配置别名的所有远程库                           |
-| git remote rm <远程仓库别名>                  | 删除别名与远程分支的关联                           |
-| git add <文件名>                              | 添加到暂存区                                       |
-| git commit -m "日志信息" <文件名>             | 提交到本地库                                       |
-| git push <远程仓库别名> <本地分支名>          | 将本地仓库分支推送到远程仓库                       |
-| git pull <远程仓库别名> <远程分支名>          | 拉取远程仓库的数据到本地远程分支，并进行merge合并  |
-| git pull –-rebase <远程仓库别名> <远程分支名> | 拉取远程仓库的数据到本地远程分支，并进行rebase合并 |
-| git status                                    | 查看本地库状态                                     |
-| git diff                                      | 查看仓库改动                                       |
-| git log                                       | 查看日志                                           |
-| git reflog                                    | 查看历史记录                                       |
-| git reset --hard <版本号>                     | 版本穿梭                                           |
-| git merge / rebase <分支名>                   | 合并分支                                           |
+| 命令                                          | 作用                                         |
+| --------------------------------------------- | -------------------------------------------- |
+| git clone <仓库地址>                          | 克隆仓库到本地                               |
+| git init                                      | 初始化本地库                                 |
+| git remote add <远程仓库别名><仓库地址>       | 关联别名到远程库                             |
+| git remote -v                                 | 查看配置别名的所有远程库                     |
+| git remote rm <远程仓库别名>                  | 删除别名与远程分支的关联                     |
+| git add <文件名>                              | 添加到暂存区                                 |
+| git commit -m "日志信息" <文件名>             | 提交到本地库                                 |
+| git push <远程仓库别名> <本地分支名>          | 将本地仓库分支推送到远程仓库                 |
+| git pull <远程仓库别名> <远程分支名>          | 拉取远程仓库的数据到本地远程分支，merge合并  |
+| git pull –-rebase <远程仓库别名> <远程分支名> | 拉取远程仓库的数据到本地远程分支，rebase合并 |
+| git status                                    | 查看本地库状态                               |
+| git diff                                      | 查看仓库改动                                 |
+| git log                                       | 查看日志                                     |
+| git reflog                                    | 查看历史记录                                 |
+| git reset --hard <版本号>                     | 版本穿梭                                     |
+| git merge / rebase <分支名>                   | 合并分支                                     |
 
 
 
@@ -189,7 +189,7 @@ git push -f -u origin release
 
 #### 3.3 克隆/拉取
 
-##### 3.3.1 克隆网络仓库到本地
+##### 3.3.1 克隆网络仓库
 
 > 在要克隆到的文件夹下打开cmd执行命令
 
@@ -218,7 +218,7 @@ git clone -b <分支名> <仓库地址>
 
 
 
-##### 3.3.2 拉取远程仓库代码到本地
+##### 3.3.2 拉取远程仓库代码
 
 > 可以直接git pull，默认拉取远程仓库别名为`origin`的`master`分支
 
@@ -314,14 +314,14 @@ git checkout -b dev origin/dev
 
 > 如果本地的分支是直接创建出来的（git branch 分支名称）,则本地的分支与远程的分支默认是无关联的，若只使用`git pull` 或 `git push`，没有指定分支，则会提示先进行分支关联
 
-##### 4.4.1 本地分支关联远程分支
+##### 4.4.1 关联远程分支
 
 ```shell
 git branch --set-upstream <分支名> <远程仓库别名>/<远程分支名>
 git branch --set-upstream dev origin/dev
 ```
 
-> -u参数关联远程分支
+> -u参数关联要推送的远程分支
 
 ```shell
 $ git push -u origin dev
@@ -356,63 +356,20 @@ Rebase适用于在本地分支上进行提交整理、保持干净的提交历�
 
 ![img](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/v2-165bfe942dfbe93aa14d0ee7743f2050_720w.webp)
 
-**实例**：
-
-合并需要记住提交的Commit ID，下例是将`智能指针补充`、`BugFix`、`智能指针`合并，将这三个变成一个提交
-
-![image-20240222141049484](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240222141049484.png)
-
-输入：
-
-```c++
-git rebase -i 0f467bc887c85644798a2f2121923490a90d451c
-```
-
-> 注意这个`0f46`是`对象生存周期、作用域指针`的版本号
-
-可以理解为合并从该版本号之前的所有提交，`-i`表示打开vim交互式界面，如下图：
-
-![image-20240221100015236](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240221100015236.png)
-
-手动更改，将被合并的改为s/squash，要合并到的改为p/pick，所以最少有一个pick，且一般为第一个
-
-修改错的话(比如squash打错了)会报错，报错根据提示顺序输入两种不同的代码解决：
-
-```shell
-git rebase --edit-todo --重新进入修改界面
-git rebase --continue  --继续执行rebase操作
-```
-
-不报错会跳转到该界面，手动更新合并后显示的内容(git log显示的commit内容)：
-
-![image-20240221100028420](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240221100028420.png)
-
-这里把三个Commit提交的文字更新为一个`智能指针`，其余的都删除，保存退出；
-
-这时git log显示只有一个`智能指针`的提交：
-
-![image-20240222143501360](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240222143501360.png)
-
-最后需要通过强制推送上传修改，正常推送会提示下载最新代码，下载完就白合并了
-
-```shell
-git push -f
-```
-
 
 
 ##### 4.5.3 主要区别
 
 1. merge 会多出一次 merge commit，rebase不会
 2. merge 的提交树是非线性的，rebase 的提交树是线性的（通过重写提交历史）
-3. Merge会创建一个新的合并提交，保留了原始分支的完整历史记录，而Rebase会创建新的提交，并将原始分支的提交复制到目标分支上
-4. Merge保留了分支之间的分叉结构和合并提交，而Rebase会将提交历史线变成线性的，像是按顺序提交的
+3. merge 会创建一个新的合并提交，保留了原始分支的完整历史记录，而rebase 会创建新的提交，并将原始分支的提交复制到目标分支上
+4. merge 保留了分支之间的分叉结构和合并提交，而rebase 会将提交历史线变成线性的，像是按顺序提交的
 
-选择合适的合并策略取决于具体情况和需求
+选择合适的合并策略取决于具体情况和需求：
 
-如果希望保留完整的分支历史记录和合并信息，使用Merge
+如果希望保留完整的分支历史记录和合并信息，使用merge 
 
-如果更关注提交历史的整洁性和线性，以及与上游分支的同步，使用Rebase
+如果更关注提交历史的整洁性和线性，以及与上游分支的同步，使用rebase
 
 
 
@@ -479,7 +436,7 @@ git log
 
 ![image-20231016224639711](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231016224639711.png)
 
-##### 5.3.1 显示当前指针的位置及历史记录
+##### 5.3.1 获取指针位置及历史记录
 
 > HEAD代表指针，指针指向的位置代表当前版本所在位置(分支、版本)
 
@@ -493,8 +450,10 @@ git reflog
 
 
 
-#### 5.4 版本回退(※谨慎使用※)
+#### 5.4 版本回退
 
+> ※谨慎使用※
+>
 > `-n` 参数告诉 Git 不要自动创建新的提交，而 `^..HEAD` 范围表达式指定了要撤消的提交范围
 
 ```shell
@@ -512,6 +471,57 @@ git revert -n fe91f6642cc1128270384160c8026343d27b2535^..HEAD
 
 
 
+
+
+#### 5.5 合并提交
+
+##### 5.5.1 rebase合并
+
+以下是同一分支下，将多次提交合并成一个提交：
+
+合并需要记住提交的Commit ID，下例是将`智能指针补充`、`BugFix`、`智能指针`合并，将这三个变成一个提交
+
+![image-20240222141049484](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240222141049484.png)
+
+输入：
+
+```c++
+git rebase -i 0f467bc887c85644798a2f2121923490a90d451c
+```
+
+注意这个`0f46`是`对象生存周期、作用域指针`的版本号
+
+可以理解为合并从该版本号之前的所有提交，`-i`表示打开vim交互式界面，如下图：
+
+![image-20240221100015236](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240221100015236.png)
+
+手动更改，将被合并的改为s/squash，要合并到的改为p/pick，所以最少有一个pick，且一般为第一个
+
+修改错的话(比如squash打错了)会报错，报错根据提示顺序输入两种不同的代码解决：
+
+```shell
+git rebase --edit-todo --重新进入修改界面
+git rebase --continue  --继续执行rebase操作
+```
+
+不报错会跳转到该界面，手动更新合并后显示的内容(git log显示的commit内容)：
+
+![image-20240221100028420](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240221100028420.png)
+
+这里把三个commit提交的文字更新为一个`智能指针`，其余的都删除，保存退出；
+
+这时git log显示只有一个`智能指针`的提交：
+
+![image-20240222143501360](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20240222143501360.png)
+
+最后需要通过强制推送上传修改，正常推送会提示下载最新代码，下载完就白合并了
+
+```shell
+git push -f
+```
+
+
+
 ---
 
 
@@ -520,7 +530,7 @@ git revert -n fe91f6642cc1128270384160c8026343d27b2535^..HEAD
 
 > 以下所有命令都需在Git bash中输入，因为git内置了gpg的工具
 
-#### 6.1 查看git已生成的gpg密钥
+#### 6.1 查看已生成的gpg密钥
 
 ```bash
 gpg --list-key
@@ -630,19 +640,9 @@ git config --global user.signingkey <GPG Key ID>
 
 
 
-#### 6.4 删除GPG密钥
+#### 6.4 删除gpg密钥
 
-##### 6.4.1 查看已生成的gpg密钥
-
-```bash
-gpg --list-key
-```
-
-![image-20231018004104166](https://typora-picture-zhao.oss-cn-beijing.aliyuncs.com/Typora/image-20231018004104166.png)
-
-
-
-##### 6.4.2 删除私钥
+##### 6.4.1 删除私钥
 
 > 提示两次是否确认删除
 
@@ -663,7 +663,7 @@ This is a secret key! - really delete? (y/N) y
 
 
 
-##### 6.4.3 删除公钥
+##### 6.4.2 删除公钥
 
 ```bash
 gpg --delete-key <GPG Key ID>
